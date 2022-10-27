@@ -659,7 +659,7 @@ class VKSubscribePage(models.Model):
 
     def get_page_photo_url(self) -> str:
         if self.page_photo:
-            return self.page_photo.url
+            return f'{settings.DOMAIN}{self.page_photo.url}'
         return '#'
 
     @property
