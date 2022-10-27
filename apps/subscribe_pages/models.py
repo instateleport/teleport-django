@@ -674,7 +674,7 @@ class VKSubscribePage(models.Model):
             ctr = all_subscribers / all_views * 100
         except ZeroDivisionError:
             ctr = 0
-        return ctr
+        return round(ctr, 2)
 
     def save_ctr(self, ctr: Optional[float] = None) -> None:
         if not ctr:
@@ -688,7 +688,7 @@ class VKSubscribePage(models.Model):
         views = page_subscriptions.count()
         subscribers = page_subscriptions.filter(subscribed=True).count()
         try:
-            ctr = subscribers / views * 100
+            ctr = round(subscribers / views * 100, 2)
         except ZeroDivisionError:
             ctr = 0
         return [views, subscribers, ctr]
