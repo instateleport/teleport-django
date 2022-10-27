@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block carrot %}
+    <!-- Carrot quest BEGIN -->
+    <script type="text/javascript">
+    !function(){function t(t,e){return function(){window.carrotquestasync.push(t,arguments)}}if("undefined"==typeof carrotquest){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="//cdn.carrotquest.app/api.min.js",document.getElementsByTagName("head")[0].appendChild(e),window.carrotquest={},window.carrotquestasync=[],carrotquest.settings={};for(var n=["connect","track","identify","auth","oth","onReady","addCallback","removeCallback","trackMessageInteraction"],a=0;a<n.length;a++)carrotquest[n[a]]=t(n[a])}}(),carrotquest.connect("42083-c5cbf07ce7e3c9363e0bb9df9e");
+    </script>
+    <!-- Carrot quest END -->
+{% endblock %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+    <div class="sign flex">
+		<div class="sign_logo">
+			<a href="/" class="logo">Teleport</a>
+		</div>
+		<div class="sign_img flex__align">
+			<img src="/media/images/sign-in_icon.svg" alt="">
+		</div>
+		<form method="POST" class="sign_form flex__align" id="authForm">
+            {% csrf_token %}
+			<div class="sign_form_inner">
+				<div class="sign_title">Войти</div>
+				<div class="sign_input">
+					<div class="sign_label">{{ form.username.label }}</div>
+					<div class="input">
+						<div class="input">
+                            {{ form.username }}
+                            <div class="input_err">{{ form.username.errors }}</div>
+						</div>
+					</div>
+				</div>
+				<div class="sign_input">
+					<div class="sign_label">{{ form.password.label }}</div>
+					<div class="input input__password">
+						<div class="input">
+                            {{ form.password }}
+                            <div class="input_err">{{ form.password.errors }}</div>
+                            {{ errors }}
+							<span class="icon icon-eye"></span>
+						</div>
+					</div>
+				</div>
+				<a href="{% url 'users:reset-password' %}" class="sign_forgot hover__line hover__active">Забыли пароль?</a>
+				<div class="sign_btn">
+					<input value="Войти" class="btn btn-red" type="submit">
+				</div>
+				<div class="sign_center_href"><a class="hover__line" onclick="ym(70567717,'reachGoal',' input')" href="{% url 'users:register' %}">Создать аккаунт</a></div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

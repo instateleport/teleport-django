@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Ошибка{% endblock %}
+
+{% block content %}
+	<div class="sign flex">
+		<div class="sign_logo">
+			<a href="/" class="logo">Teleport</a>
+		</div>
+		<div class="sign_img flex__align">
+			<img src="/media/images/sign-500.svg" alt>
+		</div>
+		<div class="sign_error flex__align">
+			<div class="sign_error_inner">
+				<div class="sign_title">Упс, что-то пошло не так</div>
+				<div class="sign_text">
+					Ошибка сервера 500. Приносим извинения, мы исправляем проблему. Пожалуйста, попробуйте еще раз чуть позже.
+				</div>
+				<div class="sign_btn">
+					<a class="btn btn-red" href="/">Назад</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

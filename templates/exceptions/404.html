@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Страница не найдена{% endblock %}
+
+{% block opengraph %}
+    <meta property="og:title" content="Страница не найдена"/>
+    <meta property="og:description" content="Страница не найдена"/>
+{% endblock %}
+
+{% block content %}
+
+	<div class="sign flex">
+		<div class="sign_logo">
+			<a href="/" class="logo">Teleport</a>
+		</div>
+		<div class="sign_img flex__align">
+			<img src="/media/images/sign-404.svg" alt>
+		</div>
+		<div class="sign_error flex__align">
+			<div class="sign_error_inner">
+				<div class="sign_title">Такой страницы <br>не существует</div>
+				<div class="sign_text">
+					Страница, которую Вы запрашиваете еще не создана или, возможно, была удалена.Если вы считаете, что это ошибочная ситуация, сообщите, пожалуйста, разработчикам об ошибке.
+				</div>
+				<div class="sign_btn">
+					<a class="btn btn-red" href="/">Вернуться на главную</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

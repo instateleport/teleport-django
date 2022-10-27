@@ -1,0 +1,140 @@
+{% extends 'subscribe_page_base.html' %}
+
+{% block facebook_pixel %}
+    {% if page.facebook_pixel %}
+        <!-- Facebook Pixel Code -->
+        <script>
+            !function(f,b,e,v,n,t,s){
+                if(f.fbq)return;n=f.fbq=function(){
+                    n.callMethod?
+                        n.callMethod.apply(n,arguments):n.queue.push(arguments)
+                };
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)
+            }(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '{{ page.facebook_pixel }}');
+            fbq('track', 'PageView');
+            fbq('track', 'ViewContent', {content_name: 'teleport-page-3'});
+        </script>
+        <!-- Facebook Pixel Code -->
+    {% endif %}
+{% endblock %}
+
+{% block tiktok_pixel %}
+    {% if page.tiktok_pixel %}
+        <!-- Tiktok Pixel Code -->
+        <script>
+        !function (w, d, t) {
+            w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+            ttq.load('{{ page.tiktok_pixel }}');
+            ttq.page();
+        }(window, document, 'ttq');
+        </script>
+        <!-- Tiktok Pixel Code -->
+    {% endif %}
+{% endblock %}
+
+{% block yandex_pixel %}
+    {% if page.yandex_pixel %}
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+           (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+           m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+           (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+           ym({{ page.yandex_pixel }}, "init", {
+                clickmap:true,
+                trackLinks:true,
+                accurateTrackBounce:true,
+                webvisor:false
+           });
+        </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/{{ page.yandex_pixel }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
+    {% endif %}
+{% endblock %}
+
+{% block vk_pixel %}
+    {% if page.vk_pixel %}
+        <!-- VK pixel -->
+        <script type="text/javascript">!function(){
+            var t=document.createElement("script");
+            t.type="text/javascript",
+                t.async=!0,t.src="https://vk.com/js/api/openapi.js?169",
+                t.onload=function(){
+                    VK.Retargeting.Init("{{ page.vk_pixel }}"),
+                        VK.Retargeting.Hit()
+                },
+                document.head.appendChild(t)
+            }();
+        </script>
+        <noscript><img src="https://vk.com/rtrg?p={{ page.vk_pixel }}" style="position:fixed; left:-999px;" alt=""/></noscript>
+        <!-- VK pixel -->
+    {% endif %}
+{% endblock %}
+
+{% block title %}Успешно{% endblock %}
+
+{% block content %}
+    <style>
+        body {
+            background: linear-gradient(225deg, #F3F6FB, #F3F6FB);
+            color: #5D7993!important;
+        }
+        .thanks-page .wrapper:after {
+            display: none;
+        }
+        .wrapper {
+            color: {{ bg_color.text_color }}!important;
+        }
+
+        .btn {
+            color: white;
+        }
+        .btn:hover {
+            color: white;
+        }
+
+        .user-content {
+            background-color: {{ bg_color.panel }};
+            color: {{ bg_color.panel_text_color }}
+        }
+    </style>
+    <main class="thanks-page">
+      <div class="wrapper">
+        <div class="container">
+          <div class="thanks-icon">
+            <svg width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_130:3178)">
+                <path d="M107.922 23.9512H99.9379C97.7314 23.9512 95.9456 25.7367 95.9456 27.9435C95.9456 30.1501 97.7311 31.9358 99.9379 31.9358H107.922C110.129 31.9358 111.915 30.1503 111.915 27.9435C111.914 25.7367 110.129 23.9512 107.922 23.9512Z" fill="{{ bg_color.panel_icon_color }}"/>
+                <path d="M67.5791 10.1891L63.587 2.20469C62.593 0.231898 60.203 -0.559397 58.2302 0.419164C56.2574 1.40543 55.4581 3.80322 56.4446 5.77601L60.437 13.7604C61.4219 15.7252 63.8077 16.5325 65.7938 15.5459C67.7661 14.5597 68.5653 12.1619 67.5791 10.1891Z" fill="{{ bg_color.panel_icon_color }}"/>
+                <path d="M93.7387 0.419116C91.7736 -0.559445 89.3684 0.232116 88.3819 2.20464L84.3895 10.1891C83.4033 12.1618 84.2025 14.5594 86.1751 15.5459C88.167 16.5351 90.5499 15.7186 91.5319 13.7604L95.5242 5.77597C96.5105 3.80317 95.7112 1.40538 93.7387 0.419116Z" fill="{{ bg_color.panel_icon_color }}"/>
+                <path d="M52.0309 23.9512H44.0465C41.84 23.9512 40.0542 25.7367 40.0542 27.9435C40.0542 30.1501 41.8397 31.9358 44.0465 31.9358H52.0309C54.2375 31.9358 56.0233 30.1503 56.0233 27.9435C56.0233 25.7367 54.2375 23.9512 52.0309 23.9512Z" fill="{{ bg_color.panel_icon_color }}"/>
+                <path d="M28.0779 64.1406H12.1088C9.90411 64.1406 8.11646 65.928 8.11646 68.133V132.008C8.11646 134.213 9.90384 136.001 12.1088 136.001H28.0776C30.2823 136.001 32.0699 134.213 32.0699 132.008V68.1327C32.0699 65.928 30.2828 64.1406 28.0779 64.1406Z" fill="{{ bg_color.panel_icon_color }}"/>
+                <path d="M127.804 74.7216C127.1 68.5285 121.315 64.1391 115.082 64.1391H83.9571C86.6022 59.4028 88.022 46.0065 87.959 40.5341C87.8546 31.4758 80.3531 24.2168 71.2945 24.2168H68.0003C65.7937 24.2168 64.0079 26.0023 64.0079 28.2091C64.0079 37.4409 60.4132 54.1041 53.6337 60.8839C49.0705 65.447 45.1696 67.1005 40.0544 69.6569V129.56C47.8858 132.17 57.8292 135.999 72.985 135.999H99.1001C107.705 135.999 114.407 128.03 111.072 119.609C116.152 118.226 119.899 113.567 119.899 108.054C119.899 106.498 119.599 105.009 119.057 103.64C127.618 101.308 130.769 90.7374 124.827 84.1003C127.01 81.6616 128.214 78.3258 127.804 74.7216Z" fill="{{ bg_color.panel_icon_color }}"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_130:3178">
+                  <rect width="136" height="136" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <p>{{ page.popup_title }}</p>
+          </div>
+          <div class="user-content">
+            <p class="content">
+                {{ page.popup_text }}
+            </p>
+          </div>
+
+          <a href="{{ page.popup_button_url }}" class="btn btn-hover" id="get-content">{{ page.popup_button_text }}</a>
+        </div>
+        <footer>
+          <div class="created-with">
+            <p>Made with <a href="/" target="_blank">Teleport</a></p>
+          </div>
+          <a href="{% url 'users:privacy-policy' %}" class="privacy">Privacy Policy</a>
+        </footer>
+      </div>
+    </main>
+
+{% endblock %}

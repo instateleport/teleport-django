@@ -1,0 +1,164 @@
+{% extends 'subscribe_page_base.html' %}
+{% load static %}
+
+{% block opengraph %}
+    <meta property="og:title" content="{{ page.title }}"/>
+    <meta property="og:description" content="{{ page.description }}"/>
+    <meta property="og:image" content="{{ page_photo }}"/>
+    <meta property="og:url" content= "https://instateleport.ru/page/{{ page.slug }}" />
+{% endblock %}
+
+{% block title %}{{ page.title|capfirst }}{% endblock %}
+
+{% block body_class %}theme{% endblock %}
+
+{% block facebook_pixel %}
+    {% if page.facebook_pixel %}
+        <!-- Facebook Pixel Code -->
+        <script>
+            !function(f,b,e,v,n,t,s){
+                if(f.fbq)return;n=f.fbq=function(){
+                    n.callMethod?
+                        n.callMethod.apply(n,arguments):n.queue.push(arguments)
+                };
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)
+            }(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '{{ page.facebook_pixel }}');
+            setTimeout(() => {
+                fbq('track', 'PageView');
+                fbq('track', 'ViewContent', {content_name: 'teleport-page-1'});
+            }, 1000)
+        </script>
+        <!-- Facebook Pixel Code -->
+    {% endif %}
+{% endblock %}
+
+{% block tiktok_pixel %}
+    {% if page.tiktok_pixel %}
+        <!-- Tiktok Pixel Code -->
+        <script>
+        !function (w, d, t) {
+            w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+            ttq.load('{{ page.tiktok_pixel }}');
+            ttq.page();
+        }(window, document, 'ttq');
+        </script>
+        <!-- Tiktok Pixel Code -->
+    {% endif %}
+{% endblock %}
+
+{% block yandex_pixel %}
+    {% if page.yandex_pixel %}
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+           (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+           m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+           (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+           ym({{ page.yandex_pixel }}, "init", {
+                clickmap:true,
+                trackLinks:true,
+                accurateTrackBounce:true,
+                webvisor:false
+           });
+        </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/{{ page.yandex_pixel }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
+    {% endif %}
+{% endblock %}
+
+{% block roistat_id %}
+    {% if page.roistat_id %}
+        <!-- Roistat -->
+            <script>
+            (function(w, d, s, h, id) {
+                w.roistatProjectId = id; w.roistatHost = h;
+                var p = d.location.protocol == "https:" ? "https://" : "http://";
+                var u = /^.*roistat_visit=[^;]+(.*)?$/.test(d.cookie) ? "/dist/module.js" : "/api/site/1.0/"+id+"/init?referrer="+encodeURIComponent(d.location.href);
+                var js = d.createElement(s); js.charset="UTF-8"; js.async = 1; js.src = p+h+u; var js2 = d.getElementsByTagName(s)[0]; js2.parentNode.insertBefore(js, js2);
+            })(window, document, 'script', 'cloud.roistat.com', {{ page.roistat_id }});
+            </script>
+        <!-- Roistat -->
+    {% endif %}
+{% endblock %}
+
+{% block vk_pixel %}
+    {% if page.vk_pixel %}
+        <!-- VK pixel -->
+        <script type="text/javascript">!function(){
+            var t=document.createElement("script");
+            t.type="text/javascript",
+                t.async=!0,t.src="https://vk.com/js/api/openapi.js?169",
+                t.onload=function(){
+                    VK.Retargeting.Init("{{ page.vk_pixel }}"),
+                        VK.Retargeting.Hit()
+                },
+                document.head.appendChild(t)
+            }();
+        </script>
+        <noscript><img src="https://vk.com/rtrg?p={{ page.vk_pixel }}" style="position:fixed; left:-999px;" alt=""/></noscript>
+        <!-- VK pixel -->
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <style>
+        .wrapper:after {
+            background: linear-gradient(225deg, {{ bg_color.first_color }}, {{ bg_color.second_color }})!important;
+            color: {{ bg_color.text_color }}!important;
+        }
+
+        .wrapper {
+            color: {{ bg_color.text_color }}!important;
+        }
+
+        .timer .timer-block {
+            background-color: {{ bg_color.panel }} !important;
+        }
+
+        .btn {
+            color: white;
+        }
+        .btn:hover {
+            color: white;
+        }
+    </style>
+    <main class="promo-page">
+        <div style="background-image: url('https://{{ page.get_page_photo_url }}')" class="background-picture"></div>
+        <div class="wrapper">
+            <div class="container">
+                <h1 class="promo-title">
+                    {{ page.title }}
+                </h1>
+                <div class="advantages">
+                    {{ page.description|linebreaksbr }}
+                    <a href="{% url 'subscribe_pages:page-get_material' page.slug %}" class="btn btn-hover" id="next-step">{{ page.button_text }}</a>
+                </div>
+                {% if page.is_timer_active %}
+                    <div class="timer">
+                        <input type="hidden" id="timer-time" name="timer-time" value="{{ page.timer_time }}">
+                        <input type="hidden" name="page_slug" value="{{ page.slug }}">
+                        <div class="timer-block">
+                            <div class="timer-progress" id="timer-progress"></div>
+                            <span class="sec">{{ page.timer_time }}</span>
+                        </div>
+                        <div class="timer-content">
+                            {{ page.timer_text }}
+                            <div class="time">
+                                <span id="timer-minutes">00</span>
+                                :
+                                <span id="timer-seconds">00</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <footer>
+                <div class="created-with">
+                    <p>Made with <a href="/" target="_blank">Teleport</a></p>
+                </div>
+                <a href="{% url 'users:privacy-policy' %}" class="privacy">Privacy Policy</a>
+            </footer>
+        </div>
+    </main>
+{% endblock %}

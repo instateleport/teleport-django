@@ -1,0 +1,336 @@
+{% extends 'subscribe_page_base.html' %}
+{% load static %}
+
+{% block facebook_pixel %}
+    {% if page.facebook_pixel %}
+        <!-- Facebook Pixel Code -->
+        <script>
+            !function(f,b,e,v,n,t,s){
+                if(f.fbq)return;n=f.fbq=function(){
+                    n.callMethod?
+                        n.callMethod.apply(n,arguments):n.queue.push(arguments)
+                };
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)
+            }(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '{{ page.facebook_pixel }}');
+            fbq('track', 'PageView');
+            fbq('track', 'ViewContent', {content_name: 'teleport-page-2'});
+        </script>
+        <!-- Facebook Pixel Code -->
+    {% endif %}
+{% endblock %}
+
+{% block tiktok_pixel %}
+    {% if page.tiktok_pixel %}
+        <!-- Tiktok Pixel Code -->
+        <script>
+        !function (w, d, t) {
+            w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+            ttq.load('{{ page.tiktok_pixel }}');
+            ttq.page();
+        }(window, document, 'ttq');
+        </script>
+        <!-- Tiktok Pixel Code -->
+    {% endif %}
+{% endblock %}
+
+{% block yandex_pixel %}
+    {% if page.yandex_pixel %}
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+           (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+           m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+           (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+           ym({{ page.yandex_pixel }}, "init", {
+                clickmap:true,
+                trackLinks:true,
+                accurateTrackBounce:true,
+                webvisor:false
+           });
+        </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/{{ page.yandex_pixel }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
+    {% endif %}
+{% endblock %}
+
+{% block vk_pixel %}
+    {% if page.vk_pixel %}
+        <!-- VK pixel -->
+        <script type="text/javascript">!function(){
+            var t=document.createElement("script");
+            t.type="text/javascript",
+                t.async=!0,t.src="https://vk.com/js/api/openapi.js?169",
+                t.onload=function(){
+                    VK.Retargeting.Init("{{ page.vk_pixel }}"),
+                        VK.Retargeting.Hit()
+                },
+                document.head.appendChild(t)
+            }();
+        </script>
+        <noscript><img src="https://vk.com/rtrg?p={{ page.vk_pixel }}" style="position:fixed; left:-999px;" alt=""/></noscript>
+        <!-- VK pixel -->
+    {% endif %}
+{% endblock %}
+
+{% block title %}Получение материала{% endblock %}
+
+{% block content %}
+    <style>
+        .wrapper:after, .modal-block {
+            background: linear-gradient(225deg, {{ bg_color.first_color }}, {{ bg_color.second_color }})!important;
+            color: {{ bg_color.text_color }}!important;
+        }
+        .wrapper {
+            color: {{ bg_color.text_color }}!important;
+        }
+        .btn {
+            color: white;
+        }
+        .btn:hover {
+            color: white;
+        }
+        .btn.transparent-btn {
+            color: {{ bg_color.text_color }}!important;
+        }
+
+        .user-content, .timer .timer-block {
+            background-color: {{ bg_color.panel }} !important;
+            color: {{ bg_color.panel_text_color }} !important
+        }
+
+        .content-icon {
+            background-color: {{ bg_color.panel_icon_bg_color }} !important;
+        }
+
+        #login_input {
+            background-color: {{ bg_color.input_bg_color }} !important;
+            color: {{ bg_color.input_text_color }} !important
+        }
+
+        #login_input::placeholder {
+            opacity: .6!important;
+        }
+    </style>
+        <!-- Texts -->
+    <input type="hidden" name="presubscribe_text" value="{{ page.presubscribe_text }}">
+    <input type="hidden" name="precheck_subscribe_text" value="{{ page.precheck_subscribe_text }}">
+    <input type="hidden" name="presearch_text" value="{{ page.presearch_text }}">
+    <input type="hidden" name="search_text" value="{{ page.search_text }}">
+    <input type="hidden" name="search_time_text" value="{{ page.search_time_text }}">
+    <input type="hidden" name="success_text" value="{{ page.success_text }}">
+    <input type="hidden" name="error_text" value="{{ page.error_text }}">
+    <!-- Texts -->
+<div id="modal-return-back" class="modal">
+    <div class="modal-block">
+        <div class="modal-icon">
+            <svg width="88" height="84" viewBox="0 0 88 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M86.214 64.1033L55.0932 6.81084C52.7444 2.85668 48.596 0.495117 43.9966 0.495117C39.3973 0.495117 35.2489 2.85668 32.9 6.81084C32.8823 6.84109 32.8674 6.87134 32.8497 6.90159L1.83243 64.0127C-0.566771 68.0502 -0.612146 72.899 1.70885 76.9819C4.03518 81.0672 8.22618 83.5042 12.9264 83.5042H74.8949C79.5952 83.5042 83.9584 81.0672 86.2846 76.9819C88.6056 72.8992 88.5604 68.0501 86.214 64.1033ZM38.8352 26.7282C38.8352 23.8775 41.1461 21.5668 43.9966 21.5668C46.8474 21.5668 49.158 23.8777 49.158 26.7282V47.374C49.158 50.2244 46.8472 52.5354 43.9966 52.5354C41.1461 52.5354 38.8352 50.2242 38.8352 47.374V26.7282ZM43.9966 73.1814C39.7274 73.1814 36.2544 69.7085 36.2544 65.4391C36.2544 61.1699 39.7273 57.697 43.9966 57.697C48.2658 57.697 51.7387 61.1699 51.7387 65.4391C51.7389 69.7083 48.266 73.1814 43.9966 73.1814Z"
+                      fill="#FD3162" />
+            </svg>
+        </div>
+        <div class="modal-content">
+            <p>
+                {{ page.presearch_text }}
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div id="modal-loading" class="modal modal-style1">
+    <div class="modal-block">
+        <div class="modal-icon">
+            <div class="point1"></div>
+            <div class="point2"></div>
+            <div class="point3"></div>
+            <div class="point4"></div>
+            <div class="point5"></div>
+            <div class="point6"></div>
+            <div class="point7"></div>
+            <div class="point8"></div>
+        </div>
+        <div class="modal-content">
+            <p>{{ page.search_text }}</p>
+        </div>
+    </div>
+</div>
+
+<div id="modal-acc-found" class="modal modal-style1">
+                    <input type="hidden" name="page_slug" value="{{ page.slug }}">
+    <div class="modal-block">
+        <div class="modal-icon">
+            <svg width="88" height="88" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M60 30C60 46.5685 46.5685 60 30 60C13.4315 60 0 46.5685 0 30C0 13.4315 13.4315 0 30 0C46.5685 0 60 13.4315 60 30ZM29.9984 29.9112C34.9341 29.9112 38.9353 25.9016 38.9353 20.9556C38.9353 16.0096 34.9341 12 29.9984 12C25.0626 12 21.0614 16.0096 21.0614 20.9556C21.0614 25.9016 25.0626 29.9112 29.9984 29.9112ZM30 32.4487C32.9918 32.4487 35.7534 31.2956 37.7863 29.3738C41.5452 32.4103 44 37.1379 44 40.7894C44 46.5932 41.8904 48.515 30 48.515C18.1096 48.515 16 46.5932 16 40.7894C16 37.1379 18.4548 32.4103 22.2137 29.3738C24.2466 31.2956 27.0082 32.4487 30 32.4487Z" fill="#81C784"/>
+            </svg>
+
+            {#            <svg width="88" height="88" viewBox="0 0 88 88" fill="none">#}
+{#                <circle cx="44" cy="44" r="44" fill="#81C784"/>#}
+{#                <path d="M43.9977 43.8694C51.2368 43.8694 57.1053 37.9887 57.1053 30.7345C57.1053 23.4803 51.2368 17.5996 43.9977 17.5996C36.7586 17.5996 30.8901 23.4803 30.8901 30.7345C30.8901 37.9887 36.7586 43.8694 43.9977 43.8694Z" fill="#29324F"/>#}
+{#                <path d="M55.42 43.0801C52.4385 45.8987 48.3881 47.5899 44.0001 47.5899C39.6122 47.5899 35.5618 45.8987 32.5802 43.0801C27.0672 47.5335 23.4668 54.4674 23.4668 59.8228C23.4668 68.3351 26.5609 71.1538 44.0001 71.1538C61.4394 71.1538 64.5335 68.3351 64.5335 59.8228C64.5335 54.4674 60.9331 47.5335 55.42 43.0801Z" fill="#29324F"/>#}
+{#            </svg>#}
+        </div>
+        <div class="modal-content">
+            <p>{{ page.success_text }}</p>
+        </div>
+    </div>
+</div>
+
+<div id="modal-not-sub" class="modal modal-style1">
+    <div class="modal-block">
+        <div class="modal-icon">
+            <svg width="80" height="79" viewBox="0 0 80 79" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4531 0C8.26166 0 0 8.5812 0 19.1666V48.345C0 58.9304 8.26166 67.5116 18.4531 67.5116H19.4532C21.5682 67.5116 22.6257 67.5116 23.6334 67.7293C24.4905 67.9145 25.3183 68.2157 26.0941 68.6244C27.0061 69.105 27.8165 69.7844 29.4372 71.1433L29.4372 71.1434L35.008 75.8141C36.8016 77.318 37.6985 78.07 38.7029 78.3503C39.5514 78.5871 40.4486 78.5871 41.2971 78.3503C42.3015 78.07 43.1984 77.318 44.992 75.8141L50.5628 71.1434C52.1835 69.7844 52.9939 69.105 53.9059 68.6244C54.6817 68.2157 55.5095 67.9145 56.3666 67.7293C57.3743 67.5116 58.4318 67.5116 60.5468 67.5116H61.5464C71.7378 67.5116 80 58.9304 80 48.345V19.1666C80 8.5812 71.7378 0 61.5469 0H18.4531ZM39.9993 28.7239C42.0375 28.7239 43.6898 30.3762 43.6898 32.4144L43.6898 50.4325C43.6898 52.4707 42.0375 54.123 39.9993 54.123C37.9611 54.123 36.3088 52.4707 36.3088 50.4325V32.4144C36.3088 30.3762 37.9611 28.7239 39.9993 28.7239ZM39.999 24.7823C42.1864 24.7823 43.9595 23.0092 43.9595 20.8218C43.9595 18.6345 42.1864 16.8613 39.999 16.8613C37.8117 16.8613 36.0385 18.6345 36.0385 20.8218C36.0385 23.0092 37.8117 24.7823 39.999 24.7823Z" fill="#FD3162"/>
+            </svg>
+        </div>
+        <div class="modal-content">
+            <p>{{ page.error_text }}</p>
+        </div>
+    </div>
+</div>
+
+<main class="profile-page">
+    <div style="background-image: url('https://{{ page.get_page_photo_url }}')" class="background-picture"></div>
+    <div class="wrapper">
+        <div class="profile-content">
+            <div class="container">
+                {% csrf_token %}
+                <div class="avatar">
+                    <img src="{{ page.get_instagram_avatar_url }}" alt="">
+                </div>
+                <div class="user-info">
+                    <h4 class="user-title">{{ page.instagram_name }}</h4>
+                    <p>
+                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.00195 18.0409C6.54195 18.0409 6.25195 18.0279 5.29195 17.9859C4.54332 17.9613 3.80438 17.8091 3.10695 17.5359C2.51013 17.3036 1.96813 16.9498 1.51537 16.4969C1.06261 16.0439 0.708987 15.5018 0.476953 14.9049C0.214259 14.2049 0.072571 13.4654 0.0579531 12.7179C0.00195312 11.7599 0.00195312 11.4459 0.00195312 9.00488C0.00195312 6.53788 0.0149531 6.24988 0.0579531 5.29488C0.0728908 4.5484 0.214574 3.80989 0.476953 3.11088C0.70872 2.51322 1.06258 1.97046 1.51595 1.51727C1.96931 1.06408 2.5122 0.710423 3.10995 0.478883C3.8086 0.215085 4.5473 0.073027 5.29395 0.0588827C6.24895 0.00488271 6.56295 0.00488281 9.00195 0.00488281C11.482 0.00488281 11.767 0.0178827 12.712 0.0588827C13.46 0.0728827 14.202 0.214883 14.902 0.478883C15.4995 0.710691 16.0423 1.06444 16.4956 1.5176C16.949 1.97075 17.3029 2.51338 17.535 3.11088C17.802 3.82088 17.945 4.57088 17.956 5.32788C18.012 6.28588 18.012 6.59888 18.012 9.03888C18.012 11.4789 17.998 11.7989 17.956 12.7459C17.941 13.4941 17.799 14.2343 17.536 14.9349C17.3033 15.5322 16.949 16.0746 16.4956 16.5277C16.0422 16.9808 15.4995 17.3347 14.902 17.5669C14.202 17.8289 13.463 17.9709 12.716 17.9859C11.761 18.0409 11.448 18.0409 9.00195 18.0409ZM8.96795 1.58788C6.52195 1.58788 6.26795 1.59988 5.31295 1.64288C4.7426 1.65034 4.17775 1.75553 3.64295 1.95388C3.25288 2.1034 2.89847 2.33299 2.60257 2.62786C2.30667 2.92274 2.07583 3.27634 1.92495 3.66588C1.72495 4.20588 1.61995 4.77688 1.61395 5.35288C1.56095 6.32188 1.56095 6.57588 1.56095 9.00488C1.56095 11.4049 1.56995 11.6959 1.61395 12.6589C1.62295 13.2289 1.72795 13.7939 1.92495 14.3289C2.23095 15.1159 2.85495 15.7379 3.64395 16.0399C4.17806 16.2395 4.7428 16.3447 5.31295 16.3509C6.28095 16.4069 6.53595 16.4069 8.96795 16.4069C11.421 16.4069 11.675 16.3949 12.622 16.3509C13.1924 16.344 13.7573 16.2388 14.292 16.0399C14.6799 15.8892 15.0323 15.6595 15.3267 15.3653C15.6211 15.071 15.8511 14.7188 16.002 14.3309C16.202 13.7909 16.307 13.2189 16.313 12.6429H16.324C16.367 11.6869 16.367 11.4319 16.367 8.98888C16.367 6.54588 16.356 6.28888 16.313 5.33388C16.3039 4.76434 16.1988 4.20041 16.002 3.66588C15.8514 3.27743 15.6216 2.92459 15.3272 2.62983C15.0328 2.33508 14.6802 2.10487 14.292 1.95388C13.757 1.75388 13.192 1.64988 12.622 1.64288C11.655 1.58788 11.402 1.58788 8.96795 1.58788ZM9.00195 13.6239C8.08753 13.6245 7.19346 13.3539 6.43284 12.8463C5.67222 12.3387 5.07921 11.617 4.72882 10.7723C4.37842 9.92771 4.28638 8.99813 4.46434 8.10119C4.6423 7.20424 5.08227 6.38022 5.72858 5.73334C6.3749 5.08647 7.19854 4.64579 8.09533 4.46706C8.99212 4.28832 9.92178 4.37955 10.7667 4.72921C11.6116 5.07888 12.3339 5.67126 12.8421 6.43144C13.3504 7.19162 13.6218 8.08545 13.622 8.99988C13.6204 10.2251 13.1332 11.3997 12.2673 12.2664C11.4013 13.1331 10.2271 13.6212 9.00195 13.6239ZM9.00195 5.99788C8.40861 5.99788 7.82859 6.17383 7.33524 6.50347C6.84189 6.83312 6.45738 7.30165 6.23031 7.84983C6.00325 8.39801 5.94384 9.00121 6.0596 9.58315C6.17535 10.1651 6.46108 10.6996 6.88063 11.1192C7.30019 11.5388 7.83474 11.8245 8.41668 11.9402C8.99862 12.056 9.60182 11.9966 10.15 11.7695C10.6982 11.5425 11.1667 11.1579 11.4964 10.6646C11.826 10.1712 12.002 9.59123 12.002 8.99788C12.0001 8.2028 11.6834 7.44081 11.1212 6.8786C10.559 6.3164 9.79703 5.99973 9.00195 5.99788ZM13.802 5.28488C13.6604 5.28436 13.5203 5.25595 13.3897 5.20129C13.2591 5.14663 13.1406 5.06679 13.0409 4.96632C12.8394 4.7634 12.7269 4.48879 12.728 4.20288C12.729 3.91698 12.8436 3.64321 13.0465 3.44179C13.2494 3.24038 13.524 3.12782 13.81 3.12888C14.0959 3.12994 14.3696 3.24454 14.571 3.44745C14.7725 3.65036 14.885 3.92498 14.884 4.21088C14.8829 4.49679 14.7683 4.77056 14.5654 4.97197C14.3625 5.17339 14.0879 5.28594 13.802 5.28488Z" fill="#CCE0FF"/>
+                        </svg>
+                        {{ page.instagram_username }}
+                    </p>
+                </div>
+
+                {% if show_subscribes %}
+                    <div class="profile-amount">
+                        <div class="profile-amount_item style1">
+                            <div class="profile-amount_numb">{{ media_count }}</div>
+                            <div class="profile-amount_text">Публик.</div>
+                        </div>
+                        <div class="profile-amount_item style2">
+                            <div class="profile-amount_numb">{{ follower_count }}</div>
+                            <div class="profile-amount_text">Подписчиков</div>
+                        </div>
+                        <div class="profile-amount_item style3">
+                            <div class="profile-amount_numb">{{ following_count }}</div>
+                            <div class="profile-amount_text">Подписок</div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="user-content" id="preSubscribePanel">
+                    <a class="content-icon">
+                        <svg width="25" height="21" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.05885 10.0638C10.8122 10.0638 13.0442 7.82709 13.0442 5.06801C13.0442 2.30894 10.8122 0.0722656 8.05885 0.0722656C5.30551 0.0722656 3.07349 2.30894 3.07349 5.06801C3.07349 7.82709 5.30551 10.0638 8.05885 10.0638Z" fill="{{ bg_color.panel_icon_color }}"/>
+                            <path d="M12.4032 9.76367C11.2691 10.8357 9.7286 11.4789 8.05968 11.4789C6.39077 11.4789 4.85022 10.8357 3.71622 9.76367C1.61937 11.4575 0.25 14.0947 0.25 16.1316C0.25 19.3692 1.4268 20.4413 8.05968 20.4413C14.6926 20.4413 15.8694 19.3692 15.8694 16.1316C15.8694 14.0947 14.5 11.4575 12.4032 9.76367Z" fill="{{ bg_color.panel_icon_color }}"/>
+                            <path d="M19.7024 6.40527V13.6365" stroke="{{ bg_color.panel_icon_color }}" stroke-width="1.58333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23.3213 10.0203H16.0833" stroke="{{ bg_color.panel_icon_color }}" stroke-width="1.58333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <div class="content">
+                        {{ page.presubscribe_text }}
+                    </div>
+                </div>
+                <div class="user-content" id="preCheckSubscribePanel" style="display: none">
+                    <a href="#" class="content-icon">
+                        <svg width="25" height="21" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.05885 10.0638C10.8122 10.0638 13.0442 7.82709 13.0442 5.06801C13.0442 2.30894 10.8122 0.0722656 8.05885 0.0722656C5.30551 0.0722656 3.07349 2.30894 3.07349 5.06801C3.07349 7.82709 5.30551 10.0638 8.05885 10.0638Z" fill="{{ bg_color.panel_icon_color }}"/>
+                            <path d="M12.4032 9.76367C11.2691 10.8357 9.7286 11.4789 8.05968 11.4789C6.39077 11.4789 4.85022 10.8357 3.71622 9.76367C1.61937 11.4575 0.25 14.0947 0.25 16.1316C0.25 19.3692 1.4268 20.4413 8.05968 20.4413C14.6926 20.4413 15.8694 19.3692 15.8694 16.1316C15.8694 14.0947 14.5 11.4575 12.4032 9.76367Z" fill="{{ bg_color.panel_icon_color }}"/>
+                            <path d="M19.7024 6.40527V13.6365" stroke="{{ bg_color.panel_icon_color }}" stroke-width="1.58333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23.3213 10.0203H16.0833" stroke="{{ bg_color.panel_icon_color }}" stroke-width="1.58333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <div class="content">
+                        {{ page.precheck_subscribe_text }}
+                    </div>
+                </div>
+                <input type="hidden" name="page_slug" value="{{ page.slug }}">
+                {% if page.is_timer_active %}
+                    <div class="timer">
+                        <input type="hidden" id="timer-time" name="timer-time" value="{{ page.timer_time }}">
+                        <input type="hidden" name="page_slug" value="{{ page.slug }}">
+                        <div class="timer-block">
+                            <div class="timer-progress" id="timer-progress"></div>
+                            <span class="sec">180</span>
+                        </div>
+                        <div class="timer-content">
+                            {{ page.timer_text }}
+                            <div class="time">
+                                <span id="timer-minutes">00</span>
+                                :
+                                <span id="timer-seconds">00</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div id="form-block1">
+                    <a href="" class="btn btn-hover go-subscribe" id="go-subscribe" instagram="{{ instagram_url }}">
+                        <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.19037 6.27161C6.71195 6.27161 7.94544 5.03556 7.94544 3.51081C7.94544 1.98606 6.71195 0.75 5.19037 0.75C3.66879 0.75 2.4353 1.98606 2.4353 3.51081C2.4353 5.03556 3.66879 6.27161 5.19037 6.27161Z" fill="white"/>
+                            <path d="M7.59122 6.10547C6.96453 6.69792 6.11318 7.05338 5.19088 7.05338C4.26858 7.05338 3.41723 6.69792 2.79054 6.10547C1.63176 7.04154 0.875 8.49896 0.875 9.62461C0.875 11.4138 1.52534 12.0062 5.19088 12.0062C8.85642 12.0062 9.50676 11.4138 9.50676 9.62461C9.50676 8.49896 8.75 7.04154 7.59122 6.10547Z" fill="white"/>
+                            <path d="M11.625 4.25V8.24619" stroke="white" stroke-width="0.875" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13.625 6.24777H9.625" stroke="white" stroke-width="0.875" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        {{ page.subscribe_button }}
+                    </a>
+                    <a href="#" class="btn transparent-btn already-subscribe" id="already-subscribe">{{ page.already_subscribed_text }}</a>
+                </div>
+                <div id="form-block2" style="display: none;">
+                    <div class="login-input">
+                        <svg class="login-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22H17V20H12C7.66 20 4 16.34 4 12C4 7.66 7.66 4 12 4C16.34 4 20 7.66 20 12V13.43C20 14.22 19.29 15 18.5 15C17.71 15 17 14.22 17 13.43V12C17 9.24 14.76 7 12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C13.38 17 14.64 16.44 15.54 15.53C16.19 16.42 17.31 17 18.5 17C20.47 17 22 15.4 22 13.43V12C22 6.48 17.52 2 12 2ZM12 15C10.34 15 9 13.66 9 12C9 10.34 10.34 9 12 9C13.66 9 15 10.34 15 12C15 13.66 13.66 15 12 15Z"
+                                  fill="#7088AC" />
+                        </svg>
+                        <input type="text" placeholder="{{ page.enter_login_placeholder }}" name="instagram_username" id="login_input">
+                        <div class="tooltip">
+                            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 8C16 10.1217 15.1571 12.1566 13.6569 13.6569C12.1566 15.1571 10.1217 16 8 16C5.87827 16 3.84344 15.1571 2.34315 13.6569C0.842855 12.1566 0 10.1217 0 8C0 5.87827 0.842855 3.84344 2.34315 2.34315C3.84344 0.842855 5.87827 0 8 0C10.1217 0 12.1566 0.842855 13.6569 2.34315C15.1571 3.84344 16 5.87827 16 8ZM5.496 6.033H6.321C6.459 6.033 6.569 5.92 6.587 5.783C6.677 5.127 7.127 4.649 7.929 4.649C8.615 4.649 9.243 4.992 9.243 5.817C9.243 6.452 8.869 6.744 8.278 7.188C7.605 7.677 7.072 8.248 7.11 9.175L7.113 9.392C7.11405 9.45761 7.14085 9.52017 7.18762 9.5662C7.23439 9.61222 7.29738 9.63801 7.363 9.638H8.174C8.2403 9.638 8.30389 9.61166 8.35078 9.56478C8.39766 9.51789 8.424 9.4543 8.424 9.388V9.283C8.424 8.565 8.697 8.356 9.434 7.797C10.043 7.334 10.678 6.82 10.678 5.741C10.678 4.23 9.402 3.5 8.005 3.5C6.738 3.5 5.35 4.09 5.255 5.786C5.25363 5.81829 5.25888 5.85053 5.27043 5.88072C5.28198 5.91091 5.29958 5.93841 5.32216 5.96155C5.34473 5.98468 5.3718 6.00296 5.40169 6.01524C5.43159 6.02753 5.46368 6.03357 5.496 6.033ZM7.821 12.476C8.431 12.476 8.85 12.082 8.85 11.549C8.85 10.997 8.43 10.609 7.821 10.609C7.237 10.609 6.812 10.997 6.812 11.549C6.812 12.082 7.237 12.476 7.822 12.476H7.821Z" fill="{{ bg_color.panel_icon_color }}" />
+                            </svg>
+                            <div class="tooltip-content">
+                                <div class="tooltip-inner">
+                                    <div class="tooltip-content_img">
+                                        <img src="/media/images/tooltip-image.png" alt="Tooltip">
+                                    </div>
+                                    <div class="tooltip-content_desc">
+                                        <p>{{ page.help_text }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="" class="btn btn-hover go-subscribe" id="subscribed-check">
+                        <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.19037 6.27161C6.71195 6.27161 7.94544 5.03556 7.94544 3.51081C7.94544 1.98606 6.71195 0.75 5.19037 0.75C3.66879 0.75 2.4353 1.98606 2.4353 3.51081C2.4353 5.03556 3.66879 6.27161 5.19037 6.27161Z"
+                                  fill="white" />
+                            <path d="M7.59122 6.10547C6.96453 6.69792 6.11318 7.05338 5.19088 7.05338C4.26858 7.05338 3.41723 6.69792 2.79054 6.10547C1.63176 7.04154 0.875 8.49896 0.875 9.62461C0.875 11.4138 1.52534 12.0062 5.19088 12.0062C8.85642 12.0062 9.50676 11.4138 9.50676 9.62461C9.50676 8.49896 8.75 7.04154 7.59122 6.10547Z"
+                                  fill="white" />
+                            <path d="M11.625 4.25V8.24619" stroke="white" stroke-width="0.875" stroke-linecap="round"
+                                  stroke-linejoin="round" />
+                            <path d="M13.625 6.24777H9.625" stroke="white" stroke-width="0.875" stroke-linecap="round"
+                                  stroke-linejoin="round" />
+                        </svg>
+                        {{ page.subscribed_button }}
+                    </a>
+                    <a href="{{ instagram_url }}" target="_blank" class="btn transparent-btn already-subscribe">{{ page.not_yet_subscribed }}</a>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="created-with">
+                <p>Made with <a href="/" target="_blank">Teleport</a></p>
+            </div>
+            <a href="{% url 'users:privacy-policy' %}" class="privacy">Privacy Policy</a>
+        </footer>
+        <div class="bg"></div>
+    </div>
+</main>
+    <script src="{% static 'js/subscribe.js' %}"></script>
+{% endblock %}

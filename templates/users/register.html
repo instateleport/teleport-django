@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block carrot %}
+    <!-- Carrot quest BEGIN -->
+    <script type="text/javascript">
+    !function(){function t(t,e){return function(){window.carrotquestasync.push(t,arguments)}}if("undefined"==typeof carrotquest){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="//cdn.carrotquest.app/api.min.js",document.getElementsByTagName("head")[0].appendChild(e),window.carrotquest={},window.carrotquestasync=[],carrotquest.settings={};for(var n=["connect","track","identify","auth","oth","onReady","addCallback","removeCallback","trackMessageInteraction"],a=0;a<n.length;a++)carrotquest[n[a]]=t(n[a])}}(),carrotquest.connect("42083-c5cbf07ce7e3c9363e0bb9df9e");
+    </script>
+    <!-- Carrot quest END -->
+{% endblock %}
+
+{% block content %}
+    <div class="sign flex">
+		<div class="sign_logo">
+			<div class="logo">Teleport</div>
+		</div>
+		<div class="sign_img flex__align">
+			<img src="/media/images/sign-up_icon.svg" alt="image">
+		</div>
+		<form method="POST" class="sign_form flex__align" autocomplete="off" id="signUpForm">
+            {% csrf_token %}
+
+			<div class="sign_form_inner">
+				<div class="sign_title">Регистрация</div>
+				<div class="sign_input">
+					<div class="sign_label">{{ form.username.label }}</div>
+					<div class="input">
+						<div class="input">
+                            {{ form.username }}
+							<div class="input_err">{{ form.username.errors }}</div>
+						</div>
+					</div>
+				</div>
+				<div class="sign_input">
+					<div class="sign_label">{{ form.email.label }}</div>
+					<div class="input">
+						<div class="input">
+                            {{ form.email }}
+							<div class="input_err">{{ form.email.errors }}</div>
+						</div>
+					</div>
+				</div>
+				<div class="sign_input">
+					<div class="sign_label">{{ form.phone.label }}</div>
+					<div class="input">
+						<div class="input">
+                            {{ form.phone }}
+							<div class="input_err">{{ form.phone.errors }}</div>
+						</div>
+					</div>
+				</div>
+				<div class="sign_input">
+					<div class="sign_label">{{ form.password1.label }}</div>
+					<div class="input input__password">
+						<div class="input">
+                            {{ form.password1 }}
+							<div class="input_err">{{ form.password.errors }}</div>
+							<span class="icon icon-eye"></span>
+						</div>
+					</div>
+				</div>
+				<div class="sign_input">
+					<div class="sign_label">{{ form.password2.label }} </div>
+					<div class="input input__password">
+						<div class="input">
+                            {{ form.password2 }}
+							<div class="input_err">{{ form.password2.errors }}</div>
+							<span class="icon icon-eye"></span>
+						</div>
+					</div>
+				</div>
+				<div class="sign_btn">
+					<input type="submit" class="btn btn-red" value="Создать аккаунт">
+				</div>
+				<div class="sign_center_href"><a class="hover__line" href="{% url 'users:login' %}">Войти</a></div>
+			</div>
+		</form>
+	</div>
+    <script src="{% static 'js/mask.js' %}"></script>
+{% endblock %}

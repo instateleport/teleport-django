@@ -1,0 +1,2 @@
+[2022-10-02 13:52:14,932: INFO/ForkPoolWorker-4] Task save_instagram_info[312e65ed-b57f-4091-b962-62d280d2e502] succeeded in 0.007207067999843275s: None
+[2022-10-02 13:52:14,937: INFO/ForkPoolWorker-4] Task save_instagram_info[7ff4a2ed-a101-4987-865c-1f8c9066593c] succeeded in 0.0010502940003789263s: None

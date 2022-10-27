@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Баланс кончился{% endblock %}
+
+{% block content %}
+   <div class="balance">
+		<div class="balance_img">
+			<img src="/media/images/balance_man.png">
+		</div>
+		<div class="balance_text">У вас кончился баланс</div>
+		<div class="balance_buttons">
+			<div class="balance_button">
+                <a href="{% url 'subscribe_pages:page-list'  %}" class="button_next">на главную</a>
+			</div>
+			<div class="balance_button">
+				<a href="{% url 'users:balance' %}" class="button">ПОПОЛНИТЬ БАЛАНС</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

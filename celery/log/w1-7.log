@@ -1,0 +1,3 @@
+[2022-10-02 13:52:14,903: INFO/ForkPoolWorker-7] Task save_instagram_info[3a9b7225-9129-49d4-8581-c0aa33e31f1f] succeeded in 0.0032804330003273208s: None
+[2022-10-02 13:52:14,908: INFO/ForkPoolWorker-7] Task save_instagram_info[b3723d76-796c-464a-aa3c-e0d58ddb9dda] succeeded in 0.00043966100020043086s: None
+[2022-10-02 13:52:15,389: INFO/ForkPoolWorker-7] Task reset_password[b6e67288-ae97-4f61-8a45-ac70cb8c8a47] succeeded in 0.47495651099961833s: None

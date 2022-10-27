@@ -1,0 +1,8 @@
+[2022-10-02 13:52:14,925: INFO/ForkPoolWorker-1] Task save_instagram_info[4b2cc949-729e-453a-84ec-3fffd888be09] succeeded in 0.006298975000390783s: None
+[2022-10-02 13:52:14,931: INFO/ForkPoolWorker-1] Task save_instagram_info[66a5e436-e281-4ec0-bea8-dc54bc95c382] succeeded in 0.0016294859997287858s: None
+[2022-10-02 13:52:14,935: INFO/ForkPoolWorker-1] Task save_instagram_info[91c1610e-c830-421f-ad5d-9bbe525d327d] succeeded in 0.0010283039991918486s: None
+[2022-10-02 13:52:14,940: INFO/ForkPoolWorker-1] Task save_instagram_info[9f143013-8007-4f24-982f-073f317de6b5] succeeded in 0.001180084000225179s: None
+[2022-10-02 13:52:14,947: INFO/ForkPoolWorker-1] Task save_instagram_info[9745cdbd-ee1d-43fd-b9f8-f1f74c38f5f2] succeeded in 0.0017065169995476026s: None
+[2022-10-02 13:52:14,954: INFO/ForkPoolWorker-1] Task save_instagram_info[ed750b55-36c2-4a7e-94ab-87c5702d04b0] succeeded in 0.0013861349998478545s: None
+[2022-10-02 13:52:14,957: INFO/ForkPoolWorker-1] Task save_instagram_info[dbd0ff2b-172c-42b9-8e3a-1991ce1e0e3f] succeeded in 0.001142144999903394s: None
+[2022-10-02 13:52:14,962: INFO/ForkPoolWorker-1] Task save_instagram_info[ec4c970e-8991-43a6-89f9-dc357ace907b] succeeded in 0.001940576999913901s: None
