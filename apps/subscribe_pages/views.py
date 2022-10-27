@@ -153,19 +153,16 @@ class AddToFolderView(LoginRequiredMixin, AjaxMixin, View):
     def post(self, request, *args, **kwargs):
         response = self.get_ajax_response()
         data = request.POST
-        try:
-            page = models.InstagramSubscribePage.objects.get(
-                slug=data['slug'], user=request.user
-            )
-            group = models.GroupOfSubscribePage.objects.get(
-                user=request.user, id=int(data['group'])
-            )
-            page.group = group
-            page.save(update_fields=['group'])
-            response['status'] = 'SUCCESS'
-            response['url'] = '/subscribe-pages/%s/' % group.name
-        except:
-            response['status'] = 'FAIL'
+        page = models.InstagramSubscribePage.objects.get(
+            slug=data['slug'], user=request.user
+        )
+        group = models.GroupOfSubscribePage.objects.get(
+            user=request.user, id=int(data['group_id'])
+        )
+        page.group = group
+        page.save()
+        response['status'] = 'SUCCESS'
+        response['url'] = '/subscribe-pages/%s/' % group.name
 
         return self.ajax_response(response)
 
