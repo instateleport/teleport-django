@@ -1,0 +1,41 @@
+{% block content %}
+
+<ul>
+    <li>
+        <div style="display: flex">
+            <div style="margin-top: 50px">
+                Кол-во зарегистрированных вчера пользователей -
+            </div>
+            <div style="font-size: 100">
+                {{ amount_of_system_users }}
+            </div>
+        </div>
+    </li>
+
+
+    <li>
+        <div style="display: flex">
+            <div style="margin-top: 50px">
+                Кол-во человек, которые подписались на инстаграмм странички (вчера) -
+            </div>
+            <div style="font-size: 100">
+                {{ amount_of_instagram_subs }}
+            </div>
+        </div>
+    </li>
+
+
+    <li>
+        <div style="display: flex">
+            <div style="margin-top: 50px">
+                Кол-во человек, которые подписались на группу в вк (вчера) -
+            </div>
+            <div style="font-size: 100">
+                {{ amount_of_vk_subs }}
+            </div>
+        </div>
+    </li>
+
+</ul>
+
+{% endblock content %}
