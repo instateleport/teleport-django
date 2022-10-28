@@ -97,37 +97,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'getsub.wsgi.application'
 
-DATABASES = {}
-
-if config('DATABASE') == 'local':
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'politech',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-    }
-elif config('DATABASE') == 'product':
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'teleport',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost'
-    }
-elif config('DATABASE') == 'product_new':
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'teleport2',
-        'USER': 'teleport2',
-        'PASSWORD': 'dN3pJ7kF0ovZ5o',
-        'HOST': '77.83.173.18'
-    }
-elif config('DATABASE') == 'sqlite':
+DATABASES = {
+}
+if config('IS_SQLITE'):
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3'
+        'NAME': 'db.sqlite3',
     }
+else:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT')
+    }
+
 
 LOGGING = {
     'version': 1,
