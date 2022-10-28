@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'apps.subscribe_pages.apps.SubscribePagesConfig',
     'apps.payment.apps.PaymentConfig',
     'apps.partners.apps.PartnersConfig',
+    'apps.stats',
 
     'rest_framework',
     'rest_framework_simplejwt',
