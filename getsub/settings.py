@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'getsub.wsgi.application'
 
 DATABASES = {
 }
-if config('IS_SQLITE'):
+if eval(os.getenv('IS_SQLITE')):
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'db.sqlite3',
