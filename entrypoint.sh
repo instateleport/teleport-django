@@ -1,4 +1,4 @@
 #!/bin/bash
-gunicorn -b 0.0.0.0:8000 -w $GUNICORN_WORKERS_AMOUNT getsub.wsgi:application & \
+gunicorn -b $GUNICORN_HOST:$GUNICORN_PORT -w $GUNICORN_WORKERS_AMOUNT getsub.wsgi:application & \
     celery -A getsub worker -l info & \
     celery -A getsub beat -l info
