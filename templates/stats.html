@@ -1,50 +1,68 @@
-{% block content %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Russo+One&display=swap" rel="stylesheet">
+</head >
+    <body style="font-family: 'Rubik Mono One', sans-serif; font-size: 50px">
 
-<ul>
-    <li>
-        <div style="display: flex; align-items: center; width: 1000px; justify-content: space-between;">
-            <div style="margin-top: 50px; font-weight: 800; font-size: 50">
-                Кол-во зарегистрированных вчера пользователей
-            </div>
-            <div style="font-weight: 800; font-size: 50">
-                -
-            </div>
-            <div style="font-size: 100; font-weight: 800; margin-left: 20px">
-                {{ amount_of_system_users }}
-            </div>
-        </div>
-    </li>
+        {% block content %}
+
+        <ul>
+            <li style="margin-top: 50px">
+                <div style="display: flex; align-items: center; width: 1500px; justify-content: space-between;">
+                    <div>
+                        Кол-во зарегистрированных вчера пользователей
+                    </div>
+                    <div style="margin-left: 10px">
+                        -
+                    </div>
+                    <div style="margin-left: 10px; font-size: 100px">
+                        {{ amount_of_system_users }}
+                    </div>
+                </div>
+            </li>
 
 
-    <li>
-        <div style="display: flex; align-items: center; width: 1000px; justify-content: space-between;">
-            <div style="margin-top: 50px; font-weight: 800; font-size: 50">
-                Кол-во человек, которые подписались на инстаграмм странички (вчера)
-            </div>
-            <div style="font-weight: 800; font-size: 50">
-                -
-            </div>
-            <div style="font-size: 100; font-weight: 800; margin-left: 20px">
-                {{ amount_of_instagram_subs }}
-            </div>
-        </div>
-    </li>
+            <li style="margin-top: 50px">
+                <div style="display: flex; align-items: center; width: 1500px; justify-content: space-between;">
+                    <div>
+                        Кол-во человек, которые подписались на инстаграмм странички (вчера)
+                    </div>
+                    <div style="margin-left: 10px">
+                        -
+                    </div>
+                    <div style="margin-left: 10px; font-size: 100px">
+                        {{ amount_of_instagram_subs }}
+                    </div>
+                </div>
+            </li>
 
 
-    <li>
-        <div style="display: flex; align-items: center; width: 1000px; justify-content: space-between;">
-            <div style="margin-top: 50px; font-weight: 800; font-size: 50">
-                Кол-во человек, которые подписались на группу в вк (вчера)
-            </div>
-            <div style="font-weight: 800; font-size: 50">
-                -
-            </div>
-            <div style="font-size: 100; font-weight: 800; margin-left: 20px">
-                {{ amount_of_vk_subs }}
-            </div>
-        </div>
-    </li>
+            <li style="margin-top: 50px">
+                <div style="display: flex; align-items: center; width: 1500px; justify-content: space-between;">
+                    <div>
+                        Кол-во человек, которые подписались на группу в вк (вчера)
+                    </div>
+                    <div style="margin-left: 10px">
+                        -
+                    </div>
+                    <div style="margin-left: 10px; font-size: 100px">
+                        {{ amount_of_vk_subs }}
+                    </div>
+                </div>
+            </li>
 
-</ul>
+        </ul>
 
-{% endblock content %}
+        {% endblock content %}
+
+    </body>
+</html>
+
