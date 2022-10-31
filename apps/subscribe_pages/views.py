@@ -523,7 +523,7 @@ class StatisticSubscribePageDetailView(LoginRequiredMixin,
 
         subscribers = self.object.views.exclude(instagram_username='').filter(
             instagram_username__isnull=False
-        )[:100]
+        ).order_by('-date')[:100]
         paginator = Paginator(subscribers, 10)
 
         context['subscribers'] = paginator.get_page(page)
