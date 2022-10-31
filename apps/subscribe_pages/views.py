@@ -355,7 +355,7 @@ class SubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin,
         context['bg_color'] = self.object.bg_color
         context['bg_colors'] = models.BGColor.objects.filter(is_active=True)
 
-        context['photo'] = self.object.get_page_photo_url()
+        context['photo'] = f'https://{self.object.get_page_photo_url()}'
         context['instagram_avatar'] = self.object.get_instagram_avatar_url()
         context['instagram_username'] = self.object.instagram_username
         context["follower_count"] = 1000
@@ -824,7 +824,7 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
 
         subscriber = models.InstagramSubscriber.get_or_create_by_user_ip(request)
         if subscriber.is_visited_page_by_slug(self.object.slug):
-            return HttpResponse("Already subscriber")
+            return HttpResponse("FAIL")
 
         page.user.pocket.pay_per_subscriber()
         statistic, statistic_created = models.InstagramStatistic.objects.get_or_create(
