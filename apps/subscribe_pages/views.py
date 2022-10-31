@@ -822,6 +822,10 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
         if not s or page.user.pocket.balance <= 0:
             return HttpResponse("FAIL")
 
+        subscriber = models.InstagramSubscriber.get_or_create_by_user_ip(request)
+        if subscriber.is_visited_page_by_slug(self.object.slug):
+            return HttpResponse("Already subscriber")
+
         page.user.pocket.pay_per_subscriber()
         statistic, statistic_created = models.InstagramStatistic.objects.get_or_create(
                         subscribe_page=self.object, day=datetime.today())
@@ -829,7 +833,6 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
         statistic.subscribers += 1
         statistic.save(update_fields=["subscribers"])
 
-        subscriber = models.InstagramSubscriber.get_or_create_by_user_ip(request)
         subscriber.instagram_username = username2
         subscriber.subscribe_to.add(page)
         subscriber.save()
