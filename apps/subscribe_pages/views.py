@@ -355,7 +355,7 @@ class SubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin,
         context['bg_color'] = self.object.bg_color
         context['bg_colors'] = models.BGColor.objects.filter(is_active=True)
 
-        context['photo'] = f'https://{self.object.get_page_photo_url()}'
+        context['page_photo'] = f'https://{self.object.get_page_photo_url()}'
         context['instagram_avatar'] = self.object.get_instagram_avatar_url()
         context['instagram_username'] = self.object.instagram_username
         context["follower_count"] = 1000
@@ -1011,7 +1011,7 @@ class VKSubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin,
         context['bg_color'] = self.object.bg_color
         context['bg_colors'] = models.BGColor.objects.filter(is_active=True)
 
-        context['page_photo'] = self.object.get_page_photo_url()
+        context['page_photo'] = f'https://{self.object.get_page_photo_url()}'
         return context
 
     def form_valid(self, form):
