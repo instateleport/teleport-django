@@ -581,10 +581,11 @@ class StatisticSubscribePageDownloadSubscribers(LoginRequiredMixin,
 
         for subscriber in self.object.views.all():
             # subscribers['date'].append(str(subscriber.date))
-            subscribers['username'].append(subscriber.instagram_username)
-            subscribers['subscribed'].append(
-                '+' if self.object in subscriber.subscribe_to.all() else '-'
-            )
+            if subscriber.instagram_username:
+                subscribers['username'].append(subscriber.instagram_username)
+                subscribers['subscribed'].append(
+                    '+' if self.object in subscriber.subscribe_to.all() else '-'
+                )
 
         excel_file_path = f'media/excels/{request.user.id}'
         if not os.path.exists(excel_file_path):
