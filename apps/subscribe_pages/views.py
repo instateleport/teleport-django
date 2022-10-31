@@ -521,7 +521,7 @@ class StatisticSubscribePageDetailView(LoginRequiredMixin,
 
         page = int(self.request.GET.get('page', 1))
 
-        subscribers = self.object.views.filter(
+        subscribers = self.object.views.exclude(instagram_username='').filter(
             instagram_username__isnull=False
         )[:100]
         paginator = Paginator(subscribers, 10)
