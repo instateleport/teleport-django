@@ -177,3 +177,18 @@ class DomainAdmin(admin.ModelAdmin):
 @admin.register(models.CostPerSubscriber)
 class CostPerSubscriberAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.TelegramSubscribePage)
+class TelegramSubscribePageAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.TelegramUser)
+class TelegramUserAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.TelegramSubscriber)
+class TelegramSubscriberAdmin(admin.ModelAdmin):
+    pass

@@ -1521,3 +1521,19 @@ class VKStatisticAPIView(generics.CreateAPIView, mixins.UpdateModelMixin):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED,
                         headers=headers)
+
+
+class GetPresentFromTelegramPageView(APIView):
+
+    def get(self, request, channel_id):
+        try:
+            telegram_sub_page = models.TelegramSubscribePage.objects.get(
+                telegram_channel_id=channel_id)
+        except:
+            data = {'message': 'There is not channel with given id'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+        if telegram_sub_page.user.pocket.balance <= 0:
+            data = {'message': 'Channel owner has not enough money'}
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+        data = {'present_url': telegram_sub_page.present_url}
+        return Response(data=data, status=status.HTTP_200_OK)

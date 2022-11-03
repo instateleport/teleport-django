@@ -5,15 +5,12 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import datetime
-from django.utils import timezone
 from django.urls import reverse_lazy
 from django.conf import settings
 
 from decimal import Decimal
 
 import logging
-
-from numpy.distutils.system_info import numarray_info
 
 ipLogger = logging.getLogger('ip')
 
@@ -331,9 +328,9 @@ class InstagramSubscribePage(models.Model):
     single_page = models.BooleanField(default=False)
     show_subscribers = models.BooleanField(default=False)
 
-    following_count = models.CharField(max_length=12, blank=True)
-    follower_count = models.CharField(max_length=12, blank=True)
-    media_count = models.CharField(max_length=12, blank=True)
+    following_count = models.CharField(max_length=12, blank=True, null=True)
+    follower_count = models.CharField(max_length=12, blank=True, null=True)
+    media_count = models.CharField(max_length=12, blank=True, null=True)
 
     is_active = models.BooleanField(default=False, verbose_name=_('Активный'))
     created = models.BooleanField(default=False, verbose_name=_('Создано'))
@@ -867,6 +864,26 @@ class VKSubscription(models.Model):
 
     def __str__(self):
         return f'{self.vk_subscriber} - {self.vk_page.slug}'
+
+
+class TelegramUser(models.Model):
+    telegram_username = models.CharField(max_length=100)
+    telegram_user_id = models.CharField(max_length=100)
+
+
+class TelegramSubscribePage(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='telegram_subscribe_pages', verbose_name=_('Пользователь'))
+    telegram_bot_url = models.CharField(max_length=200)
+    telegram_channel_id = models.CharField(max_length=200)
+    present_url = models.CharField(max_length=200)
+
+
+class TelegramSubscriber(models.Model):
+    telegram_subscribe_page = models.ForeignKey(
+        TelegramSubscribePage, on_delete=models.CASCADE)
+    telegram_user = models.ForeignKey(TelegramUser, on_delete=models.CASCADE)
 
 
 @receiver(post_save, sender=InstagramSubscribePage)
