@@ -870,6 +870,9 @@ class TelegramUser(models.Model):
     telegram_username = models.CharField(max_length=100)
     telegram_user_id = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.telegram_username
+
 
 class TelegramSubscribePage(models.Model):
     user = models.ForeignKey(
@@ -879,11 +882,17 @@ class TelegramSubscribePage(models.Model):
     telegram_channel_id = models.CharField(max_length=200)
     present_url = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.telegram_bot_url
+
 
 class TelegramSubscriber(models.Model):
     telegram_subscribe_page = models.ForeignKey(
         TelegramSubscribePage, on_delete=models.CASCADE)
     telegram_user = models.ForeignKey(TelegramUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.telegram_subscribe_page.telegram_bot_url} <- {self.telegram_user.telegram_username}'
 
 
 @receiver(post_save, sender=InstagramSubscribePage)
