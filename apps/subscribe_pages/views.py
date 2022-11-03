@@ -45,7 +45,8 @@ from .mixins import (
 )
 from . import models, forms, task
 from .serializers import (
-    VKSubscribePageSerializer, VKSubscriptionSerializer, VKSubscriberSerializer
+    VKSubscribePageSerializer, VKSubscriptionSerializer, VKSubscriberSerializer,
+    TelegramSubscriberSerializer
 )
 
 from .lamadava_api.lamadava import user_is_following
@@ -1537,3 +1538,39 @@ class GetPresentFromTelegramPageView(APIView):
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
         data = {'present_url': telegram_sub_page.present_url}
         return Response(data=data, status=status.HTTP_200_OK)
+
+
+class AddTelegramUserToChannelSubscribers(APIView):
+
+    def post(self, request):
+        serializer = TelegramSubscriberSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        telegram_channel_id = serializer.data['telegram_channel_id']
+        telegram_user_id = serializer.data['telegram_user_id']
+        telegram_user_username = serializer.data['telegram_user_username']
+        try:
+            telegram_sub_page = models.TelegramSubscribePage.objects.get(
+                telegram_channel_id=telegram_channel_id)
+        except:
+            data = {'message': 'There is not channel with given id'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+        if telegram_sub_page.user.pocket.balance <= 0:
+            data = {'message': 'Channel owner has not enough money'}
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            telegram_user = models.TelegramUser.objects.get(
+                telegram_user_id=telegram_user_id)
+        except:
+            telegram_user = models.TelegramUser(
+                telegram_user_id=telegram_user_id,
+                telegram_username=telegram_user_username
+            )
+            telegram_user.save()
+
+        models.TelegramSubscriber.objects.get_or_create(
+            telegram_subscribe_page=telegram_sub_page,
+            telegram_user=telegram_user
+        )
+        return Response(status=status.HTTP_201_CREATED)

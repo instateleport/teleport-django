@@ -136,7 +136,9 @@ urlpatterns = [
 
     #telegram bot
     path('api/v1/telegram-page/present/<str:channel_id>/',
-         views.GetPresentFromTelegramPageView.as_view())
+         views.GetPresentFromTelegramPageView.as_view()),
+    path('api/v1/telegram-page/subscriber/',
+         views.AddTelegramUserToChannelSubscribers.as_view())
 ]
 
 if settings.DEBUG:
