@@ -1569,8 +1569,11 @@ class AddTelegramUserToChannelSubscribers(APIView):
             )
             telegram_user.save()
 
-        models.TelegramSubscriber.objects.get_or_create(
+        model, result = models.TelegramSubscriber.objects.get_or_create(
             telegram_subscribe_page=telegram_sub_page,
             telegram_user=telegram_user
         )
+        if result:
+            telegram_sub_page.user.pocket.pay_per_subscriber()
+
         return Response(status=status.HTTP_201_CREATED)
