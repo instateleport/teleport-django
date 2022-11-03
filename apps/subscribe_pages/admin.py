@@ -181,6 +181,7 @@ class CostPerSubscriberAdmin(admin.ModelAdmin):
 
 @admin.register(models.TelegramSubscribePage)
 class TelegramSubscribePageAdmin(admin.ModelAdmin):
+    raw_id_fields = ("user",)
     pass
 
 
