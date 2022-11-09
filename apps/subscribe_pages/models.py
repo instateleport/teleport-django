@@ -874,16 +874,336 @@ class TelegramUser(models.Model):
         return self.telegram_username
 
 
-class TelegramSubscribePage(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-        related_name='telegram_subscribe_pages', verbose_name=_('Пользователь'))
-    telegram_bot_url = models.CharField(max_length=200)
-    telegram_channel_id = models.CharField(max_length=200)
-    present_url = models.CharField(max_length=200)
+class TelegramGroupOfSubscribePage(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             related_name='tg_group_of_pages',
+                             verbose_name=_('Владелец'))
+    name = models.CharField(max_length=255, verbose_name=_('Название'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Создано'))
+    can_delete = models.BooleanField(default=True,
+                                     verbose_name=_('Можно удалить'))
+
+    class Meta:
+        verbose_name = 'Группа Telegram страницы'
+        verbose_name_plural = 'Группы Telegram страниц'
 
     def __str__(self):
-        return self.telegram_bot_url
+        return f'{self.name}-{self.user}'
+
+
+class TelegramSubscribePage(models.Model):
+    def get_page_photo_path(self, filename: str) -> str:
+        return f'subscribe_page/{self.instagram_username}/page_photos/{filename}'
+
+    def get_instagram_avatar_path(self, filename: str) -> str:
+        return f'subscribe_page/{self.instagram_username}/instagram_avatars/{filename}'
+
+    @classmethod
+    def slug_generate(cls, user: settings.AUTH_USER_MODEL, count: int = 1):
+        slug = f'{user.username}-{cls.objects.filter(user=user).count() + count}'.replace(
+            '.', '_')
+        if cls.objects.filter(slug=slug):
+            return cls.slug_generate(user, count + 1)
+        return slug
+
+    tg_bot_url = models.URLField(max_length=200)
+    tg_channel_id = models.CharField(max_length=200)
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='tg_subscribe_pages',
+        verbose_name=_('Пользователь')
+    )
+    group = models.ForeignKey(
+        TelegramGroupOfSubscribePage, on_delete=models.SET_NULL,
+        related_name='tg_subscribe_pages',
+        null=True, blank=True,
+        verbose_name=_('Группа страниц')
+    )
+    domain = models.ForeignKey(
+        Domain, on_delete=models.SET_NULL,
+        related_name='tg_subscribe_pages',
+        blank=True, null=True,
+        verbose_name=_('Домен')
+    )
+    page_name = models.CharField(
+        max_length=60,
+        verbose_name=_('Название страницы')
+    )
+    slug = models.SlugField(
+        max_length=30, db_index=True, unique=True,
+        verbose_name=_('Ссылка подписной страницы')
+    )
+    page_photo = models.ImageField(
+        upload_to=get_page_photo_path,
+        blank=True, null=True,
+        verbose_name=_('Page photo')
+    )
+    bg_color = models.ForeignKey(
+        BGColor, related_name='tg_subscribe_pages',
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        verbose_name=_('Цвет фона')
+    )
+
+    title = models.CharField(
+        max_length=60, null=True,
+        verbose_name=_('Заголовок')
+    )
+    description = models.TextField(
+        null=True,
+        verbose_name=_('Описание')
+    )
+    button_text = models.CharField(
+        max_length=30,
+        default=_('ПОЛУЧИТЬ'),
+        verbose_name=_('Текст на кнопке')
+    )
+
+    instagram_username = models.CharField(
+        max_length=40, null=True,
+        verbose_name=_('Ник в Instagram')
+    )
+    instagram_name = models.CharField(
+        max_length=100, blank=True, null=True,
+        verbose_name=_('Имя в Instagram')
+    )
+    instagram_avatar = models.ImageField(
+        upload_to=get_instagram_avatar_path,
+        blank=True, null=True,
+        verbose_name=_('Аватарка Instagram')
+    )
+
+    timer_text = models.CharField(
+        max_length=39, blank=True, null=True,
+        default=_('Материал станет недоступным через:'),
+        verbose_name=_('Текст на таймере')
+    )
+    is_timer_active = models.BooleanField(
+        default=False,
+        verbose_name=_('Таймер обратного отсчёта')
+    )
+    timer_time = models.IntegerField(
+        default=180,
+        verbose_name=_('Время таймера (в секундах)')
+    )
+
+    facebook_pixel = models.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name=_('Facebook пиксель')
+    )
+    tiktok_pixel = models.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name=_('Tiktok пиксель')
+    )
+    vk_pixel = models.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name=_('ВК пиксель')
+    )
+    yandex_pixel = models.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name=_('Яндекс метрика')
+    )
+    roistat_id = models.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name=_('Roistat ID')
+    )
+
+    ctr = models.FloatField(
+        default=0, blank=True, null=True,
+        verbose_name=_('CTR')
+    )
+
+    popup_title = models.CharField(
+        max_length=50,
+        default=_('Успешно'),
+        verbose_name=_('Заголовок')
+    )
+    popup_text = models.TextField(
+        default=_('Можете получить материалы, нажав по кнопке ниже.'),
+        verbose_name=_('Текст'))
+    popup_button_url = models.TextField(
+        null=True,
+        verbose_name=_('Ссылка кнопки')
+    )
+    popup_button_text = models.CharField(
+        max_length=19,
+        default=_('ПОЛУЧИТЬ МАТЕРИАЛЫ'),
+        verbose_name=_('Текст на кнопке')
+    )
+
+    # Расширенные настройки
+    presubscribe_text = models.CharField(
+        max_length=255,
+        default=_(
+            'Подпишись на мой инстаграм и '
+            'ссылка для скачивания материалов станет доступна'
+        ),
+        verbose_name=_('Текст перед подпиской')
+    )
+    precheck_subscribe_text = models.CharField(
+        max_length=255,
+        default=_('Введите ваш логин инстаграма для проверки подписки'),
+        verbose_name=_(
+            'Текст "Введите ваш логин инстаграма для проверки подписки"')
+    )
+
+    enter_login_placeholder = models.CharField(
+        max_length=255,
+        default=_('введите ваш логин'),
+        verbose_name=_('Текст "Введите ваш логин"')
+    )
+    help_text = models.CharField(
+        max_length=255,
+        default=_('Здесь находится логин'),
+        verbose_name=_('Текст "Здесь находиться логин" (подсказка)')
+    )
+
+    subscribe_button = models.CharField(
+        max_length=255,
+        default=_('Подписаться'),
+        verbose_name=_('Текст "Подписаться" на кнопке')
+    )
+    already_subscribed_text = models.CharField(
+        max_length=255,
+        default=_('Я уже подписался'),
+        verbose_name=_('Текст "Я уже подписался" под кнопкой')
+    )
+
+    subscribed_button = models.CharField(
+        max_length=255,
+        default=_('Подписался'),
+        verbose_name=_('Текст "Я подписался" на кнопке')
+    )
+    not_yet_subscribed = models.CharField(
+        max_length=255,
+        default=_('Я еще не подписался'),
+        verbose_name=_('Текст "Я еще не подписался" под кнопкой')
+    )
+
+    presearch_text = models.CharField(
+        max_length=255,
+        default=_('После подписки вернись на эту страницу для подтверждения'),
+        verbose_name=_(
+            'Текст "После подписки вернись на эту страницу для подтверждения"'
+        )
+    )
+    search_text = models.CharField(
+        max_length=255,
+        default=_('Поиск аккаунта...'),
+        verbose_name=_('Текст "Поиск аккаунта..."')
+    )
+    search_time_text = models.CharField(
+        max_length=255,
+        default=_('Это может занять до 20 секунд'),
+        verbose_name=_('Текст "Это может занять до 20 секунд"')
+    )
+    success_text = models.CharField(
+        max_length=255,
+        default=_('Аккаунт найден!'),
+        verbose_name=_('Текст "Аккаунт найден"')
+    )
+    error_text = models.CharField(
+        max_length=255,
+        default=_('Аккаунт не найден!'),
+        verbose_name=_('Текст "Аккаунт не найден"')
+    )
+
+    single_page = models.BooleanField(default=False)
+    show_subscribers = models.BooleanField(default=False)
+
+    following_count = models.CharField(max_length=12, blank=True, null=True)
+    follower_count = models.CharField(max_length=12, blank=True, null=True)
+    media_count = models.CharField(max_length=12, blank=True, null=True)
+
+    is_active = models.BooleanField(default=False, verbose_name=_('Активный'))
+    created = models.BooleanField(default=False, verbose_name=_('Создано'))
+
+    class Meta:
+        verbose_name = 'Подписная страница'
+        verbose_name_plural = 'Подписные страницы'
+
+    def get_absolute_url(self) -> str:
+        return reverse_lazy('subscribe_pages:page-detail', args=(self.slug,))
+
+    def get_page_photo_url(self) -> str:
+        if self.page_photo:
+            return f'{settings.DOMAIN}{self.page_photo.url}' 
+        return '#'
+
+    def set_default_group(self):
+        default_group, default_group_created = \
+            GroupOfSubscribePage.objects.get_or_create(
+                user=self.user, name='Неотсортированные'
+            )
+        self.group = default_group
+        self.save(update_fields=['group'])
+
+    def get_instagram_avatar_url(self) -> str:
+        avatar_url = None
+        if self.instagram_avatar:
+            avatar_url = self.instagram_avatar.url
+
+        if not avatar_url:
+            if self.user.theme == 'white':
+                avatar_url = '/media/images/icon/no_ava-white.svg'
+            else:
+                avatar_url = '/media/images/icon/no_ava.svg'
+        return avatar_url
+
+    @property
+    def page_url(self) -> str:
+        return f'{self.page_domain}/page/{self.slug}'
+
+    @property
+    def page_domain(self) -> str:
+        if self.domain:
+            domain = self.domain.domain
+        else:
+            domain = settings.DOMAIN
+        return domain
+
+    def calculate_ctr(self) -> float:
+        all_views, all_subscribers = \
+            InstagramStatistic.get_all_views_and_subscribers(self)
+        try:
+            ctr = all_subscribers / all_views * 100
+        except ZeroDivisionError:
+            ctr = 0
+        return ctr
+
+    def save_ctr(self, ctr: Optional[float] = None) -> None:
+        if not ctr:
+            ctr = self.calculate_ctr()
+        self.ctr = float('{:.2f}'.format(ctr))
+        self.save(update_fields=['ctr'])
+
+    def all_views_subscribers_and_ctr(self) -> List[int]:
+        all_views, all_subscribers = InstagramStatistic.get_all_views_and_subscribers(
+            self)
+        return [all_views, all_subscribers, self.ctr]
+
+    all_views_subscribers_and_ctr.short_description = '👁‍🗨, 👤, %'
+
+    @staticmethod
+    def deactivate_user_subscribe_pages(user: settings.AUTH_USER_MODEL):
+        for subscribe_page in user.subscribe_pages.filter(is_active=True):
+            subscribe_page.is_active = False
+            subscribe_page.save(update_fields=['is_active'])
+
+    @staticmethod
+    def activate_user_subscribe_pages(user: settings.AUTH_USER_MODEL):
+        for subscribe_page in user.subscribe_pages.filter(is_active=False):
+            subscribe_page.is_active = True
+            subscribe_page.save(update_fields=['is_active'])
+
+    @classmethod
+    def is_slug_unique(cls, slug) -> bool:
+        return not cls.objects.filter(slug=slug)
+
+    def __str__(self):
+        return f'{self.page_name} - {self.slug}'
 
 
 class TelegramSubscriber(models.Model):

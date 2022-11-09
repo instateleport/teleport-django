@@ -65,6 +65,48 @@ class AddToFolderForm(forms.ModelForm):
         }
 
 
+class TGGroupCreateForm(forms.ModelForm):
+    class Meta:
+        model = models.TelegramGroupOfSubscribePage
+        fields = ['name']
+
+    def is_valid(self):
+        name = self.data.get('name')
+        forbidden_characters = set(re.findall('[^\daA-zZаА-яЯ\.-]', name))
+
+        if forbidden_characters:
+            forbidden_characters = list(
+                map(lambda x: f'"{x}"', forbidden_characters))
+            self.add_error('name', 'Название содержит запрещённые символы:')
+            self.add_error('name', ', '.join(forbidden_characters))
+        return self.is_bound and not self.errors
+
+
+class AddToTelegramFolderForm(forms.ModelForm):
+    def is_valid(self, user):
+        slug = self.data.get('slug')
+
+        exist = models.TelegramSubscribePage.objects.filter(user=user, slug=slug)
+        if not exist:
+            self.add_error('slug', 'Не удалось найти страницу')
+
+        return super().is_valid()
+
+    class Meta:
+        model = models.TelegramSubscribePage
+        fields = ['slug', 'group']
+        widgets = {
+            'slug': forms.HiddenInput(attrs={
+                'class': 'AddToFolder',
+                'id': 'page_slug'
+            }),
+            'group': forms.HiddenInput(attrs={
+                'class': 'AddToFolder',
+                'id': 'folder_id'
+            }),
+        }
+
+
 # ig subscribe pages
 class SubscribePageCreateForm(forms.ModelForm):
     def is_valid(self):

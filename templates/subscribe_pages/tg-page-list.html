@@ -21,7 +21,7 @@
     <!-- Carrot quest END -->
 {% endblock %}
 
-{% block title %}Мои страницы (VK){% endblock %}
+{% block title %}Мои страницы (Instagram){% endblock %}
 
 {% block body_class %}theme{% endblock %}
 
@@ -33,8 +33,7 @@
                     <div class="logo"><a href="/">Teleport</a></div>
                 </div>
                 <div class="bar_nav">
-
-					<div class="bar_nav_li">
+                    <div class="bar_nav_li">
                         <a href="{% url 'subscribe_pages:page-list' %}">
                             <svg enable-background="new 0 0 128 128" id="Social_Icons" version="1.1" viewBox="0 0 128 128" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <g id="_x37__stroke">
@@ -53,7 +52,7 @@
                             Instagram страницы
                         </a>
                     </div>
-                    <div class="bar_nav_li">
+                    <div class="bar_nav_li active">
                         <a href="{% url 'subscribe_pages:tg-page-list' %}">
                             <svg fill="none" width="24px" height="24px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
                                 <path class="fill" id="telegram-1" d="M18.384,22.779c0.322,0.228 0.737,0.285 1.107,0.145c0.37,-0.141 0.642,-0.457 0.724,-0.84c0.869,-4.084 2.977,-14.421 3.768,-18.136c0.06,-0.28 -0.04,-0.571 -0.26,-0.758c-0.22,-0.187 -0.525,-0.241 -0.797,-0.14c-4.193,1.552 -17.106,6.397 -22.384,8.35c-0.335,0.124 -0.553,0.446 -0.542,0.799c0.012,0.354 0.25,0.661 0.593,0.764c2.367,0.708 5.474,1.693 5.474,1.693c0,0 1.452,4.385 2.209,6.615c0.095,0.28 0.314,0.5 0.603,0.576c0.288,0.075 0.596,-0.004 0.811,-0.207c1.216,-1.148 3.096,-2.923 3.096,-2.923c0,0 3.572,2.619 5.598,4.062Zm-11.01,-8.677l1.679,5.538l0.373,-3.507c0,0 6.487,-5.851 10.185,-9.186c0.108,-0.098 0.123,-0.262 0.033,-0.377c-0.089,-0.115 -0.253,-0.142 -0.376,-0.064c-4.286,2.737 -11.894,7.596 -11.894,7.596Z"/>
@@ -61,7 +60,7 @@
                             Telegram страницы
                         </a>
                     </div>
-                    <div class="bar_nav_li active">
+                    <div class="bar_nav_li">
                         <a href="{% url 'subscribe_pages:vk-page-list' %}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                               <path class="fill" d="M20.911 0h-9.823c-8.964 0-11.089 2.125-11.089 11.089v9.823c0 8.964 2.125 11.089 11.089 11.089h9.823c8.964 0 11.089-2.125 11.089-11.089v-9.823c0-8.964-2.146-11.089-11.089-11.089zM25.833 22.828h-2.323c-0.88 0-1.151-0.698-2.734-2.302-1.375-1.333-1.984-1.51-2.323-1.51-0.479 0-0.615 0.135-0.615 0.792v2.099c0 0.563-0.177 0.901-1.667 0.901-2.464 0-5.198-1.49-7.115-4.266-2.891-4.068-3.682-7.115-3.682-7.745 0-0.339 0.135-0.656 0.786-0.656h2.328c0.589 0 0.813 0.271 1.042 0.901 1.151 3.323 3.068 6.234 3.859 6.234 0.292 0 0.427-0.135 0.427-0.88v-3.432c-0.089-1.583-0.922-1.719-0.922-2.281 0-0.271 0.224-0.542 0.583-0.542h3.661c0.495 0 0.677 0.271 0.677 0.854v4.63c0 0.5 0.224 0.677 0.359 0.677 0.292 0 0.542-0.177 1.083-0.719 1.672-1.875 2.87-4.766 2.87-4.766 0.156-0.339 0.427-0.656 1.016-0.656h2.328c0.698 0 0.854 0.359 0.698 0.859-0.292 1.354-3.141 5.375-3.141 5.375-0.245 0.406-0.339 0.583 0 1.036 0.25 0.339 1.063 1.042 1.604 1.672 0.995 1.13 1.76 2.078 1.964 2.734 0.229 0.651-0.109 0.99-0.766 0.99z" fill="#fff"/>
@@ -310,12 +309,8 @@
                     </div>
                 </div>
                 <div class="content_btn">
-                    <div class="btn btn-outline icon_plus dtn__modal" data-modal="new_folder">
-                        <span class="icon">
-                            <span class="plus"></span>
-                            Создать папку
-                        </span>
-                    </div>
+                    <div class="btn btn-outline icon_plus dtn__modal" data-modal="new_folder"><span class="icon"><span
+                            class="plus"></span>Создать папку</span></div>
                 </div>
             </div>
             <div class="content_slider" id="folderList">
@@ -323,9 +318,9 @@
                     <div class="content_slid delete__e">
                         <div class="folder {% if folder.name == selected_folder_name %}selected{% endif %}"
                              data-element-id="{{ folder.id }}">
-                            <a href="{% url 'subscribe_pages:vk-page-list' folder.name %}"></a>
+                            <a href="{% url 'subscribe_pages:tg-page-list' folder.name %}"></a>
                             <div class="folder_top flex__start">
-                                <div class="folder_file">{{ folder.vk_subscribe_pages.count }}</div>
+                                <div class="folder_file">{{ folder.tg_subscribe_pages.count }}</div>
                                 {% if folder.can_delete %}
                                     <div class="folder_more">
                                         <div class="more">
@@ -341,7 +336,7 @@
                                                         Редактировать папку
                                                     </div>
                                                     <div class="more_opt icon icon-del dtn__modal delete__btn"
-                                                         data-modal="vk_delete_folder" data-element-id="{{ folder.id }}">
+                                                         data-modal="delete_folder" data-element-id="{{ folder.id }}">
                                                         Удалить папку
                                                     </div>
                                                 </div>
@@ -362,20 +357,26 @@
                     <div class="content_subtitle">Всего {{ pages_count }}</div>
                 </div>
                 <div class="content_btn">
-                    <a class="btn btn-red icon_plus" href="{% url 'subscribe_pages:vk-page-create' %}"><span
+                    <a class="btn btn-red icon_plus" href="{% url 'subscribe_pages:page-create' %}"><span
                             class="icon"><span class="plus"></span>Создать страницу</span></a>
                 </div>
             </div>
-            <div class="subscribe_blocks vk" id="pages">
-                {% for page in vk_subscribe_pages %}
+            <div class="subscribe_blocks" id="pages">
+                {% for page in subscribe_pages %}
                     <div class="subscribe_block flex__start delete__e">
                         <div class="subscribe_info">
                             <div class="subscribe_top flex__align">
                                 <div class="subscribe_num">{{ forloop.counter }}</div>
                                 <div class="subscribe_name">{{ page.page_name }}</div>
                             </div>
-                            <div style="margin-left: 0;" class="subscribe_user flex__align">
-                                <div style="padding-left: 0;" class="subscribe_user_left">
+                            <div class="subscribe_user flex__align">
+                                <div class="subscribe_ava">
+                                    <div class="ava">
+                                        <img src="{{ page.get_instagram_avatar_url }}">
+                                    </div>
+                                </div>
+                                <div class="subscribe_user_left">
+                                    <div class="subscribe_user_name">{{ page.instagram_username }}</div>
                                     {% if page.is_active %}
                                         <div class="subscribe_active">Активная</div>
                                     {% else %}
@@ -384,9 +385,10 @@
                                 </div>
                                 <div class="subscribe_right">
                                     <div class="subscribe_id">id: <span>{{ page.slug }}</span></div>
+                                    <div class="subscribe_domain">domain: <span>{{ page.page_domain }}</span></div>
                                 </div>
                             </div>
-                            <div style="margin-left: 0;" class="subscribe_statistic flex__center">
+                            <div class="subscribe_statistic flex__center">
                                 {% with page.all_views_subscribers_and_ctr as all_views_subscribers_and_ctr %}
                                     <div class="subscribe_statistic_li">
                                         <div class="subscribe_subtitle">Подписчики</div>
@@ -450,10 +452,10 @@
                         </div>
                         <div class="subscribe_navigation">
                             <div class="subscribe_btn">
-                                <a class="btn btn-fill" href="{% url 'subscribe_pages:vk-page-detail' page.slug %}"><span
+                                <a class="btn btn-fill" href="{% url 'subscribe_pages:page-detail' page.slug %}"><span
                                         class="icon icon-pencil_btn">Изменить</span></a>
                                 <a class="btn btn-outline" id="page_open-{{ forloop.counter }}" target="_blank"
-                                   href="{{ page.page_url }}"><span class="icon icon-open">Открыть</span></a>
+                                   href="https://{{ page.page_url }}"><span class="icon icon-open">Открыть</span></a>
                             </div>
                             <div class="subscribe_nav flex__center">
                                 <div class="subscribe_nav_li dtn__modal" data-modal="carry" data-id="{{ page.slug }}">
@@ -487,7 +489,7 @@
                                     <p>Копировать</p>
                                 </div>
                                 <div class="subscribe_nav_li">
-                                    <a href="{% url 'subscribe_pages:vk-page-duplicate' page.slug %}">
+                                    <a href="{% url 'subscribe_pages:page-duplicate' page.slug %}">
                                         <span>
                                             <svg width="18" height="22" viewbox="0 0 18 22" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -503,7 +505,7 @@
                                     </a>
                                 </div>
                                 <div class="subscribe_nav_li">
-                                    <a href="{% url 'subscribe_pages:vk-page-statistic' page.slug %}">
+                                    <a href="{% url 'subscribe_pages:page-statistic' page.slug %}">
                                         <span>
                                             <svg width="24" height="24" viewbox="0 0 24 24" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -521,7 +523,7 @@
                                         <p>Статистика</p>
                                     </a>
                                 </div>
-                                <div class="subscribe_nav_li dtn__modal delete__btn" data-modal="vk_delete_page"
+                                <div class="subscribe_nav_li dtn__modal delete__btn" data-modal="delete_page"
                                      data-element-id="{{ page.id }}">
                                     <span>
                                         <svg width="24" height="24" viewbox="0 0 24 24" fill="none"
@@ -548,7 +550,7 @@
     <div class="copied copy__href">Ссылка на страницу скопирована</div>
 
     <!-- Modal-folder. -->
-    <form class="modal modal_folder" method="POST" action="{% url 'subscribe_pages:vk-folder-rename' %}"
+    <form class="modal modal_folder" method="POST" action="{% url 'subscribe_pages:folder-rename' %}"
           id="folderRenameForm">
         {% csrf_token %}
         <div class="modal_wrapper">
@@ -574,7 +576,7 @@
 
     <!-- Modal-folder. -->
     <form class="modal modal_new_folder" id="createFolderModal" method="POST"
-          action="{% url 'subscribe_pages:vk-folder-create' %}">
+          action="{% url 'subscribe_pages:tg-folder-create' %}">
         {% csrf_token %}
         <div class="modal_wrapper">
             <div class="modal_scroll">
@@ -598,7 +600,7 @@
     <!-- Modal-folder. -->
 
     <!-- Modal-delete. -->
-    <div class="modal modal_vk_delete_folder">
+    <div class="modal modal_delete_folder">
         <div class="modal_wrapper">
             <div class="modal_scroll">
                 <div class="modal_close"></div>
@@ -625,7 +627,7 @@
     <!-- Modal-delete. -->
 
     <!-- Modal-delete. -->
-    <div class="modal modal_vk_delete_page">
+    <div class="modal modal_delete_page">
         <div class="modal_wrapper">
             <div class="modal_scroll">
                 <div class="modal_close"></div>
@@ -677,7 +679,7 @@
                 </div>
                 <div class="modal_btn flex__center">
                     <div class="btn btn-outline btn__close">Отмена</div>
-                    <div class="btn btn-red" id="moveFolderButton" data-type="vk">Перенести</div>
+                    <div class="btn btn-red" id="moveFolderButton" data-type="ig">Перенести</div>
                 </div>
             </div>
         </div>

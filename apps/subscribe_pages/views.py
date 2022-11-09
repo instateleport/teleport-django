@@ -55,6 +55,32 @@ from .lamadava_api.lamadava import user_is_following
 logger_page = logging.getLogger('page')
 
 
+class SubscribePageListMixin(LoginRequiredMixin, IsResetPasswordMixin, ListView, FormMixin):
+    model = models.GroupOfSubscribePage
+    context_object_name = 'folder_list'
+    template_name = ''
+    form_class = forms.AddToFolderForm
+
+    def get_group(self, group_name: str):
+        group_list = self.object_list.filter(name=group_name)
+
+        if not group_list:
+            group = None
+        else:
+            group = group_list[0]
+
+        return group
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(user=self.request.user)
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        return queryset
+
+
 # ig folders
 class FolderCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
     model = models.GroupOfSubscribePage
@@ -168,22 +194,156 @@ class AddToFolderView(LoginRequiredMixin, AjaxMixin, View):
         return self.ajax_response(response)
 
 
-# ig subscribe pages - crud
-class SubscribePageListView(LoginRequiredMixin, IsResetPasswordMixin, ListView,
-                            FormMixin):
-    model = models.GroupOfSubscribePage
-    context_object_name = 'folder_list'
-    template_name = 'subscribe_pages/page-list.html'
-    form_class = forms.AddToFolderForm
+class TGFolderCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
+    model = models.TelegramGroupOfSubscribePage
+    form_class = forms.TGGroupCreateForm
+    template_name = 'subscribe_pages/tg-page-list.html'
+    http_method_names = ['post']
+
+    def get_success_url(self):
+        return reverse_lazy('subscribe_pages:tg-page-list',
+                            args=(self.object.name,))
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request, 'Название папки содержит запрещенные символы'
+        )
+        return HttpResponseRedirect(reverse_lazy('subscribe_pages:tg-page-list'))
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.user = request.user
+            return self.form_valid(form)
+        return self.form_invalid(form)
+
+
+class TGSubscribePageListView(SubscribePageListMixin):
+    model = models.TelegramGroupOfSubscribePage
+    form_class = forms.AddToTelegramFolderForm
+    template_name = 'subscribe_pages/tg-page-list.html'
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
 
         group_name = kwargs.get('name', 'Неотсортированные')
         group = self.get_group(group_name)
-        # models.InstagramSubscribePage.activate_user_subscribe_pages(request.user)
+        if group_name == 'Неотсортированные' and not group:
+            group = self.model.objects.create(
+                user=request.user,
+                name='Неотсортированные',
+                can_delete=False
+            )
+        if group_name == 'Неотсортированные' \
+                and not group.tg_subscribe_pages.all() \
+                and request.user.tg_group_of_pages.count() > 1:
 
-        # print(group.subscribe_pages.all()[0])
+            for page in request.user.tg_subscribe_pages.all():
+                page.group = group
+                page.save(update_fields=['group'])
+
+        if not group:
+            return HttpResponseRedirect(
+                reverse_lazy('subscribe_pages:tg-page-list'))
+
+        context = self.get_context_data(group=group)
+        
+        return self.render_to_response(context)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        group = kwargs.get('group')
+
+        count_of_groups = str(self.object_list.count())
+        count_of_pages = str(group.tg_subscribe_pages.count())
+
+        context = super().get_context_data(object_list=object_list, **kwargs)
+
+        context['groups_count'] = count_of_groups + (
+            ' папка' if count_of_groups == '1' else ' папок')
+        context['pages_count'] = count_of_pages + (
+            ' страница' if count_of_pages == '1' else ' страниц')
+        context['selected_folder_name'] = group.name
+        context['subscribe_pages'] = group.tg_subscribe_pages.all().order_by(
+            '-id')
+        context['form'] = self.get_form()
+
+        return context
+
+
+class TelegramSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
+    model = models.TelegramSubscribePage
+    form_class = forms.SubscribePageCreateForm
+    template_name = 'subscribe_pages/page-create.html'
+
+    def get_success_url(self):
+        self.success_url = reverse('subscribe_pages:page-list')
+        return str(self.success_url)
+
+    def get_initial(self):
+        """Return the initial data to use for forms on this view."""
+        initial = self.initial.copy()
+        initial['slug'] = self.model.slug_generate(self.request.user)
+        return initial
+
+    def get_context_data(self, **kwargs):
+        """Insert the form into the context dict."""
+        context = super().get_context_data(**kwargs)
+
+        context['bg_colors'] = models.BGColor.objects.filter(is_active=True)
+
+        context['domains'] = models.Domain.objects.filter(
+            user=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        task.save_instagram_info.delay(
+            self.object.pk)  # сохраняем инфу о аккаунте в подписную страницу
+
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+
+        if form.is_valid():
+            instagram_username = form.cleaned_data[
+                'instagram_username']
+
+            instagram_user_info = form.instagram_user_info
+
+            f = form.save(commit=False)
+            f.user = request.user
+            f.instagram_username = instagram_username
+            f.instagram_name = instagram_username
+
+            if instagram_user_info.get("follower_count"):
+                f.follower_count = instagram_user_info["follower_count"]
+                f.following_count = instagram_user_info["following_count"]
+                f.media_count = instagram_user_info["media_count"]
+
+            if not f.bg_color:
+                f.bg_color = models.BGColor.objects.get(slug='default')
+
+            models.InstagramCreator.objects.get_or_create(user=request.user,
+                                                          instagram=instagram_username)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+# ig subscribe pages - crud
+class InstagramSubscribePageListView(SubscribePageListMixin):
+    template_name = 'subscribe_pages/page-list.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+
+        group_name = kwargs.get('name', 'Неотсортированные')
+        group = self.get_group(group_name)
 
         if group_name == 'Неотсортированные' and not group:
             group = models.GroupOfSubscribePage.objects.create(
@@ -207,16 +367,6 @@ class SubscribePageListView(LoginRequiredMixin, IsResetPasswordMixin, ListView,
         
         return self.render_to_response(context)
 
-    def get_group(self, group_name: str):
-        group_list = self.object_list.filter(name=group_name)
-
-        if not group_list:
-            group = None
-        else:
-            group = group_list[0]
-
-        return group
-
     def get_context_data(self, *, object_list=None, **kwargs):
         group = kwargs.get('group')
 
@@ -235,15 +385,6 @@ class SubscribePageListView(LoginRequiredMixin, IsResetPasswordMixin, ListView,
         context['form'] = self.get_form()
 
         return context
-
-    def get_queryset(self):
-        queryset = self.model.objects.filter(user=self.request.user)
-        ordering = self.get_ordering()
-        if ordering:
-            if isinstance(ordering, str):
-                ordering = (ordering,)
-            queryset = queryset.order_by(*ordering)
-        return queryset
 
 
 class SubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin,
@@ -799,7 +940,6 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
     queryset = models.InstagramSubscribePage.objects.filter(created=True)
 
     def post(self, request, *args, **kwargs):
-        # print()
         instagram_username = self.get_object().__dict__["instagram_username"]
         username2 = request.POST.get("login", "")
 

@@ -36,10 +36,17 @@ urlpatterns = [
     path('folder/append/', views.AddToFolderView.as_view(),
          name='add-to-folder'),
 
+    path('tg-subscribe-pages/', views.TGSubscribePageListView.as_view(),
+         name='tg-page-list'),
+    path('tg-subscribe-pages/<str:name>/', views.TGSubscribePageListView.as_view(),
+         name='tg-page-list'),
+    path('tg-folders/create/', views.TGFolderCreateView.as_view(),
+         name='tg-folder-create'),
+
     # ig instagram pages - crud
-    path('subscribe-pages/', views.SubscribePageListView.as_view(),
+    path('subscribe-pages/', views.InstagramSubscribePageListView.as_view(),
          name='page-list'),
-    path('subscribe-pages/<str:name>/', views.SubscribePageListView.as_view(),
+    path('subscribe-pages/<str:name>/', views.InstagramSubscribePageListView.as_view(),
          name='page-list'),
 
     path('subscribe-page/create/', views.SubscribePageCreateView.as_view(),
