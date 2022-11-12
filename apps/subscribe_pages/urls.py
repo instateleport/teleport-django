@@ -42,6 +42,13 @@ urlpatterns = [
          name='tg-page-list'),
     path('tg-folders/create/', views.TGFolderCreateView.as_view(),
          name='tg-folder-create'),
+    path('tg-folders/delete/', views.TGFolderDeleteAjaxView.as_view(),
+         name='tg-folder-delete'),
+    path('tg-folders/rename/', views.TGFolderRenameView.as_view(),
+         name='tg-folder-rename'),
+
+    path('tg-subscribe-page/create/', views.TGSubscribePageCreateView.as_view(),
+         name='tg-page-create'),
 
     # ig instagram pages - crud
     path('subscribe-pages/', views.InstagramSubscribePageListView.as_view(),

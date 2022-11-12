@@ -220,6 +220,73 @@ class TGFolderCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
         return self.form_invalid(form)
 
 
+class TGFolderDeleteAjaxView(LoginRequiredMixin, IsResetPasswordMixin, DeleteAjaxMixin):
+    model = models.TelegramGroupOfSubscribePage
+    id_field_name = 'folderID'
+    is_owner = True
+
+    def delete(self, request, *args, **kwargs):
+        response = self.get_ajax_response()
+        data = request.POST
+        object_id = int(data.get(self.id_field_name, 0))
+
+        self.object = self.get_object(object_id)
+        if self.object:
+            for subscribe_page in self.object.tg_subscribe_pages.all():
+                subscribe_page.set_default_group()
+            if self.object.can_delete:
+                self.object.delete()
+                response['status'] = 'SUCCESS'
+            else:
+                response['status'] = 'ERROR'
+                response['reason'] = 'FOLDER_CAN_NOT_BE_DELETED'
+        else:
+            response['status'] = 'ERROR'
+            response['reason'] = 'OBJECT_NOT_FOUND'
+        return self.ajax_response(response)
+
+
+class TGFolderRenameView(LoginRequiredMixin, IsResetPasswordMixin, UpdateView):
+    model = models.TelegramGroupOfSubscribePage
+    form_class = forms.TGGroupRenameForm
+    template_name = 'subscribe_pages/tg-page-list.html'
+    http_method_names = ['get', 'post']
+
+    def get_object(self, object_id: int):
+        query_kwargs = {'id': int(object_id), 'user': self.request.user}
+
+        try:
+            obj = self.model.objects.get(**query_kwargs)
+        except self.model.DoesNotExist:
+            obj = None
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse_lazy('subscribe_pages:tg-page-list'))
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+
+        object_id = int(data.get('id', 0))
+        self.object = self.get_object(object_id)
+        object_name = data.get('name', self.object.name)
+
+        if not self.object.can_delete:
+            messages.error(self.request, 'Эту папку переименовать нельзя!')
+            return HttpResponseRedirect(
+                reverse_lazy('subscribe_pages:tg-page-list', args=(object_name,)))
+
+        if self.object:
+            self.object.name = object_name
+            self.object.save(update_fields=['name'])
+        else:
+            messages.error(self.request, 'Папка не найдена!')
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return self.request.path
+
+
 class TGSubscribePageListView(SubscribePageListMixin):
     model = models.TelegramGroupOfSubscribePage
     form_class = forms.AddToTelegramFolderForm
@@ -272,19 +339,20 @@ class TGSubscribePageListView(SubscribePageListMixin):
         return context
 
 
-class TelegramSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
+class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
     model = models.TelegramSubscribePage
-    form_class = forms.SubscribePageCreateForm
-    template_name = 'subscribe_pages/page-create.html'
+    form_class = forms.TGSubscribePageCreateForm
+    template_name = 'subscribe_pages/tg-page-create.html'
 
     def get_success_url(self):
-        self.success_url = reverse('subscribe_pages:page-list')
+        self.success_url = reverse('subscribe_pages:tg-page-list')
         return str(self.success_url)
 
     def get_initial(self):
         """Return the initial data to use for forms on this view."""
         initial = self.initial.copy()
-        initial['slug'] = self.model.slug_generate(self.request.user)
+        # initial['slug'] = self.model.slug_generate(self.request.user)
+        initial['slug'] = 'otfyguihojkpmkbjh'
         return initial
 
     def get_context_data(self, **kwargs):
@@ -300,38 +368,28 @@ class TelegramSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, 
     def form_valid(self, form):
         self.object = form.save()
 
-        task.save_instagram_info.delay(
-            self.object.pk)  # сохраняем инфу о аккаунте в подписную страницу
+        # task.save_instagram_info.delay(
+        #     self.object.pk)  # сохраняем инфу о аккаунте в подписную страницу
 
         return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-
+        print(form)
+        print('huytcrytuvijok')
         if form.is_valid():
-            instagram_username = form.cleaned_data[
-                'instagram_username']
-
-            instagram_user_info = form.instagram_user_info
 
             f = form.save(commit=False)
             f.user = request.user
-            f.instagram_username = instagram_username
-            f.instagram_name = instagram_username
-
-            if instagram_user_info.get("follower_count"):
-                f.follower_count = instagram_user_info["follower_count"]
-                f.following_count = instagram_user_info["following_count"]
-                f.media_count = instagram_user_info["media_count"]
 
             if not f.bg_color:
                 f.bg_color = models.BGColor.objects.get(slug='default')
 
-            models.InstagramCreator.objects.get_or_create(user=request.user,
-                                                          instagram=instagram_username)
+            models.TelegramUser.objects.get_or_create(user=request.user)
             return self.form_valid(form)
         else:
+            print(form.errors.as_data())
             return self.form_invalid(form)
 
 

@@ -220,10 +220,24 @@ $(document).ready(() => {
                 headers: {'X-CSRFToken': CSRFToken},
                 data
             }),
-        folderDeleteAjax = async (data, CSRFToken, is_vk = false) =>
+        deleteInstagramFolderAjax = async (data, CSRFToken) =>
             await $.ajax({
                 method: 'post',
-                url: is_vk ? '/vk-folders/delete/' : '/folders/delete/',
+                url: '/folders/delete/',
+                headers: {'X-CSRFToken': CSRFToken},
+                data,
+            }),
+        deleteVKFolderAjax = async (data, CSRFToken) =>
+            await $.ajax({
+                method: 'post',
+                url: '/vk-folders/delete/',
+                headers: {'X-CSRFToken': CSRFToken},
+                data,
+            }),
+        deleteTGFolderAjax = async (data, CSRFToken) =>
+            await $.ajax({
+                method: 'post',
+                url: '/tg-folders/delete/',
                 headers: {'X-CSRFToken': CSRFToken},
                 data,
             }),
@@ -1510,6 +1524,8 @@ $(document).on('click', '.statistic_button .button', function () {
 			modalSelector = '.modal_' + typeOfDelete,
 			elementID = $(this).data('element-id'),
 			CSRFToken = $('input[name=csrfmiddlewaretoken]').val();
+        console.log(elementID)
+        console.log(typeOfDelete)
 
 		$('.delete').on('click', async function () {
 			switch (typeOfDelete) {
@@ -1521,15 +1537,23 @@ $(document).on('click', '.statistic_button .button', function () {
 					);
 					break;
 				case 'delete_folder':
-					await folderDeleteAjax(
+					await deleteInstagramFolderAjax(
 						{
 							'folderID': elementID
 						}, CSRFToken
 					);
 					window.location = ''
 					break;
+                case 'tg_delete_folder':
+                    await deleteTGFolderAjax(
+                        {
+							'folderID': elementID
+						}, CSRFToken
+                    )
+                    window.location = ''
+					break;
 				case 'vk_delete_folder':
-					await folderDeleteAjax(
+					await deleteVKFolderAjax(
 						{
 							'folderID': elementID
 						}, CSRFToken, true

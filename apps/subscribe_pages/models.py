@@ -867,8 +867,12 @@ class VKSubscription(models.Model):
 
 
 class TelegramUser(models.Model):
-    telegram_username = models.CharField(max_length=100)
-    telegram_user_id = models.CharField(max_length=100)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             related_name='telegrams',
+                             verbose_name=_('User'), null=True)
+    telegram_username = models.CharField(max_length=100, null=True, blank=True)
+    telegram_user_id = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.telegram_username
@@ -894,10 +898,10 @@ class TelegramGroupOfSubscribePage(models.Model):
 
 class TelegramSubscribePage(models.Model):
     def get_page_photo_path(self, filename: str) -> str:
-        return f'subscribe_page/{self.instagram_username}/page_photos/{filename}'
+        return f'subscribe_page/telegram-{self.user.username}/page_photos/{filename}'
 
     def get_instagram_avatar_path(self, filename: str) -> str:
-        return f'subscribe_page/{self.instagram_username}/instagram_avatars/{filename}'
+        return f'subscribe_page/telegram-{self.user.username}/instagram_avatars/{filename}'
 
     @classmethod
     def slug_generate(cls, user: settings.AUTH_USER_MODEL, count: int = 1):
@@ -906,9 +910,6 @@ class TelegramSubscribePage(models.Model):
         if cls.objects.filter(slug=slug):
             return cls.slug_generate(user, count + 1)
         return slug
-
-    tg_bot_url = models.URLField(max_length=200)
-    tg_channel_id = models.CharField(max_length=200)
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
@@ -921,6 +922,17 @@ class TelegramSubscribePage(models.Model):
         null=True, blank=True,
         verbose_name=_('Группа страниц')
     )
+    message_after_getting_present = models.CharField(
+        max_length=2000,
+        verbose_name=_('Сообщение при выдаче подарка')
+    )
+    bot_button_text = models.CharField(
+        max_length=500,
+        verbose_name=_('Текст на кнопке (бот)')
+    )
+    bot_button_url = models.URLField(
+        max_length=200,
+        verbose_name=_('Ссылка кнопки (бот)'))
     domain = models.ForeignKey(
         Domain, on_delete=models.SET_NULL,
         related_name='tg_subscribe_pages',
@@ -930,6 +942,10 @@ class TelegramSubscribePage(models.Model):
     page_name = models.CharField(
         max_length=60,
         verbose_name=_('Название страницы')
+    )
+    description = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Описание')
     )
     slug = models.SlugField(
         max_length=30, db_index=True, unique=True,
@@ -947,32 +963,14 @@ class TelegramSubscribePage(models.Model):
         verbose_name=_('Цвет фона')
     )
 
-    title = models.CharField(
-        max_length=60, null=True,
-        verbose_name=_('Заголовок')
-    )
-    description = models.TextField(
-        null=True,
-        verbose_name=_('Описание')
-    )
-    button_text = models.CharField(
-        max_length=30,
-        default=_('ПОЛУЧИТЬ'),
-        verbose_name=_('Текст на кнопке')
-    )
-
-    instagram_username = models.CharField(
-        max_length=40, null=True,
-        verbose_name=_('Ник в Instagram')
-    )
     instagram_name = models.CharField(
         max_length=100, blank=True, null=True,
-        verbose_name=_('Имя в Instagram')
+        verbose_name=_('Имя в Telegram')
     )
     instagram_avatar = models.ImageField(
         upload_to=get_instagram_avatar_path,
         blank=True, null=True,
-        verbose_name=_('Аватарка Instagram')
+        verbose_name=_('Аватарка Telegram')
     )
 
     timer_text = models.CharField(
@@ -988,7 +986,6 @@ class TelegramSubscribePage(models.Model):
         default=180,
         verbose_name=_('Время таймера (в секундах)')
     )
-
     facebook_pixel = models.CharField(
         max_length=255, blank=True, null=True,
         verbose_name=_('Facebook пиксель')
@@ -1020,13 +1017,6 @@ class TelegramSubscribePage(models.Model):
         default=_('Успешно'),
         verbose_name=_('Заголовок')
     )
-    popup_text = models.TextField(
-        default=_('Можете получить материалы, нажав по кнопке ниже.'),
-        verbose_name=_('Текст'))
-    popup_button_url = models.TextField(
-        null=True,
-        verbose_name=_('Ссылка кнопки')
-    )
     popup_button_text = models.CharField(
         max_length=19,
         default=_('ПОЛУЧИТЬ МАТЕРИАЛЫ'),
@@ -1037,16 +1027,10 @@ class TelegramSubscribePage(models.Model):
     presubscribe_text = models.CharField(
         max_length=255,
         default=_(
-            'Подпишись на мой инстаграм и '
+            'Подпишись на мой телеграм и '
             'ссылка для скачивания материалов станет доступна'
         ),
         verbose_name=_('Текст перед подпиской')
-    )
-    precheck_subscribe_text = models.CharField(
-        max_length=255,
-        default=_('Введите ваш логин инстаграма для проверки подписки'),
-        verbose_name=_(
-            'Текст "Введите ваш логин инстаграма для проверки подписки"')
     )
 
     enter_login_placeholder = models.CharField(
@@ -1110,7 +1094,6 @@ class TelegramSubscribePage(models.Model):
         verbose_name=_('Текст "Аккаунт не найден"')
     )
 
-    single_page = models.BooleanField(default=False)
     show_subscribers = models.BooleanField(default=False)
 
     following_count = models.CharField(max_length=12, blank=True, null=True)
@@ -1121,8 +1104,8 @@ class TelegramSubscribePage(models.Model):
     created = models.BooleanField(default=False, verbose_name=_('Создано'))
 
     class Meta:
-        verbose_name = 'Подписная страница'
-        verbose_name_plural = 'Подписные страницы'
+        verbose_name = 'Подписная Telegram страница'
+        verbose_name_plural = 'Подписные Telegram страницы'
 
     def get_absolute_url(self) -> str:
         return reverse_lazy('subscribe_pages:page-detail', args=(self.slug,))
@@ -1134,7 +1117,7 @@ class TelegramSubscribePage(models.Model):
 
     def set_default_group(self):
         default_group, default_group_created = \
-            GroupOfSubscribePage.objects.get_or_create(
+            TelegramGroupOfSubscribePage.objects.get_or_create(
                 user=self.user, name='Неотсортированные'
             )
         self.group = default_group
@@ -1180,21 +1163,21 @@ class TelegramSubscribePage(models.Model):
         self.save(update_fields=['ctr'])
 
     def all_views_subscribers_and_ctr(self) -> List[int]:
-        all_views, all_subscribers = InstagramStatistic.get_all_views_and_subscribers(
-            self)
-        return [all_views, all_subscribers, self.ctr]
+        # all_views, all_subscribers = InstagramStatistic.get_all_views_and_subscribers(
+        #     self)
+        return [10, 10, 10]
 
     all_views_subscribers_and_ctr.short_description = '👁‍🗨, 👤, %'
 
     @staticmethod
     def deactivate_user_subscribe_pages(user: settings.AUTH_USER_MODEL):
-        for subscribe_page in user.subscribe_pages.filter(is_active=True):
+        for subscribe_page in user.tg_subscribe_pages.filter(is_active=True):
             subscribe_page.is_active = False
             subscribe_page.save(update_fields=['is_active'])
 
     @staticmethod
     def activate_user_subscribe_pages(user: settings.AUTH_USER_MODEL):
-        for subscribe_page in user.subscribe_pages.filter(is_active=False):
+        for subscribe_page in user.tg_subscribe_pages.filter(is_active=False):
             subscribe_page.is_active = True
             subscribe_page.save(update_fields=['is_active'])
 
@@ -1260,6 +1243,37 @@ def vk_subscribe_page_post_save(sender, created, instance: VKSubscribePage,
         )
         #        ipLogger.warning('123')
         default_group, default_group_created = VKGroupOfSubscribePage.objects.get_or_create(
+            user=instance.user, name='Неотсортированные'
+        )
+        instance.group = default_group
+
+        instance.slug = instance.slug.lower()
+        instance.created = True
+
+        instance.save(
+            update_fields=[
+                'slug', 'created',
+                'group'
+            ]
+        )
+        #        ipLogger.warning('jopa')
+        # если баланс больше 0, то подписная страница становится активной
+        if instance.user.pocket.balance > 0:
+            instance.is_active = True
+            instance.save(update_fields=['is_active'])
+
+
+@receiver(post_save, sender=TelegramSubscribePage)
+def tg_subscribe_page_post_save(sender, created, instance: TelegramSubscribePage,
+                                **kwargs):
+    #    ipLogger.warning('signal ', end='')
+    if created:
+        #        ipLogger.warning('started: ')
+        # VKStatistic.objects.create(
+        #     vk_subscribe_page=instance, day=datetime.today()
+        # )
+        #        ipLogger.warning('123')
+        default_group, default_group_created = TelegramGroupOfSubscribePage.objects.get_or_create(
             user=instance.user, name='Неотсортированные'
         )
         instance.group = default_group

@@ -65,6 +65,12 @@ class AddToFolderForm(forms.ModelForm):
         }
 
 
+class TGGroupRenameForm(forms.ModelForm):
+    class Meta:
+        model = models.TelegramGroupOfSubscribePage
+        fields = ['name']
+
+
 class TGGroupCreateForm(forms.ModelForm):
     class Meta:
         model = models.TelegramGroupOfSubscribePage
@@ -103,6 +109,182 @@ class AddToTelegramFolderForm(forms.ModelForm):
             'group': forms.HiddenInput(attrs={
                 'class': 'AddToFolder',
                 'id': 'folder_id'
+            }),
+        }
+
+
+class TGSubscribePageCreateForm(forms.ModelForm):
+    def is_valid(self):
+        print(self.data)
+        slug = self.data.get('slug').lower()
+        page_photo = self.files.get('page_photo')
+    #     instagram_username = str(self.data.get('instagram_username')).replace('@', '').strip().lower()
+
+    #     # if not instagram_username:
+    #     #     self.add_error('instagram_username', 'Введите ник')
+    #     #     self.fields['instagram_username'].widget.attrs.update({
+    #     #         'class': 'sheet_input error'
+    #     #     })
+    #     # else:
+    #     #     instagram_user_info = get_account_id_by_username(instagram_username) # проверка профиля
+
+    #     #     if instagram_user_info.get("exc_type") == "UserNotFound":  # если аккаунт не найден
+    #     #         self.add_error('instagram_username', 'Аккаунт не найден')
+    #     #         self.fields['instagram_username'].widget.attrs.update({
+    #     #             'class': 'sheet_input error'
+    #     #         })
+
+    #     #     elif instagram_user_info.get("exc_type"):  # если аккаунт не найден
+    #     #         self.add_error('instagram_username', 'Произошла ошибка, попробуйте ещё раз')
+    #     #         self.fields['instagram_username'].widget.attrs.update({
+    #     #             'class': 'sheet_input error'
+    #     #         })
+
+    #     #     if instagram_user_info.get('is_private'):  # если аккаунт приватный
+    #     #         self.add_error('instagram_username', 'Аккаунт приватный')
+    #     #         self.fields['instagram_username'].widget.attrs.update({
+    #     #             'class': 'sheet_input error'
+    #     #         })
+
+    #     #     self.instagram_user_info = instagram_user_info
+
+        if page_photo:
+            if page_photo.size > 310000:
+                self.add_error('page_photo', 'Размер изображения не должен превышать 300кб')
+        if not slug.isascii():
+            self.add_error('slug', 'Ссылка должна содержать только английские символы')
+            self.fields['slug'].widget.attrs.update({
+                'class': 'sheet_input error'
+            })
+        if not models.TelegramSubscribePage.is_slug_unique(slug):
+            self.add_error('slug', 'Страница с такой ссылкой уже существует')
+            self.fields['slug'].widget.attrs.update({
+                'class': 'sheet_input error'
+            })
+        return self.is_bound and not self.errors
+
+    class Meta:
+        model = models.TelegramSubscribePage
+        exclude = [
+            'user', 'group',
+            'is_active', 'created'
+        ]
+        widgets = {
+            'page_name': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Страница №1'
+            }),
+            'domain': forms.HiddenInput(),
+            'slug': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Ссылка на страницу',
+                'id': 'id_slug_create'
+            }),
+            'message_after_getting_present': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'сообщения при получении подарка (бот)',
+            }),
+            'bot_button_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'текст на кнопке (бот)',
+            }),
+            'bot_button_url': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'ссылка кнопки (бот)',
+            }),
+            'page_photo': forms.FileInput(attrs={
+                'class': 'input__hidden',
+                'id': 'photo',
+            }),
+            'bg_color': forms.HiddenInput(),
+            'presubscribe_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст перед подпиской',
+                'data-id': 'prew_sub'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите описание',
+                'data-id': 'promo_text'
+            }),
+            'facebook_pixel': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите ID пикселя'
+            }),
+            'tiktok_pixel': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите ID пикселя'
+            }),
+            'vk_pixel': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите ID пикселя'
+            }),
+            'yandex_pixel': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите ID метрики'
+            }),
+            'roistat_id': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите ID Roistat'
+            }),
+
+            'is_timer_active': forms.HiddenInput(),
+            'timer_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'data-id': 'timer_text'
+            }),
+            'timer_time': forms.NumberInput(attrs={
+                'class': 'sheet_input',
+                'min': '0',
+                'max': '3600',
+                'data-id': 'timer'
+            }),
+
+            'subscribe_button': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст',
+                'data-id': 'subscribe_btn'
+            }),
+            'already_subscribed_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст',
+                'data-id': 'yes_subscribe'
+            }),
+            'subscribed_button': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст',
+                'data-id': 'signet_btn'
+            }),
+            'not_yet_subscribed': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст',
+                'data-id': 'not_sibscribe'
+            }),
+            'search_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст',
+                'data-id': 'search_text'
+            }),
+            'success_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст',
+                'data-id': 'success_text'
+            }),
+            'error_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст',
+                'data-id': 'error_text'
+            }),
+
+            'popup_title': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите заголовок',
+                'data-id': 'hit_title'
+            }),
+            'popup_button_text': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'Введите текст на кнопке',
+                'data-id': 'hit_button'
             }),
         }
 

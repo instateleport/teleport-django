@@ -14,7 +14,7 @@
 {% block body_class %}theme{% endblock %}
 
 {% block content %}
-	{% include 'subscribe_pages/nav.html' %}
+    {% include 'subscribe_pages/nav.html' %}
     <div class="bar_viel"></div>
 
  	<div class="content">
@@ -51,20 +51,6 @@
 						<span></span>
 					</div>
 					<div class="content_step_name">Страница 1</div>
-				</div>
-				<div class="content_step_li step-3">
-					<div class="content_step_top flex__align">
-						<div class="content_step_number">3</div>
-						<span></span>
-					</div>
-					<div class="content_step_name">Страница 2</div>
-				</div>
-				<div class="content_step_li step-4">
-					<div class="content_step_top flex__align">
-						<div class="content_step_number">4</div>
-						<span></span>
-					</div>
-					<div class="content_step_name">Страница 3</div>
 				</div>
 			</div>
 			<form method="POST" enctype="multipart/form-data" class="content_form" id="subscribePageForm">
@@ -107,19 +93,26 @@
 						</div>
 					</div>
 					<div class="content_form_title">Визуализация<span></span></div>
-					<div class="content_form_input">
-						<div class="content_form_label">Тип страницы</div>
-						<div class="input input__radio flex__center">
-							{{ form.single_page }}
-							<label for="typePage-1">
-								<input type="radio" class="input__hidden" name="typePage" id="typePage-1" {% if form.single_page.value == True or form.single_page.value == 'true' %}checked{% endif %} onclick="prev_page(false, false)">
-								<span>Одна страница</span>
-							</label>
-							<label for="typePage-2">
-								<input type="radio" class="input__hidden" name="typePage" id="typePage-2" {% if form.single_page.value == False or form.single_page.value == 'false' %}checked{% endif %} onclick="prev_page(false, false)">
-								<span>Три страницы</span>
+					<div class="content_form_photo images__wrapper">
+						<div class="content_form_label required__field">{{ form.page_photo.label }}</div>
+						<div class="photo images">
+							<img>
+						</div>
+						<div class="content_form_photo_btn">
+                            {{ form.page_photo }}
+							<div class="input_err">{{ form.page_photo.errors }}</div>
+							<label for="photo">
+								<span>
+									<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M5 18.9998C5 18.7346 5.10536 18.4802 5.29289 18.2927C5.48043 18.1051 5.73478 17.9998 6 17.9998H18C18.2652 17.9998 18.5196 18.1051 18.7071 18.2927C18.8946 18.4802 19 18.7346 19 18.9998C19 19.265 18.8946 19.5194 18.7071 19.7069C18.5196 19.8944 18.2652 19.9998 18 19.9998H6C5.73478 19.9998 5.48043 19.8944 5.29289 19.7069C5.10536 19.5194 5 19.265 5 18.9998ZM8.293 8.70679C8.10553 8.51926 8.00021 8.26495 8.00021 7.99979C8.00021 7.73462 8.10553 7.48031 8.293 7.29279L11.293 4.29279C11.4805 4.10532 11.7348 4 12 4C12.2652 4 12.5195 4.10532 12.707 4.29279L15.707 7.29279C15.8892 7.48139 15.99 7.73399 15.9877 7.99619C15.9854 8.25838 15.8802 8.5092 15.6948 8.6946C15.5094 8.88001 15.2586 8.98518 14.9964 8.98746C14.7342 8.98974 14.4816 8.88894 14.293 8.70679L13 7.41379V14.9998C13 15.265 12.8946 15.5194 12.7071 15.7069C12.5196 15.8944 12.2652 15.9998 12 15.9998C11.7348 15.9998 11.4804 15.8944 11.2929 15.7069C11.1054 15.5194 11 15.265 11 14.9998V7.41379L9.707 8.70679C9.51947 8.89426 9.26516 8.99957 9 8.99957C8.73484 8.99957 8.48053 8.89426 8.293 8.70679Z" fill="#94B3E2"/>
+									</svg>
+									Загрузите фото
+								</span>
 							</label>
 						</div>
+						<div class="content_form_x images__close"></div>
+						<div class="content_form_subtitle">Размер изображения: 1920х1080</div>
+                        <div class="photo_error"></div>
 					</div>
 					<div class="content_form_input">
 						<div class="content_form_label">Цвет страницы</div>
@@ -133,29 +126,18 @@
                             {% endfor %}
 						</div>
 					</div>
-					<div class="content_form_title">Instagram<span></span></div>
+					<div class="content_form_title">Telegram<span></span></div>
 					<label for="ava" class="content_form_ava images__wrapper flex__align">
-						<div class="ava images">
-							<img>
-						</div>
-						<div class="content_form_ava_btn">
-                            {{ form.instagram_avatar }}
-							<div class="hover__line">{{ form.instagram_avatar.label }}</div>
+						<div class="btn btn-outline copy__href domain_copy">
+							<div class="icon" href="http://instateleport.ru">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path class="stroke" d="M10.1968 12.906C10.5859 13.4262 11.0823 13.8566 11.6523 14.1681C12.2224 14.4795 12.8528 14.6647 13.5007 14.7111C14.1486 14.7575 14.799 14.664 15.4076 14.437C16.0162 14.21 16.5689 13.8547 17.0282 13.3953L19.7462 10.6772C20.5714 9.82282 21.028 8.67851 21.0177 7.49073C21.0074 6.30296 20.531 5.16675 19.691 4.32684C18.8511 3.48692 17.7149 3.01049 16.5271 3.00017C15.3394 2.98985 14.1951 3.44646 13.3407 4.27165L11.7823 5.82095" stroke="#68A4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+									<path class="stroke" d="M13.8211 11.094C13.432 10.5738 12.9356 10.1434 12.3655 9.83198C11.7955 9.52053 11.1651 9.33532 10.5172 9.28892C9.86923 9.24251 9.21889 9.336 8.61027 9.56304C8.00164 9.79007 7.44896 10.1453 6.98971 10.6048L4.27165 13.3228C3.44646 14.1772 2.98985 15.3215 3.00017 16.5093C3.01049 17.6971 3.48692 18.8333 4.32684 19.6732C5.16675 20.5131 6.30296 20.9895 7.49073 20.9999C8.67851 21.0102 9.82282 20.5536 10.6772 19.7284L12.2265 18.1791" stroke="#68A4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+								</svg>
+								Подключить
+							</div>
 						</div>
 					</label>
-					<div class="content_form_title">Вид страницы<span></span></div>
-						<div class="content_form_lever lever__wrapper lever__subscriber {% if form.show_subscribers.value == True or form.show_subscribers.value == 'true' %}active{% endif %}">
-							<div class="lever"></div>
-							<p>Показать число подписчиков</p>
-							{{ form.show_subscribers }}
-					</div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.instagram_username.label }}</div>
-						<div class="input input__read">
-                            {{ form.instagram_username }}
-							<div class="input_err">{{ form.instagram_username.errors }}</div>
-						</div>
-					</div>
 					<div class="content_form_title">Пиксели<span></span></div>
 					<div class="content_form_more lever__wrapper hover__line hover__active" id="inner-pix">
 						<span>Показать пиксели</span>
@@ -204,33 +186,18 @@
 				</div>
 
 				<div class="content_form_step" id="step-2">
-					<div class="content_form_title">Главная<span></span></div>
-					<div class="content_form_photo images__wrapper">
-						<div class="content_form_label required__field">{{ form.page_photo.label }}</div>
-						<div class="photo images">
-							<img>
-						</div>
-						<div class="content_form_photo_btn">
-                            {{ form.page_photo }}
-							<div class="input_err">{{ form.page_photo.errors }}</div>
-							<label for="photo">
-								<span>
-									<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M5 18.9998C5 18.7346 5.10536 18.4802 5.29289 18.2927C5.48043 18.1051 5.73478 17.9998 6 17.9998H18C18.2652 17.9998 18.5196 18.1051 18.7071 18.2927C18.8946 18.4802 19 18.7346 19 18.9998C19 19.265 18.8946 19.5194 18.7071 19.7069C18.5196 19.8944 18.2652 19.9998 18 19.9998H6C5.73478 19.9998 5.48043 19.8944 5.29289 19.7069C5.10536 19.5194 5 19.265 5 18.9998ZM8.293 8.70679C8.10553 8.51926 8.00021 8.26495 8.00021 7.99979C8.00021 7.73462 8.10553 7.48031 8.293 7.29279L11.293 4.29279C11.4805 4.10532 11.7348 4 12 4C12.2652 4 12.5195 4.10532 12.707 4.29279L15.707 7.29279C15.8892 7.48139 15.99 7.73399 15.9877 7.99619C15.9854 8.25838 15.8802 8.5092 15.6948 8.6946C15.5094 8.88001 15.2586 8.98518 14.9964 8.98746C14.7342 8.98974 14.4816 8.88894 14.293 8.70679L13 7.41379V14.9998C13 15.265 12.8946 15.5194 12.7071 15.7069C12.5196 15.8944 12.2652 15.9998 12 15.9998C11.7348 15.9998 11.4804 15.8944 11.2929 15.7069C11.1054 15.5194 11 15.265 11 14.9998V7.41379L9.707 8.70679C9.51947 8.89426 9.26516 8.99957 9 8.99957C8.73484 8.99957 8.48053 8.89426 8.293 8.70679Z" fill="#94B3E2"/>
-									</svg>
-									Загрузите фото
-								</span>
-							</label>
-						</div>
-						<div class="content_form_x images__close"></div>
-						<div class="content_form_subtitle">Размер изображения: 1920х1080</div>
-                        <div class="photo_error"></div>
+					<div class="content_form_title">Таймер<span></span></div>
+					<div class="content_form_lever lever__wrapper lever__timer {% if form.is_timer_active.value == True or form.is_timer_active.value == 'true' %}active{% endif %}" id="inner-1">
+						<div class="lever"></div>
+                        {{ form.is_timer_active }}
+						<p>Таймер обратного отсчета</p>
 					</div>
+					<div class="content_form_title">Тексты<span></span></div>
 					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.title.label }}</div>
+						<div class="content_form_label required__field">{{ form.popup_title.label }}</div>
 						<div class="input input__read">
-                            {{ form.title }}
-							<div class="input_err">{{ form.title.errors }}</div>
+                            {{ form.popup_title }}
+							<div class="input_err">{{ form.popup_title.errors }}</div>
 						</div>
 					</div>
 					<div class="content_form_input">
@@ -241,18 +208,53 @@
 						</div>
 					</div>
 					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.button_text.label }}</div>
+						<div class="content_form_label required__field">{{ form.popup_button_text.label }}</div>
 						<div class="input input__read">
-                            {{ form.button_text }}
-							<div class="input_err">{{ form.button_text.errors }}</div>
+                            {{ form.popup_button_text }}
+							<div class="input_err">{{ form.popup_button_text.errors }}</div>
 						</div>
 					</div>
-					<div class="content_form_title">Таймер<span></span></div>
+					<div class="content_form_input">
+						<div class="content_form_label required__field">{{ form.presubscribe_text.label }}</div>
+						<div class="input input__read">
+                            {{ form.presubscribe_text }}
+							<div class="input_err">{{ form.presubscribe_text.errors }}</div>
+						</div>
+					</div>
+					<div class="content_form_title">Успешная<span></span></div>
+					<div class="content_form_input">
+						<div class="content_form_label required__field">{{ form.message_after_getting_present.label }}</div>
+						<div class="input input__read">
+                            {{ form.message_after_getting_present }}
+							<div class="input_err">{{ form.message_after_getting_present.errors }}</div>
+						</div>
+					</div>
+					<div class="content_form_title">Материал<span></span></div>
+					<div class="content_form_input">
+						<div class="content_form_label required__field">{{ form.bot_button_text.label }}</div>
+						<div class="input input__read">
+                            {{ form.bot_button_text }}
+							<div class="input_err">{{ form.bot_button_text.errors }}</div>
+						</div>
+					</div>
+					<div class="content_form_input">
+						<div class="content_form_label required__field">{{ form.bot_button_url.label }}</div>
+						<div class="input input__read">
+                            {{ form.bot_button_url }}
+							<div class="input_err">{{ form.bot_button_url.errors }}</div>
+						</div>
+					</div>
+					<div class="content_form_btn flex">
+						<div class="btn btn-outline prev__step">Назад</div>
+                        <input type="submit" class="btn btn-red dtn__modal" data-modal="ok" value="Создать страницу">
+{#					<div class="btn btn-red dtn__modal" data-modal="ok">Создать страницу</div>#}
+					</div>
+					{% comment %} <div class="content_form_title">Таймер<span></span></div>
 					<div class="content_form_lever lever__wrapper lever__timer {% if form.is_timer_active.value == True or form.is_timer_active.value == 'true' %}active{% endif %}" id="inner-1">
 						<div class="lever"></div>
                         {{ form.is_timer_active }}
 						<p>Таймер обратного отсчета</p>
-					</div>
+					</div> {% endcomment %}
 					<div class="content_form_inner inner-1">
 						<div class="content_form_input">
 							<div class="content_form_label">{{ form.timer_text.label }}</div>
@@ -268,353 +270,6 @@
 								<div class="input_err">{{ form.timer_time.errors }}</div>
 							</div>
 						</div>
-					</div>
-					<div class="content_form_btn flex">
-						<div class="btn btn-outline prev__step">Назад</div>
-						<div class="btn btn-red next__step">Далее</div>
-					</div>
-				</div>
-				<div class="content_form_step" id="step-3">
-					<div class="content_form_title">Тексты<span></span></div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.presubscribe_text.label }}</div>
-						<div class="input input__read">
-                            {{ form.presubscribe_text }}
-							<div class="input_err">{{ form.presubscribe_text.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.precheck_subscribe_text.label }}</div>
-						<div class="input input__read">
-                            {{ form.precheck_subscribe_text }}
-							<div class="input_err">{{ form.precheck_subscribe_text.errors }}</div>
-						</div>
-					</div>
-
-					<div class="content_form_more lever__wrapper hover__line hover__active" id="inner-2">
-						<span>Показать расширенные настройки</span>
-						<span>Скрыть расширенные настройки</span>
-					</div>
-					<div class="content_form_inner inner-2">
-						<div class="content_form_text">
-							Используя эти поля Вы можете настроить
-							<br>тексты в интерфейсе вашей подписной страницы.
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.subscribe_button.label }}</div>
-							<div class="input input__read">
-                                {{ form.subscribe_button }}
-								<div class="input_err">{{ form.subscribe_button.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.already_subscribed_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.already_subscribed_text }}
-								<div class="input_err">{{ form.already_subscribed_text.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.subscribed_button.label }}</div>
-							<div class="input input__read">
-                                {{ form.subscribed_button }}
-								<div class="input_err">{{ form.subscribed_button.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.not_yet_subscribed.label }}</div>
-							<div class="input input__read">
-                                {{ form.not_yet_subscribed }}
-								<div class="input_err">{{ form.not_yet_subscribed.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.presearch_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.presearch_text }}
-								<div class="input_err">{{ form.presearch_text.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.search_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.search_text }}
-								<div class="input_err">{{ form.search_text.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.enter_login_placeholder.label }}</div>
-							<div class="input input__read">
-                                {{ form.enter_login_placeholder }}
-								<div class="input_err">{{ form.enter_login_placeholder.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.help_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.help_text }}
-								<div class="input_err">{{ form.help_text.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.search_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.search_text }}
-								<div class="input_err">{{ form.search_text.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.search_time_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.search_time_text }}
-								<div class="input_err">{{ form.search_time_text.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.success_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.success_text }}
-								<div class="input_err">{{ form.success_text.errors }}</div>
-							</div>
-						</div>
-
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.error_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.error_text }}
-								<div class="input_err">{{ form.error_text.errors }}</div>
-							</div>
-						</div>
-					</div>
-					<div class="content_form_btn flex">
-						<div class="btn btn-outline prev__step">Назад</div>
-						<div class="btn btn-red next__step">Далее</div>
-					</div>
-				</div>
-				<div class="content_form_step" id="step-4">
-					<div class="content_form_title">Успешная<span></span></div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_title.label }}</div>
-						<div class="input input__read">
-                            {{ form.popup_title }}
-							<div class="input_err">{{ form.popup_title.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_text.label }}</div>
-						<div class="input input__read">
-                            {{ form.popup_text }}
-							<div class="input_err">{{ form.popup_text.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_title">Материал<span></span></div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_button_text.label }}</div>
-						<div class="input input__read">
-                            {{ form.popup_button_text }}
-							<div class="input_err">{{ form.popup_button_text.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_button_url.label }}</div>
-						<div class="input input__read">
-                            {{ form.popup_button_url }}
-							<div class="input_err">{{ form.popup_button_url.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_btn flex">
-						<div class="btn btn-outline prev__step">Назад</div>
-                        <input type="submit" class="btn btn-red dtn__modal" data-modal="ok" value="Создать страницу">
-{#					<div class="btn btn-red dtn__modal" data-modal="ok">Создать страницу</div>#}
-					</div>
-				</div>
-<!-- type page 2 -->
-				<div class="content_form_step" id="step-5">
-					<div class="content_form_title">Главная<span></span></div>
-					<div class="content_form_photo images__wrapper">
-						<div class="content_form_label required__field">{{ form.page_photo.label }}</div>
-						<div class="photo images">
-							 <img>
-						</div>
-						<div class="content_form_photo_btn">
-							{{ form.page_photo }}
-							
-							<div class="input_err">{{ form.page_photo.errors }}</div>
-							<label for="photo">
-								<span>
-									<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M5 18.9998C5 18.7346 5.10536 18.4802 5.29289 18.2927C5.48043 18.1051 5.73478 17.9998 6 17.9998H18C18.2652 17.9998 18.5196 18.1051 18.7071 18.2927C18.8946 18.4802 19 18.7346 19 18.9998C19 19.265 18.8946 19.5194 18.7071 19.7069C18.5196 19.8944 18.2652 19.9998 18 19.9998H6C5.73478 19.9998 5.48043 19.8944 5.29289 19.7069C5.10536 19.5194 5 19.265 5 18.9998ZM8.293 8.70679C8.10553 8.51926 8.00021 8.26495 8.00021 7.99979C8.00021 7.73462 8.10553 7.48031 8.293 7.29279L11.293 4.29279C11.4805 4.10532 11.7348 4 12 4C12.2652 4 12.5195 4.10532 12.707 4.29279L15.707 7.29279C15.8892 7.48139 15.99 7.73399 15.9877 7.99619C15.9854 8.25838 15.8802 8.5092 15.6948 8.6946C15.5094 8.88001 15.2586 8.98518 14.9964 8.98746C14.7342 8.98974 14.4816 8.88894 14.293 8.70679L13 7.41379V14.9998C13 15.265 12.8946 15.5194 12.7071 15.7069C12.5196 15.8944 12.2652 15.9998 12 15.9998C11.7348 15.9998 11.4804 15.8944 11.2929 15.7069C11.1054 15.5194 11 15.265 11 14.9998V7.41379L9.707 8.70679C9.51947 8.89426 9.26516 8.99957 9 8.99957C8.73484 8.99957 8.48053 8.89426 8.293 8.70679Z" fill="#94B3E2"/>
-									</svg>
-									Загрузите фото
-								</span>
-							</label>
-						</div>
-						<div class="content_form_x images__close"></div>
-						<div class="content_form_subtitle">Размер изображения: 1920х1080</div>
-                        <div class="photo_error"></div>
-					</div>
-                    <div class="content_form_title">Таймер<span></span></div>
-					<div class="content_form_lever lever__wrapper lever__timer {% if form.is_timer_active.value == True or form.is_timer_active.value == 'true' %}active{% endif %}" id="inner-1_2">
-						<div class="lever"></div>
-                        {{ form.is_timer_active }}
-						<p>Таймер обратного отсчета</p>
-					</div>
-					<div class="content_form_inner inner-1_2" {% if form.is_timer_active.value == True or form.is_timer_active.value == 'true' %}style="display: block;"{% endif %}>
-						<div class="content_form_input">
-							<div class="content_form_label">{{ form.timer_text.label }}</div>
-							<div class="input input__read">
-                                {{ form.timer_text }}
-								<div class="input_err">{{ form.timer_text.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label">{{ form.timer_time.label }}</div>
-							<div class="input input__read">
-                                {{ form.timer_time }}
-								<div class="input_err">{{ form.timer_time.errors }}</div>
-							</div>
-						</div>
-					</div>
-					<div class="content_form_title">Тексты<span></span></div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.presubscribe_text.label }}</div>
-					<div class="input input__read">
-							{{ form.presubscribe_text }}
-<!--							<input type="text" placeholder="Введите текст" data-id="prew_sub">-->
-							<div class="input_err">{{ form.presubscribe_text.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.precheck_subscribe_text.label }}</div>
-						<div class="input input__read">
-							{{ form.precheck_subscribe_text }}
-<!--							<input type="text" placeholder="Введите текст" data-id="prew_ex">-->
-							<div class="input_err">{{ form.precheck_subscribe_text.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_more lever__wrapper hover__line hover__active" id="inner-2">
-						<span>Показать расширенные настройки</span>
-						<span>Скрыть расширенные настройки</span>
-					</div>
-					<div class="content_form_inner inner-2">
-						<div class="content_form_text">
-							Используя эти поля Вы можете настроить
-							<br>тексты в интерфейсе вашей подписной страницы.
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.subscribe_button.label }}</div>
-							<div class="input input__read">
-								{{ form.subscribe_button }}
-<!--								<input type="text" placeholder="Введите текст" data-id="subscribe_btn">-->
-								<div class="input_err">{{ form.subscribe_button.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.already_subscribed_text.label }}</div>
-							<div class="input input__read">
-								{{ form.already_subscribed_text }}
-<!--								<input type="text" placeholder="Введите текст" data-id="signet_btn">-->
-								<div class="input_err">{{ form.already_subscribed_text.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.subscribed_button.label }}</div>
-							<div class="input input__read">
-								{{ form.subscribed_button }}
-<!--								<input type="text" placeholder="Введите текст" data-id="yes_subscribe">-->
-								<div class="input_err">{{ form.subscribed_button.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label">{{ form.not_yet_subscribed.label }}</div>
-							<div class="input input__read">
-								{{ form.not_yet_subscribed }}
-<!--								<input type="text" placeholder="Введите текст" data-id="not_sibscribe">-->
-								<div class="input_err">{{ form.not_yet_subscribed.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.presearch_text.label }}</div>
-							<div class="input input__read">
-								{{ form.presearch_text }}
-<!--								<input type="text" placeholder="Введите текст">-->
-								<div class="input_err">{{ form.presearch_text.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.search_text.label }}</div>
-							<div class="input input__read">
-								{{ form.search_text }}
-<!--								<input type="text" placeholder="Введите текст">-->
-								<div class="input_err">{{ form.search_text.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.enter_login_placeholder.label }}</div>
-							<div class="input input__read">
-								{{ form.enter_login_placeholder }}
-<!--								<input type="text" placeholder="Введите текст">-->
-								<div class="input_err">{{ form.enter_login_placeholder.errors }}</div>
-							</div>
-						</div>
-						<div class="content_form_input">
-							<div class="content_form_label required__field">{{ form.help_text.label }}</div>
-							<div class="input input__read">
-								{{ form.help_text }}
-<!--								<input type="text" placeholder="Введите текст">-->
-								<div class="input_err">{{ form.help_text.errors }}</div>
-							</div>
-						</div>
-					</div>
-					<div class="content_form_title">Успешная<span></span></div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_title.label }}</div>
-						<div class="input input__read">
-							{{ form.popup_title }}
-<!--							<input type="text" placeholder="Введите текст">-->
-							<div class="input_err">{{ form.popup_title.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_text.label }}</div>
-						<div class="input input__read">
-							{{ form.popup_text }}
-<!--							<textarea placeholder="Введите текст"></textarea>-->
-							<div class="input_err">{{ form.popup_text.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_title">Материал<span></span></div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_button_text.label }}</div>
-						<div class="input input__read">
-							{{ form.popup_button_text }}
-<!--							<input type="text" placeholder="Введите текст">-->
-							<div class="input_err">{{ form.popup_button_text.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_input">
-						<div class="content_form_label required__field">{{ form.popup_button_url.label }}</div>
-						<div class="input input__read">
-							{{ form.popup_button_url }}
-<!--							<input type="text" placeholder="Введите ссылку">-->
-							<div class="input_err">{{ form.popup_button_url.errors }}</div>
-						</div>
-					</div>
-					<div class="content_form_btn flex">
-						<div class="btn btn-outline prev__step">Назад</div>
-<!--						<div class="btn btn-red dtn__modal" data-modal="ok">Создать страницу</div>-->
-							<input type="submit" class="btn btn-red" data-modal="ok" value="Создать страницу">
 					</div>
 				</div>
 			</form>
