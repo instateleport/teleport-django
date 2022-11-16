@@ -283,10 +283,27 @@ $(document).ready(() => {
                 url: '/subscribe-pages/list/',
                 data
             }),
-        pageDeleteAjax = async (data, CSRFToken, is_vk = false) =>
+
+        deleteTGPageAjax = async (data, CSRFToken) =>
             await $.ajax({
                 method: 'post',
-                url: is_vk ? '/vk-subscribe-page/delete/' : '/subscribe-page/delete/',
+                url: '/tg-subscribe-page/delete/',
+                headers: {'X-CSRFToken': CSRFToken},
+                data,
+            }),
+
+        deleteVKPageAjax = async (data, CSRFToken) =>
+            await $.ajax({
+                method: 'post',
+                url: '/vk-subscribe-page/delete/',
+                headers: {'X-CSRFToken': CSRFToken},
+                data,
+            }),
+
+        deleteInstagramPageAjax = async (data, CSRFToken) =>
+            await $.ajax({
+                method: 'post',
+                url: '/subscribe-page/delete/',
                 headers: {'X-CSRFToken': CSRFToken},
                 data,
             }),
@@ -1561,19 +1578,26 @@ $(document).on('click', '.statistic_button .button', function () {
 					window.location = ''
 					break;
 				case 'delete_page':
-					await pageDeleteAjax(
+					await deleteInstagramPageAjax(
 						{
 							'pageID': elementID
 						}, CSRFToken
 					);
 					break;
 				case 'vk_delete_page':
-					await pageDeleteAjax(
+					await deleteVKPageAjax(
 						{
 							'pageID': elementID
-						}, CSRFToken, true
+						}, CSRFToken
 					);
 					break;
+                case 'tg_delete_page':
+                    await deleteTGPageAjax(
+                    {
+                            'pageID': elementID
+                        }, CSRFToken
+                    );
+                    break;
                 case 'delete_channel':
                     await channelDeleteAjax(
                         {

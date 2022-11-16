@@ -194,6 +194,13 @@ class AddToFolderView(LoginRequiredMixin, AjaxMixin, View):
         return self.ajax_response(response)
 
 
+class TGSubscribePageDeleteView(LoginRequiredMixin, IsResetPasswordMixin,
+                              DeleteAjaxMixin):
+    model = models.TelegramSubscribePage
+    id_field_name = 'pageID'
+    is_owner = True
+
+
 class TGFolderCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
     model = models.TelegramGroupOfSubscribePage
     form_class = forms.TGGroupCreateForm
