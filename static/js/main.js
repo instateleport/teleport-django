@@ -250,11 +250,27 @@ $(document).ready(() => {
                 headers: {'X-CSRFToken': CSRFToken},
                 data,
             }),
-        // add to folder
-        addToFolderAjax = async (data, CSRFToken, is_vk = false) =>
+
+        appendToTGFolderAjax = async (data, CSRFToken) =>
             await $.ajax({
                 method: 'post',
-                url: is_vk ? '/vk-folder/append/' : '/folder/append/',
+                url: '/tg-folder/append/',
+                headers: {'X-CSRFToken': CSRFToken},
+                data,
+            }),
+
+        appendToVKFolderAjax = async (data, CSRFToken) =>
+            await $.ajax({
+                method: 'post',
+                url: '/vk-folder/append/',
+                headers: {'X-CSRFToken': CSRFToken},
+                data,
+            }),
+
+        appendToInstagramFolderAjax = async (data, CSRFToken) =>
+            await $.ajax({
+                method: 'post',
+                url: '/folder/append/',
                 headers: {'X-CSRFToken': CSRFToken},
                 data,
             }),
@@ -1708,15 +1724,40 @@ $(document).on('click', '.statistic_button .button', function () {
         let csrfToken = $('input[name=csrfmiddlewaretoken]').val(),
             slg = $('#page_slug').val(),
             folder_id = $('#folder_id').val(),
-            type = $(this).data('type'),
-            response = await addToFolderAjax(
-                {
-                    'slug': slg,
-                    'group_id': folder_id
-                },
-                csrfToken,
-                type === 'vk'
-            );
+            type = $(this).data('type')
+
+        let response = null
+        console.log(type)
+        switch (type) {
+            case 'vk':
+                response = await appendToVKFolderAjax(
+                    {
+                        'slug': slg,
+                        'group_id': folder_id
+                    },
+                    csrfToken,
+                );
+                break;
+            case 'tg':
+                response = await appendToTGFolderAjax(
+                    {
+                        'slug': slg,
+                        'group_id': folder_id
+                    },
+                    csrfToken,
+                );
+                break;
+            case 'ig':
+                    response = await appendToInstagramFolderAjax(
+                        {
+                            'slug': slg,
+                            'group_id': folder_id
+                        },
+                        csrfToken,
+                    );
+                    break;
+        }
+        console.log(response)
 
         if (response['status'] === 'SUCCESS') {
             window.location = response['url']

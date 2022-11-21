@@ -126,18 +126,6 @@
                             {% endfor %}
 						</div>
 					</div>
-					<div class="content_form_title">Telegram<span></span></div>
-					<label for="ava" class="content_form_ava images__wrapper flex__align">
-						<div class="btn btn-outline copy__href domain_copy">
-							<div class="icon" href="http://instateleport.ru">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path class="stroke" d="M10.1968 12.906C10.5859 13.4262 11.0823 13.8566 11.6523 14.1681C12.2224 14.4795 12.8528 14.6647 13.5007 14.7111C14.1486 14.7575 14.799 14.664 15.4076 14.437C16.0162 14.21 16.5689 13.8547 17.0282 13.3953L19.7462 10.6772C20.5714 9.82282 21.028 8.67851 21.0177 7.49073C21.0074 6.30296 20.531 5.16675 19.691 4.32684C18.8511 3.48692 17.7149 3.01049 16.5271 3.00017C15.3394 2.98985 14.1951 3.44646 13.3407 4.27165L11.7823 5.82095" stroke="#68A4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-									<path class="stroke" d="M13.8211 11.094C13.432 10.5738 12.9356 10.1434 12.3655 9.83198C11.7955 9.52053 11.1651 9.33532 10.5172 9.28892C9.86923 9.24251 9.21889 9.336 8.61027 9.56304C8.00164 9.79007 7.44896 10.1453 6.98971 10.6048L4.27165 13.3228C3.44646 14.1772 2.98985 15.3215 3.00017 16.5093C3.01049 17.6971 3.48692 18.8333 4.32684 19.6732C5.16675 20.5131 6.30296 20.9895 7.49073 20.9999C8.67851 21.0102 9.82282 20.5536 10.6772 19.7284L12.2265 18.1791" stroke="#68A4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-								</svg>
-								Подключить
-							</div>
-						</div>
-					</label>
 					<div class="content_form_title">Пиксели<span></span></div>
 					<div class="content_form_more lever__wrapper hover__line hover__active" id="inner-pix">
 						<span>Показать пиксели</span>
@@ -184,7 +172,6 @@
 						<div class="btn btn-red next__step">Далее</div>
 					</div>
 				</div>
-
 				<div class="content_form_step" id="step-2">
 					<div class="content_form_title">Таймер<span></span></div>
 					<div class="content_form_lever lever__wrapper lever__timer {% if form.is_timer_active.value == True or form.is_timer_active.value == 'true' %}active{% endif %}" id="inner-1">
@@ -247,14 +234,7 @@
 					<div class="content_form_btn flex">
 						<div class="btn btn-outline prev__step">Назад</div>
                         <input type="submit" class="btn btn-red dtn__modal" data-modal="ok" value="Создать страницу">
-{#					<div class="btn btn-red dtn__modal" data-modal="ok">Создать страницу</div>#}
 					</div>
-					{% comment %} <div class="content_form_title">Таймер<span></span></div>
-					<div class="content_form_lever lever__wrapper lever__timer {% if form.is_timer_active.value == True or form.is_timer_active.value == 'true' %}active{% endif %}" id="inner-1">
-						<div class="lever"></div>
-                        {{ form.is_timer_active }}
-						<p>Таймер обратного отсчета</p>
-					</div> {% endcomment %}
 					<div class="content_form_inner inner-1">
 						<div class="content_form_input">
 							<div class="content_form_label">{{ form.timer_text.label }}</div>

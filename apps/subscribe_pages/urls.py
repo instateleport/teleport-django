@@ -46,6 +46,8 @@ urlpatterns = [
          name='tg-folder-delete'),
     path('tg-folders/rename/', views.TGFolderRenameView.as_view(),
          name='tg-folder-rename'),
+    path('tg-folder/append/', views.TGAddToFolderView.as_view(),
+         name='add-to-folder'),
 
     path('tg-subscribe-page/create/', views.TGSubscribePageCreateView.as_view(),
          name='tg-page-create'),

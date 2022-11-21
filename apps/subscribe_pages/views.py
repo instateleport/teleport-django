@@ -194,6 +194,24 @@ class AddToFolderView(LoginRequiredMixin, AjaxMixin, View):
         return self.ajax_response(response)
 
 
+class TGAddToFolderView(LoginRequiredMixin, AjaxMixin, View):
+    def post(self, request, *args, **kwargs):
+        response = self.get_ajax_response()
+        data = request.POST
+        page = models.TelegramSubscribePage.objects.get(
+            slug=data['slug'], user=request.user
+        )
+        group = models.TelegramGroupOfSubscribePage.objects.get(
+            user=request.user, id=int(data['group_id'])
+        )
+        page.group = group
+        page.save()
+        response['status'] = 'SUCCESS'
+        response['url'] = '/tg-subscribe-pages/%s/' % group.name
+
+        return self.ajax_response(response)
+
+
 class TGSubscribePageDeleteView(LoginRequiredMixin, IsResetPasswordMixin,
                               DeleteAjaxMixin):
     model = models.TelegramSubscribePage
