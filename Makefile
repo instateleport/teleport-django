@@ -6,5 +6,8 @@ migrate:
 makemigrations:
 	sh -c "$(django) makemigrations"
 
+createsuperuser:
+	sh -c "$(django) createsuperuser"
+
 collectstatic:
 	sh -c "$(django) collectstatic"

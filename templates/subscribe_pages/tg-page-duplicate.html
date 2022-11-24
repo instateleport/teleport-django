@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block carrot %}
+    <!-- Carrot quest BEGIN -->
+    <script type="text/javascript">
+    !function(){function t(t,e){return function(){window.carrotquestasync.push(t,arguments)}}if("undefined"==typeof carrotquest){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="//cdn.carrotquest.app/api.min.js",document.getElementsByTagName("head")[0].appendChild(e),window.carrotquest={},window.carrotquestasync=[],carrotquest.settings={};for(var n=["connect","track","identify","auth","oth","onReady","addCallback","removeCallback","trackMessageInteraction"],a=0;a<n.length;a++)carrotquest[n[a]]=t(n[a])}}(),carrotquest.connect("42083-c5cbf07ce7e3c9363e0bb9df9e");
+    </script>
+    <!-- Carrot quest END -->
+{% endblock %}
+
+{% block title %}Дублирование страницы{% endblock %}
+
+{% block body_class %}theme{% endblock %}
+
+{% block content %}
+	{% include 'subscribe_pages/nav.html' %}
+    <div class="bar_viel"></div>
+
+ 	<div class="content">
+
+		<div class="content_top flex__align">
+			<div class="content_left flex__align">
+				<div class="content_burger">
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+				<div class="content_logo">
+					<div class="logo">Teleport</div>
+				</div>
+            </div>
+			<div class="content_user flex__align" id="user-desktop">
+				<div class="content_user_name">{{ request.user.username }}</div>
+			</div>
+		</div>
+
+		<div class="content_inner">
+			<div class="content_title">Создание страницы</div>
+			<form method="POST" enctype="multipart/form-data" class="content_form">
+            {% csrf_token %}
+				<div class="content_form_title">Основные характеристики<span></span></div>
+				<div class="content_form_input">
+					<div class="content_form_label required__field">{{ form.page_name.label }}</div>
+					<div class="input">
+                        {{ form.page_name }}
+						<div class="input_err">{{ form.page_name.errors }}</div>
+					</div>
+				</div>
+				<div class="content_form_input">
+                    <div class="content_form_label">{{ form.domain.label }}</div>
+                    <div class="select">
+                        <div class="select_info">Выберите домен</div>
+                        <div class="select_wrapper">
+                            <div class="select_inner">
+                                <div class="select_opt">Выберите домен</div>
+                                {% for domain in domains %}
+                                    <div data-domain-id="{{ domain.id }}" class="select_opt">{{ domain }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="content_form_input">
+					<div class="content_form_label required__field">{{ form.slug.label }}</div>
+					<div class="input input__domain">
+                        {{ form.slug }}
+						<div class="input_err">{{ form.slug.errors }}</div>
+					</div>
+				</div>
+				<div class="content_form_title">Настройки страницы подписки<span></span></div>
+				<div class="content_form_ava images__wrapper flex__align">
+					<div class="ava images">
+						<img src="{{ instagram_avatar }}">
+					</div>
+					<div class="content_form_ava_btn">
+						<input class="input__hidden" type="file" id="ava">
+                        {{ form.instagram_avatar }}
+						<label class="hover__line" for="ava">Аватарка Instagram</label>
+					</div>
+				</div>
+				<div class="content_form_btn flex">
+					<div class="btn btn-outline">Отменить</div>
+                    <input type="submit" class="btn btn-red" value="Дублировать">
+{#					<div class="btn btn-red">Дублировать</div>#}
+				</div>
+			</form>
+		</div>
+	</div>
+
+{% endblock %}

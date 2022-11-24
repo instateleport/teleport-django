@@ -1181,15 +1181,17 @@ $(document).on('click', '.statistic_button .button', function () {
                 $("#id_type_group_id").val('id')
             }
         }
-
-        // if (e.hasClass('lever__timer') || e.hasClass('lever__subscriber')) {
-        //     prev_page(false, false);
-        // }
     });
 
 
-// Copied
+    $(document).on('click', '.show__hint_in_modal', () => {
+        $('.show__hint_in_modal').addClass('active')
 
+        setTimeout(() => {
+			$('.show__hint_in_modal').removeClass('active');
+		}, 1000);
+    })
+    
 	$(document).on('click', '.copy__href', function () {
 		let e = $(this),
 			f = $('<input>'),
@@ -1239,12 +1241,6 @@ $(document).on('click', '.statistic_button .button', function () {
 		setTimeout(() => {
 			$('.copy__href').removeClass('active');
 		}, 1000);
-		// $('body').append(f);
-		// f.val($(op).attr('href')).select();
-		// document.execCommand('copy');
-		// f.remove();
-        //
-		// $('.copy__href').addClass('active');
 	});
 
 

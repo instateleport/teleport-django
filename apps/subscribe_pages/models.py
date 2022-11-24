@@ -492,8 +492,6 @@ class InstagramSubscriber(models.Model):
                                  username: str = None) -> 'InstagramSubscriber':
         if not user_ip and request:
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-            # ipLogger.info(
-            #     f'\n{timezone.now().strftime("%Y-%m-%d %H:%M:%S")}: username: {username}, ip: {x_forwarded_for}')
 
             if x_forwarded_for:
                 user_ip = x_forwarded_for.split(',')[0].strip()
@@ -922,6 +920,8 @@ class TelegramSubscribePage(models.Model):
         null=True, blank=True,
         verbose_name=_('Группа страниц')
     )
+    telegram_bot_url = models.CharField(max_length=200, null=True, blank=True)
+    telegram_channel_id = models.CharField(max_length=200, null=True, blank=True)
     message_after_getting_present = models.CharField(
         max_length=2000,
         verbose_name=_('Сообщение при выдаче подарка')
@@ -932,7 +932,9 @@ class TelegramSubscribePage(models.Model):
     )
     bot_button_url = models.URLField(
         max_length=200,
-        verbose_name=_('Ссылка кнопки (бот)'))
+        verbose_name=_('Ссылка кнопки (бот)'),
+        null=True,
+        blank=True)
     domain = models.ForeignKey(
         Domain, on_delete=models.SET_NULL,
         related_name='tg_subscribe_pages',
@@ -963,7 +965,7 @@ class TelegramSubscribePage(models.Model):
         verbose_name=_('Цвет фона')
     )
 
-    instagram_name = models.CharField(
+    instagram_username = models.CharField(
         max_length=100, blank=True, null=True,
         verbose_name=_('Имя в Telegram')
     )
@@ -1033,73 +1035,12 @@ class TelegramSubscribePage(models.Model):
         verbose_name=_('Текст перед подпиской')
     )
 
-    enter_login_placeholder = models.CharField(
-        max_length=255,
-        default=_('введите ваш логин'),
-        verbose_name=_('Текст "Введите ваш логин"')
-    )
-    help_text = models.CharField(
-        max_length=255,
-        default=_('Здесь находится логин'),
-        verbose_name=_('Текст "Здесь находиться логин" (подсказка)')
-    )
-
-    subscribe_button = models.CharField(
-        max_length=255,
-        default=_('Подписаться'),
-        verbose_name=_('Текст "Подписаться" на кнопке')
-    )
-    already_subscribed_text = models.CharField(
-        max_length=255,
-        default=_('Я уже подписался'),
-        verbose_name=_('Текст "Я уже подписался" под кнопкой')
-    )
-
-    subscribed_button = models.CharField(
-        max_length=255,
-        default=_('Подписался'),
-        verbose_name=_('Текст "Я подписался" на кнопке')
-    )
-    not_yet_subscribed = models.CharField(
-        max_length=255,
-        default=_('Я еще не подписался'),
-        verbose_name=_('Текст "Я еще не подписался" под кнопкой')
-    )
-
-    presearch_text = models.CharField(
-        max_length=255,
-        default=_('После подписки вернись на эту страницу для подтверждения'),
-        verbose_name=_(
-            'Текст "После подписки вернись на эту страницу для подтверждения"'
-        )
-    )
-    search_text = models.CharField(
-        max_length=255,
-        default=_('Поиск аккаунта...'),
-        verbose_name=_('Текст "Поиск аккаунта..."')
-    )
-    search_time_text = models.CharField(
-        max_length=255,
-        default=_('Это может занять до 20 секунд'),
-        verbose_name=_('Текст "Это может занять до 20 секунд"')
-    )
-    success_text = models.CharField(
-        max_length=255,
-        default=_('Аккаунт найден!'),
-        verbose_name=_('Текст "Аккаунт найден"')
-    )
-    error_text = models.CharField(
-        max_length=255,
-        default=_('Аккаунт не найден!'),
-        verbose_name=_('Текст "Аккаунт не найден"')
-    )
-
     show_subscribers = models.BooleanField(default=False)
 
     following_count = models.CharField(max_length=12, blank=True, null=True)
     follower_count = models.CharField(max_length=12, blank=True, null=True)
     media_count = models.CharField(max_length=12, blank=True, null=True)
-
+    is_linked = models.BooleanField(default=False, verbose_name=_('Привязан'))
     is_active = models.BooleanField(default=False, verbose_name=_('Активный'))
     created = models.BooleanField(default=False, verbose_name=_('Создано'))
 
@@ -1137,7 +1078,7 @@ class TelegramSubscribePage(models.Model):
 
     @property
     def page_url(self) -> str:
-        return f'{self.page_domain}/page/{self.slug}'
+        return f'{self.page_domain}/tg-page/{self.slug}'
 
     @property
     def page_domain(self) -> str:
@@ -1163,9 +1104,8 @@ class TelegramSubscribePage(models.Model):
         self.save(update_fields=['ctr'])
 
     def all_views_subscribers_and_ctr(self) -> List[int]:
-        # all_views, all_subscribers = InstagramStatistic.get_all_views_and_subscribers(
-        #     self)
-        return [10, 10, 10]
+        all_views, all_subscribers = TelegramStatistic.get_all_views_and_subscribers(self)
+        return [all_views, all_subscribers, self.ctr]
 
     all_views_subscribers_and_ctr.short_description = '👁‍🗨, 👤, %'
 
@@ -1189,20 +1129,106 @@ class TelegramSubscribePage(models.Model):
         return f'{self.page_name} - {self.slug}'
 
 
-class TelegramSubscriber(models.Model):
-    telegram_subscribe_page = models.ForeignKey(
-        TelegramSubscribePage, on_delete=models.CASCADE)
-    telegram_user = models.ForeignKey(TelegramUser, on_delete=models.CASCADE)
+class TelegramStatistic(models.Model):
+    telegram_subscribe_page = models.ForeignKey(TelegramSubscribePage,
+                                       on_delete=models.CASCADE,
+                                       verbose_name=_('Страница Telegram'),
+                                       related_name='statistic')
+    day = models.DateField(verbose_name=_('Дата'))
+    views = models.BigIntegerField(verbose_name=_('Просмотры'), default=0)
+    subscribers = models.BigIntegerField(verbose_name=_('Подписки'), default=0)
+    ctr = models.FloatField(default=0, blank=True, null=True,
+                            verbose_name=_('CTR'))
+
+    class Meta:
+        ordering = ('telegram_subscribe_page',)
+        verbose_name = 'Статистика Telegram'
+        verbose_name_plural = 'Статистики Telegram'
+
+    @classmethod
+    def get_all_views_and_subscribers(cls, subscribe_page: TelegramSubscribePage) -> List[int]:
+        views, subscribers = 0, 0
+        for statistic in cls.objects.filter(telegram_subscribe_page=subscribe_page):
+            views += statistic.views
+            subscribers += statistic.subscribers
+        return [views, subscribers]
+
+    def calculate_ctr(self) -> float:
+        all_views_today, all_subscribers_today = self.views, self.subscribers
+        print(all_subscribers_today, all_views_today)
+        try:
+            ctr = all_subscribers_today / all_views_today * 100
+        except ZeroDivisionError:
+            ctr = 0
+        return ctr
+
+    def save_ctr(self, ctr: Optional[float] = None) -> None:
+        if not ctr:
+            ctr = self.calculate_ctr()
+        self.ctr = float('{:.2f}'.format(ctr))
+        self.save(update_fields=['ctr'])
 
     def __str__(self):
-        return f'{self.telegram_subscribe_page.telegram_bot_url} <- {self.telegram_user.telegram_username}'
+        return f'{self.telegram_subscribe_page} - {self.day}'
+
+
+class TelegramSubscriber(models.Model):
+    telegram_user = models.ForeignKey(
+        TelegramUser,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True)
+    ip = models.CharField(max_length=255, verbose_name=_('IP'))
+    can_get_material = models.BooleanField(
+        default=False, verbose_name=_('Может просматривать материал'))
+    date = models.DateTimeField(auto_now=True, verbose_name=_('Дата'))
+
+    views = models.ManyToManyField(TelegramSubscribePage, blank=True,
+                                   related_name='views',
+                                   verbose_name=_('Просмотры'))
+    subscribe_to = models.ManyToManyField(TelegramSubscribePage, blank=True,
+                                          related_name='subscribers',
+                                          verbose_name=_('Подписки'))
+
+    class Meta:
+        verbose_name = 'Telegram Подписчик'
+        verbose_name_plural = 'Telegram Подписчики'
+
+    @classmethod
+    def get_or_create_by_user_ip(cls, request=None, user_ip: str = None,
+                                 username: str = None) -> 'TelegramSubscriber':
+        if not user_ip and request:
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+            if x_forwarded_for:
+                user_ip = x_forwarded_for.split(',')[0].strip()
+            else:
+                user_ip = request.META.get('REMOTE_ADDR').strip()
+        try:
+            subscriber, subscriber_created = cls.objects.get_or_create(
+                ip=user_ip)  # получаем/создаём IP пользователя
+        except cls.MultipleObjectsReturned:
+            subscribers = cls.objects.filter(ip=user_ip)
+            subscriber = subscribers[0]
+            for subscriber_ in subscribers[1:]:
+                for subscribe_page in subscriber_.views.all():
+                    subscriber.views.add(subscribe_page)
+                for subscribe_page in subscriber_.subscribe_to.all():
+                    subscriber.subscribe_to.add(subscribe_page)
+                subscriber_.delete()
+        return subscriber
+
+    def is_visited_page_by_slug(self, slug: str) -> bool:
+        return self.views.filter(slug=slug)
+
+    def __str__(self) -> str:
+        return f'{self.ip}'
 
 
 @receiver(post_save, sender=InstagramSubscribePage)
 def subscribe_page_post_save(sender, created, instance: InstagramSubscribePage,
                              **kwargs):
     if created:
-
         InstagramStatistic.objects.create(
             subscribe_page=instance, day=datetime.today()
         )
@@ -1235,13 +1261,10 @@ def subscribe_page_post_save(sender, created, instance: InstagramSubscribePage,
 @receiver(post_save, sender=VKSubscribePage)
 def vk_subscribe_page_post_save(sender, created, instance: VKSubscribePage,
                                 **kwargs):
-    #    ipLogger.warning('signal ', end='')
     if created:
-        #        ipLogger.warning('started: ')
         VKStatistic.objects.create(
             vk_subscribe_page=instance, day=datetime.today()
         )
-        #        ipLogger.warning('123')
         default_group, default_group_created = VKGroupOfSubscribePage.objects.get_or_create(
             user=instance.user, name='Неотсортированные'
         )
@@ -1266,13 +1289,10 @@ def vk_subscribe_page_post_save(sender, created, instance: VKSubscribePage,
 @receiver(post_save, sender=TelegramSubscribePage)
 def tg_subscribe_page_post_save(sender, created, instance: TelegramSubscribePage,
                                 **kwargs):
-    #    ipLogger.warning('signal ', end='')
     if created:
-        #        ipLogger.warning('started: ')
-        # VKStatistic.objects.create(
-        #     vk_subscribe_page=instance, day=datetime.today()
-        # )
-        #        ipLogger.warning('123')
+        TelegramStatistic.objects.create(
+            telegram_subscribe_page=instance, day=datetime.today()
+        )
         default_group, default_group_created = TelegramGroupOfSubscribePage.objects.get_or_create(
             user=instance.user, name='Неотсортированные'
         )
@@ -1287,7 +1307,6 @@ def tg_subscribe_page_post_save(sender, created, instance: TelegramSubscribePage
                 'group'
             ]
         )
-        #        ipLogger.warning('jopa')
         # если баланс больше 0, то подписная страница становится активной
         if instance.user.pocket.balance > 0:
             instance.is_active = True

@@ -5189,7 +5189,7 @@ textarea.emoj {
 }
 
 .subscribe_statistic {
-  margin-top: 20px;
+  margin-top: 50px;
   margin-left: calc(var(--ava_size) + var(--inner) + 20px);
 }
 

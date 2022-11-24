@@ -53,6 +53,13 @@ urlpatterns = [
          name='tg-page-create'),
     path('tg-subscribe-page/delete/', views.TGSubscribePageDeleteView.as_view(),
          name='page-delete'),
+    path('tg-subscribe-page/<slug:slug>/duplicate/',
+         views.TGSubscribePageDuplicateView.as_view(), name='tg-page-duplicate'),
+    path('tg-subscribe-page/<slug:slug>/',
+         views.TGSubscribePageDetailView.as_view(), name='tg-page-detail'),
+
+    path('tg-page/<slug:slug>/', views.TGSubscribePageOpenView.as_view(),
+         name='tg-page-open'),
 
     # ig instagram pages - crud
     path('subscribe-pages/', views.InstagramSubscribePageListView.as_view(),

@@ -194,6 +194,97 @@ class AddToFolderView(LoginRequiredMixin, AjaxMixin, View):
         return self.ajax_response(response)
 
 
+class TGSubscribePageOpenView(IsSubscribePageActive, DetailView):
+    model = models.TelegramSubscribePage
+    queryset = models.TelegramSubscribePage.objects.filter(created=True)
+    template_name = 'subscribe_pages/tg-page-open.html'
+    context_object_name = 'page'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['bg_color'] = self.object.bg_color
+        context['page_photo'] = self.object.get_page_photo_url()
+        context['instagram_avatar'] = self.object.get_instagram_avatar_url()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if not self.object:
+            self.object = self.get_object()
+        try:
+            subscriber = models.TelegramSubscriber.get_or_create_by_user_ip(
+                request)
+
+            statistic, statistic_created = models.TelegramStatistic.objects.get_or_create(
+                        telegram_subscribe_page=self.object, day=datetime.today())
+
+            if not subscriber.is_visited_page_by_slug(self.object.slug):  # Если он не был на этой странице то
+                try:
+                    # получаем/создаём статистику сегодняшнего дня
+                    statistic, statistic_created = models.TelegramStatistic.objects.get_or_create(
+                        telegram_subscribe_page=self.object, day=datetime.today())
+
+                except models.TelegramStatistic.MultipleObjectsReturned:
+                    statistics = models.TelegramStatistic.objects.filter(
+                        telegram_subscribe_page=self.object, day=datetime.today())
+                    statistic = statistics[0]
+                    for statistic_ in statistics[1:]:
+                        statistic.views += statistic_.views
+                        statistic_.delete()
+
+                statistic.views += 1
+                statistic.save(update_fields=['views'])
+                subscriber.views.add(self.object)  # добавляем страницу в просмотренные
+        except Exception as e:
+            logger_page.warning(
+                f'\n{timezone.now().strftime("%Y-%m-%d %H:%M:%S")}: '
+                f'error: {e}, '
+                f'slug: {self.object.slug}, '
+                f'ip: {request.META}')
+
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+
+
+
+class TGSubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin,
+                              IsSubscribePageOwner, UpdateView):
+    model = models.TelegramSubscribePage
+    form_class = forms.TGSubscribePageUpdateForm
+    template_name = 'subscribe_pages/tg-page-detail.html'
+    success_url = reverse_lazy('subscribe_pages:tg-page-list')
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            queryset = self.model.objects.all()
+        else:
+            queryset = self.model.objects.filter(user=self.request.user)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if not self.object:
+            self.object = self.get_object()
+
+        context['domain'] = self.object.domain
+        context['domains'] = models.Domain.objects.filter(
+            user=self.request.user)
+
+        context['bg_color'] = self.object.bg_color
+        context['bg_colors'] = models.BGColor.objects.filter(is_active=True)
+
+        context['page_photo'] = f'https://{self.object.get_page_photo_url()}'
+        context['instagram_avatar'] = self.object.get_instagram_avatar_url()
+        context['instagram_username'] = self.object.instagram_username
+        context['follower_count'] = 1000
+
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return super().form_valid(form)
+
 class TGAddToFolderView(LoginRequiredMixin, AjaxMixin, View):
     def post(self, request, *args, **kwargs):
         response = self.get_ajax_response()
@@ -363,6 +454,95 @@ class TGSubscribePageListView(SubscribePageListMixin):
 
         return context
 
+
+class TGSubscribePageDuplicateView(LoginRequiredMixin, IsResetPasswordMixin,
+                                 IsSubscribePageOwner, CreateView):
+    model = models.TelegramSubscribePage
+    queryset = models.TelegramSubscribePage.objects.filter(created=True)
+    form_class = forms.TGSubscribePageDuplicateForm
+    template_name = 'subscribe_pages/tg-page-duplicate.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        self.success_url = reverse('subscribe_pages:tg-page-detail',
+                                   args=[self.object.slug])
+        return str(self.success_url)
+
+    def form_valid(self, form):
+        self.object = form.save()
+        task.save_instagram_info.delay(
+            self.object.pk)  # сохраняем инфу о аккаунте в подписную страницу
+        return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        page = get_object_or_404(models.TelegramSubscribePage,
+                                 user=request.user, slug=kwargs.get('slug'))
+        self.object = page
+        self.object.slug = models.TelegramSubscribePage.slug_generate(
+            request.user)
+        return self.render_to_response(self.get_context_data())
+
+    def get_context_data(self, **kwargs):
+        """Insert the form into the context dict."""
+        context = super().get_context_data(**kwargs)
+        if self.object:
+            context['domain'] = self.object.domain
+
+        context['instagram_avatar'] = self.object.get_instagram_avatar_url()
+        context['domains'] = models.Domain.objects.filter(
+            user=self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        self.object = self.get_object()
+
+        if form.is_valid(request.user):
+            page_name = form.cleaned_data['page_name'].lower()
+
+            self.object = get_object_or_404(models.TelegramSubscribePage,
+                                            user=request.user,
+                                            slug=kwargs.get('slug'))
+
+            # SubscribePage create
+            f = form.save(commit=False)
+            f.user = request.user
+            f.slug = f.slug.lower()
+
+            # copy
+            f.page_name = page_name
+            f.page_photo = self.object.page_photo
+            f.bg_color = self.object.bg_color
+            f.description = self.object.description
+
+            f.facebook_pixel = self.object.facebook_pixel
+            f.tiktok_pixel = self.object.tiktok_pixel
+            f.yandex_pixel = self.object.yandex_pixel
+
+            if not f.instagram_avatar:
+                f.instagram_avatar = self.object.instagram_avatar
+
+            f.timer_text = self.object.timer_text
+            f.is_timer_active = self.object.is_timer_active
+            f.timer_time = self.object.timer_time
+
+            f.presubscribe_text = self.object.presubscribe_text
+            f.message_after_getting_present = self.object.message_after_getting_present
+
+            f.show_subscribers = self.object.show_subscribers
+
+            f.popup_title = self.object.popup_title
+            f.popup_button_text = self.object.popup_button_text
+            f.bot_button_text = self.object.bot_button_text
+            f.bot_button_url = self.object.bot_button_url
+
+            f.created = self.object.created
+
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
     model = models.TelegramSubscribePage
@@ -570,8 +750,6 @@ class SubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin,
 
         if not self.object:
             self.object = self.get_object()
-
-        # s = self.get_object()
 
         context['domain'] = self.object.domain
         context['domains'] = models.Domain.objects.filter(
@@ -1764,13 +1942,13 @@ class GetPresentFromTelegramPageView(APIView):
 
 
 class AddTelegramUserToChannelSubscribers(APIView):
-
     def post(self, request):
         serializer = TelegramSubscriberSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         telegram_channel_id = serializer.data['telegram_channel_id']
         telegram_user_id = serializer.data['telegram_user_id']
         telegram_user_username = serializer.data['telegram_user_username']
+        telegram_button_url = serializer.data['telegram_subscribe_page_button_url']
         try:
             telegram_sub_page = models.TelegramSubscribePage.objects.get(
                 telegram_channel_id=telegram_channel_id)
@@ -1786,11 +1964,10 @@ class AddTelegramUserToChannelSubscribers(APIView):
             telegram_user = models.TelegramUser.objects.get(
                 telegram_user_id=telegram_user_id)
         except:
-            telegram_user = models.TelegramUser(
+            telegram_user = models.TelegramUser.create(
                 telegram_user_id=telegram_user_id,
                 telegram_username=telegram_user_username
             )
-            telegram_user.save()
 
         model, result = models.TelegramSubscriber.objects.get_or_create(
             telegram_subscribe_page=telegram_sub_page,
@@ -1798,5 +1975,6 @@ class AddTelegramUserToChannelSubscribers(APIView):
         )
         if result:
             telegram_sub_page.user.pocket.pay_per_subscriber()
+            telegram_sub_page.update(bot_button_url=telegram_button_url)
 
         return Response(status=status.HTTP_201_CREATED)
