@@ -1950,13 +1950,13 @@ class AddTelegramUserToChannelSubscribers(APIView):
         telegram_user_username = serializer.data['telegram_user_username']
         telegram_button_url = serializer.data['telegram_subscribe_page_button_url']
         try:
-            telegram_sub_page = models.TelegramSubscribePage.objects.get(
+            telegram_subscribe_page = models.TelegramSubscribePage.objects.get(
                 telegram_channel_id=telegram_channel_id)
         except:
             data = {'message': 'There is not channel with given id'}
             return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
-        if telegram_sub_page.user.pocket.balance <= 0:
+        if telegram_subscribe_page.user.pocket.balance <= 0:
             data = {'message': 'Channel owner has not enough money'}
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1964,17 +1964,22 @@ class AddTelegramUserToChannelSubscribers(APIView):
             telegram_user = models.TelegramUser.objects.get(
                 telegram_user_id=telegram_user_id)
         except:
-            telegram_user = models.TelegramUser.create(
+            telegram_user = models.TelegramUser.objects.create(
                 telegram_user_id=telegram_user_id,
                 telegram_username=telegram_user_username
             )
 
         model, result = models.TelegramSubscriber.objects.get_or_create(
-            telegram_subscribe_page=telegram_sub_page,
-            telegram_user=telegram_user
+            telegram_subscribe_page=telegram_subscribe_page,
+            telegram_user=telegram_user,
         )
         if result:
-            telegram_sub_page.user.pocket.pay_per_subscriber()
-            telegram_sub_page.update(bot_button_url=telegram_button_url)
+            telegram_subscribe_page.user.pocket.pay_per_subscriber()
+            telegram_subscribe_page = models.TelegramSubscribePage.objects.get(
+                telegram_channel_id=telegram_channel_id)
+            telegram_subscribe_page.bot_button_url = telegram_button_url
+            telegram_subscribe_page.is_linked = True
+            print(telegram_subscribe_page)
+            telegram_subscribe_page.save()
 
         return Response(status=status.HTTP_201_CREATED)

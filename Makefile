@@ -11,3 +11,6 @@ createsuperuser:
 
 collectstatic:
 	sh -c "$(django) collectstatic"
+
+shell:
+	sh -c "$(django) shell"

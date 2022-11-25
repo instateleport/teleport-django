@@ -872,9 +872,6 @@ class TelegramUser(models.Model):
     telegram_username = models.CharField(max_length=100, null=True, blank=True)
     telegram_user_id = models.CharField(max_length=100, null=True, blank=True)
 
-    def __str__(self):
-        return self.telegram_username
-
 
 class TelegramGroupOfSubscribePage(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -1183,12 +1180,14 @@ class TelegramSubscriber(models.Model):
         default=False, verbose_name=_('Может просматривать материал'))
     date = models.DateTimeField(auto_now=True, verbose_name=_('Дата'))
 
-    views = models.ManyToManyField(TelegramSubscribePage, blank=True,
-                                   related_name='views',
-                                   verbose_name=_('Просмотры'))
-    subscribe_to = models.ManyToManyField(TelegramSubscribePage, blank=True,
-                                          related_name='subscribers',
-                                          verbose_name=_('Подписки'))
+    telegram_subscribe_page = models.ForeignKey(
+        TelegramSubscribePage,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='telegram_subscriber',
+        verbose_name=_('Подписная Telegram страница')
+    )
 
     class Meta:
         verbose_name = 'Telegram Подписчик'
@@ -1220,9 +1219,6 @@ class TelegramSubscriber(models.Model):
 
     def is_visited_page_by_slug(self, slug: str) -> bool:
         return self.views.filter(slug=slug)
-
-    def __str__(self) -> str:
-        return f'{self.ip}'
 
 
 @receiver(post_save, sender=InstagramSubscribePage)
