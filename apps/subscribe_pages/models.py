@@ -12,12 +12,16 @@ from decimal import Decimal
 
 import logging
 
+
 ipLogger = logging.getLogger('ip')
 
 
 class CostPerSubscriber(models.Model):
-    price = models.DecimalField(max_digits=4, decimal_places=2,
-                                verbose_name=_('Цена'))
+    price = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        verbose_name=_('Цена')
+    )
 
     class Meta:
         verbose_name = 'Стоимость за одну подписку'
@@ -32,13 +36,24 @@ class CostPerSubscriber(models.Model):
 
 
 class Domain(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE, related_name='domains',
-                             verbose_name=_('Пользователь'))
-    domain = models.CharField(max_length=255, verbose_name=_('Домен'))
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, related_name='domains',
+        verbose_name=_('Пользователь')
+    )
+    domain = models.CharField(
+        max_length=255,
+        verbose_name=_('Домен')
+    )
     for_delete = models.BooleanField(default=False)
-    ssl = models.BooleanField(default=False, verbose_name=_('SSL сертификат'))
-    is_active = models.BooleanField(default=False, verbose_name=_('Активный'))
+    ssl = models.BooleanField(
+        default=False,
+        verbose_name=_('SSL сертификат')
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name=_('Активный')
+    )
 
     class Meta:
         verbose_name = 'Домен'
@@ -54,29 +69,59 @@ class Domain(models.Model):
 
 
 class BGColor(models.Model):
-    slug = models.SlugField(max_length=255, verbose_name=_('Название цвета'))
+    slug = models.SlugField(
+        max_length=255,
+        verbose_name=_('Название цвета')
+    )
 
     # страница
-    first_color = models.CharField(max_length=50, verbose_name=_('Первый цвет'))
-    second_color = models.CharField(max_length=50, verbose_name=_('Второй цвет'))
-    text_color = models.CharField(max_length=50, default='#fff',
-                                  verbose_name=_('Цвет текста'))
+    first_color = models.CharField(
+        max_length=50,
+        verbose_name=_('Первый цвет')
+    )
+    second_color = models.CharField(
+        max_length=50,
+        verbose_name=_('Второй цвет')
+    )
+    text_color = models.CharField(
+        max_length=50,
+        default='#fff',
+        verbose_name=_('Цвет текста')
+    )
 
     # панель
-    panel = models.CharField(max_length=50, default='#2C3955',
-                             verbose_name=_('Цвет панели'))
-    panel_text_color = models.CharField(max_length=50, default='#68A4FF',
-                                        verbose_name=_('Цвет текста на панели'))
-    panel_icon_color = models.CharField(max_length=50, default='#68A4FF',
-                                        verbose_name=_('Цвет иконки на панели'))
-    panel_icon_bg_color = models.CharField(max_length=50, default='#68A4FF45',
-                                           verbose_name=_('Фон иконки'))
+    panel = models.CharField(
+        max_length=50,
+        default='#2C3955',
+        verbose_name=_('Цвет панели')
+    )
+    panel_text_color = models.CharField(
+        max_length=50,
+        default='#68A4FF',
+        verbose_name=_('Цвет текста на панели')
+    )
+    panel_icon_color = models.CharField(
+        max_length=50,
+        default='#68A4FF',
+        verbose_name=_('Цвет иконки на панели')
+    )
+    panel_icon_bg_color = models.CharField(
+        max_length=50,
+        default='#68A4FF45',
+        verbose_name=_('Фон иконки')
+    )
 
     # поле ввода
-    input_bg_color = models.CharField(max_length=50, default='#272C44',
-                                      verbose_name=_('Фон инпута'))
-    input_text_color = models.CharField(max_length=50, default='#7088AC',
-                                        verbose_name=_('Цвет текста инпута'))
+    input_bg_color = models.CharField(
+        max_length=50,
+        default='#272C44',
+        verbose_name=_('Фон инпута')
+    )
+    input_text_color = models.CharField(
+        max_length=50,
+        default='#7088AC',
+        verbose_name=_('Цвет текста инпута')
+    )
 
     is_active = models.BooleanField(default=True, verbose_name=_('Активный'))
 
@@ -92,15 +137,50 @@ class BGColor(models.Model):
         return f'{self.slug} : {self.first_color} - {self.second_color}'
 
 
-class GroupOfSubscribePage(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE,
-                             related_name='group_of_pages',
-                             verbose_name=_('Владелец'))
-    name = models.CharField(max_length=255, verbose_name=_('Название'))
-    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Создано'))
-    can_delete = models.BooleanField(default=True,
-                                     verbose_name=_('Можно удалить'))
+class BaseOfSubscribePages(models.Model):
+    related_name_for_user_model = ''
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name=related_name_for_user_model,
+        verbose_name=_('Владелец')
+    )
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_('Название')
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Создано')
+    )
+    can_delete = models.BooleanField(
+        default=True,
+        verbose_name=_('Можно удалить')
+    )
+
+    def __str__(self):
+        return f'{self.name}-{self.user}'
+
+class GroupOfSubscribePage(BaseOfSubscribePages):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='',
+        verbose_name=_('Владелец')
+    )
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_('Название')
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Создано')
+    )
+    can_delete = models.BooleanField(
+        default=True,
+        verbose_name=_('Можно удалить')
+    )
 
     class Meta:
         verbose_name = 'Группа страниц'
@@ -126,20 +206,25 @@ class InstagramSubscribePage(models.Model):
         return slug
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
         related_name='subscribe_pages',
         verbose_name=_('Пользователь')
     )
     group = models.ForeignKey(
-        GroupOfSubscribePage, on_delete=models.SET_NULL,
+        GroupOfSubscribePage,
+        on_delete=models.SET_NULL,
         related_name='subscribe_pages',
-        null=True, blank=True,
+        null=True,
+        blank=True,
         verbose_name=_('Группа страниц')
     )
     domain = models.ForeignKey(
-        Domain, on_delete=models.SET_NULL,
+        Domain,
+        on_delete=models.SET_NULL,
         related_name='subscribe_pages',
-        blank=True, null=True,
+        blank=True,
+        null=True,
         verbose_name=_('Домен')
     )
     page_name = models.CharField(
@@ -147,23 +232,29 @@ class InstagramSubscribePage(models.Model):
         verbose_name=_('Название страницы')
     )
     slug = models.SlugField(
-        max_length=30, db_index=True, unique=True,
+        max_length=30,
+        db_index=True,
+        unique=True,
         verbose_name=_('Ссылка подписной страницы')
     )
     page_photo = models.ImageField(
         upload_to=get_page_photo_path,
-        blank=True, null=True,
+        blank=True,
+        null=True,
         verbose_name=_('Page photo')
     )
     bg_color = models.ForeignKey(
-        BGColor, related_name='subscribe_pages',
+        BGColor,
+        related_name='subscribe_pages',
         on_delete=models.SET_NULL,
-        null=True, blank=True,
+        null=True,
+        blank=True,
         verbose_name=_('Цвет фона')
     )
 
     title = models.CharField(
-        max_length=60, null=True,
+        max_length=60,
+        null=True,
         verbose_name=_('Заголовок')
     )
     description = models.TextField(
@@ -177,21 +268,27 @@ class InstagramSubscribePage(models.Model):
     )
 
     instagram_username = models.CharField(
-        max_length=40, null=True,
+        max_length=40,
+        null=True,
         verbose_name=_('Ник в Instagram')
     )
     instagram_name = models.CharField(
-        max_length=100, blank=True, null=True,
+        max_length=100,
+        blank=True,
+        null=True,
         verbose_name=_('Имя в Instagram')
     )
     instagram_avatar = models.ImageField(
         upload_to=get_instagram_avatar_path,
-        blank=True, null=True,
+        blank=True,
+        null=True,
         verbose_name=_('Аватарка Instagram')
     )
 
     timer_text = models.CharField(
-        max_length=39, blank=True, null=True,
+        max_length=39,
+        blank=True,
+        null=True,
         default=_('Материал станет недоступным через:'),
         verbose_name=_('Текст на таймере')
     )
@@ -205,28 +302,40 @@ class InstagramSubscribePage(models.Model):
     )
 
     facebook_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Facebook пиксель')
     )
     tiktok_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Tiktok пиксель')
     )
     vk_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('ВК пиксель')
     )
     yandex_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Яндекс метрика')
     )
     roistat_id = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Roistat ID')
     )
 
     ctr = models.FloatField(
-        default=0, blank=True, null=True,
+        default=0,
+        blank=True,
+        null=True,
         verbose_name=_('CTR')
     )
 
@@ -422,15 +531,27 @@ class InstagramSubscribePage(models.Model):
 
 
 class InstagramStatistic(models.Model):
-    subscribe_page = models.ForeignKey(InstagramSubscribePage,
-                                       on_delete=models.CASCADE,
-                                       verbose_name=_('Страница'),
-                                       related_name='statistic')
+    subscribe_page = models.ForeignKey(
+        InstagramSubscribePage,
+        on_delete=models.CASCADE,
+        verbose_name=_('Страница'),
+        related_name='statistic'
+    )
     day = models.DateField(verbose_name=_('Дата'))
-    views = models.BigIntegerField(verbose_name=_('Просмотры'), default=0)
-    subscribers = models.BigIntegerField(verbose_name=_('Подписки'), default=0)
-    ctr = models.FloatField(default=0, blank=True, null=True,
-                            verbose_name=_('CTR'))
+    views = models.BigIntegerField(
+        verbose_name=_('Просмотры'),
+        default=0
+    )
+    subscribers = models.BigIntegerField(
+        verbose_name=_('Подписки'),
+        default=0
+    )
+    ctr = models.FloatField(
+        default=0,
+        blank=True,
+        null=True,
+        verbose_name=_('CTR')
+    )
 
     class Meta:
         ordering = ('subscribe_page',)
@@ -438,8 +559,7 @@ class InstagramStatistic(models.Model):
         verbose_name_plural = 'Статистики'
 
     @classmethod
-    def get_all_views_and_subscribers(cls,
-                                      subscribe_page: InstagramSubscribePage) -> \
+    def get_all_views_and_subscribers(cls, subscribe_page: InstagramSubscribePage) -> \
             List[int]:
         views, subscribers = 0, 0
         for statistic in cls.objects.filter(subscribe_page=subscribe_page):
@@ -468,28 +588,39 @@ class InstagramStatistic(models.Model):
 
 class InstagramSubscriber(models.Model):
     ip = models.CharField(max_length=255, verbose_name=_('IP'))
-    instagram_username = models.CharField(max_length=255, null=True,
-                                          blank=True,
-                                          verbose_name=_('Ник в Instagram'))
-
+    instagram_username = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('Ник в Instagram')
+    )
     can_get_material = models.BooleanField(
-        default=False, verbose_name=_('Может просматривать материал'))
-    date = models.DateTimeField(auto_now=True, verbose_name=_('Дата'))
-
-    views = models.ManyToManyField(InstagramSubscribePage, blank=True,
-                                   related_name='views',
-                                   verbose_name=_('Просмотры'))
-    subscribe_to = models.ManyToManyField(InstagramSubscribePage, blank=True,
-                                          related_name='subscribers',
-                                          verbose_name=_('Подписки'))
+        default=False,
+        verbose_name=_('Может просматривать материал')
+    )
+    date = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Дата')
+    )
+    views = models.ManyToManyField(
+        InstagramSubscribePage,
+        blank=True,
+        related_name='views',
+        verbose_name=_('Просмотры')
+    )
+    subscribe_to = models.ManyToManyField(
+        InstagramSubscribePage,
+        blank=True,
+        related_name='subscribers',
+        verbose_name=_('Подписки')
+    )
 
     class Meta:
         verbose_name = 'Подписчик'
         verbose_name_plural = 'Подписчики'
 
     @classmethod
-    def get_or_create_by_user_ip(cls, request=None, user_ip: str = None,
-                                 username: str = None) -> 'InstagramSubscriber':
+    def get_or_create_by_user_ip(cls, request=None, user_ip: str = None, username: str = None) -> 'InstagramSubscriber':
         if not user_ip and request:
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 
@@ -509,10 +640,6 @@ class InstagramSubscriber(models.Model):
                 for subscribe_page in subscriber_.subscribe_to.all():
                     subscriber.subscribe_to.add(subscribe_page)
                 subscriber_.delete()
-        # if username:
-        #     if subscriber.instagram_username != username:
-        #         subscriber.instagram_username = username
-        #         subscriber.save(update_fields=['instagram_username'])
         return subscriber
 
     def is_visited_page_by_slug(self, slug: str) -> bool:
@@ -524,10 +651,13 @@ class InstagramSubscriber(models.Model):
 
 
 class InstagramCreator(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE,
-                             related_name='instagrams',
-                             verbose_name=_('User'), null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='instagrams',
+        verbose_name=_('User'),
+        null=True
+    )
     instagram = models.CharField(max_length=250, verbose_name=_('Instagram'))
 
     class Meta:
@@ -540,17 +670,26 @@ class InstagramCreator(models.Model):
 
 # VK
 class VKGroupOfSubscribePage(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE,
-                             related_name='vk_group_of_pages',
-                             verbose_name=_('Владелец'))
-    name = models.CharField(max_length=255, verbose_name=_('Название'))
-    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Создано'))
-    can_delete = models.BooleanField(default=True,
-                                     verbose_name=_('Можно удалить'))
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='vk_group_of_pages',
+        verbose_name=_('Владелец'))
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_('Название')
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Создано')
+    )
+    can_delete = models.BooleanField(
+        default=True,
+        verbose_name=_('Можно удалить')
+    )
 
     class Meta:
-        verbose_name = 'Группа ВК страницы'
+        verbose_name = 'Группа ВК страниц'
         verbose_name_plural = 'Группы ВК страниц'
 
     def __str__(self):
@@ -576,73 +715,147 @@ class VKSubscribePage(models.Model):
         ('slug', 'slug')
     )
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE,
-                             related_name='vk_subscribe_pages',
-                             verbose_name=_('Пользователь'))
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='vk_subscribe_pages',
+        verbose_name=_('Пользователь')
+    )
     group = models.ForeignKey(
-        VKGroupOfSubscribePage, on_delete=models.SET_NULL,
-        related_name='vk_subscribe_pages', null=True, blank=True,
-        verbose_name=_('Группа ВК страниц'))
-    page_name = models.CharField(max_length=60,
-                                 verbose_name=_('Название страницы'))
-    slug = models.SlugField(max_length=30, db_index=True, unique=True,
-                            verbose_name=_('Ссылка подписной страницы'))
-    page_photo = models.ImageField(upload_to=get_page_photo_path, blank=True,
-                                   null=True, verbose_name=_('Page photo'))
-    bg_color = models.ForeignKey(BGColor, related_name='vk_subscribe_pages',
-                                 on_delete=models.SET_NULL,
-                                 null=True, blank=True,
-                                 verbose_name=_('Цвет фона'))
-
-    title = models.CharField(max_length=60, null=True,
-                             verbose_name=_('Заголовок'))
-    description = models.TextField(null=True, verbose_name=_('Описание'))
-    button_text = models.CharField(max_length=30, default='ПОЛУЧИТЬ',
-                                   verbose_name=_('Текст на кнопке'))
-
-    vk_group_id = models.CharField(max_length=70, null=True,
-                                   verbose_name=_('ID группы ВК'))
-    type_group_id = models.CharField(max_length=10, default='id',
-                                     choices=TYPE_GROUP_ID_CHOICES,
-                                     verbose_name=_('Тип id группы'))
-
-    timer_text = models.CharField(max_length=39,
-                                  default='Материал станет недоступным через:',
-                                  blank=True, null=True,
-                                  verbose_name=_('Текст на таймере'))
+        VKGroupOfSubscribePage, 
+        on_delete=models.SET_NULL,
+        related_name='vk_subscribe_pages',
+        null=True,
+        blank=True,
+        verbose_name=_('Группа ВК страниц')
+    )
+    page_name = models.CharField(
+        max_length=60,
+        verbose_name=_('Название страницы')
+    )
+    slug = models.SlugField(
+        max_length=30,
+        db_index=True,
+        unique=True,
+        verbose_name=_('Ссылка подписной страницы')
+    )
+    page_photo = models.ImageField(
+        upload_to=get_page_photo_path,
+        blank=True,
+        null=True,
+        verbose_name=_('Page photo')
+    )
+    bg_color = models.ForeignKey(
+        BGColor,
+        related_name='vk_subscribe_pages',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_('Цвет фона')
+    )
+    title = models.CharField(
+        max_length=60,
+        null=True,
+        verbose_name=_('Заголовок')
+    )
+    description = models.TextField(
+        null=True,
+        verbose_name=_('Описание')
+    )
+    button_text = models.CharField(
+        max_length=30,
+        default='ПОЛУЧИТЬ',
+        verbose_name=_('Текст на кнопке')
+    )
+    vk_group_id = models.CharField(
+        max_length=70,
+        null=True,
+        verbose_name=_('ID группы ВК')
+    )
+    type_group_id = models.CharField(
+        max_length=10,
+        default='id',
+        choices=TYPE_GROUP_ID_CHOICES,
+        verbose_name=_('Тип id группы')
+    )
+    timer_text = models.CharField(
+        max_length=39,
+        default='Материал станет недоступным через:',
+        blank=True,
+        null=True,
+        verbose_name=_('Текст на таймере')
+    )
     is_timer_active = models.BooleanField(
-        default=False, verbose_name=_('Таймер обратного отсчёта'))
-    timer_time = models.IntegerField(default=180,
-                                     verbose_name=_('Время таймера (в секундах)'))
-
-    facebook_pixel = models.CharField(max_length=255, blank=True, null=True,
-                                      verbose_name=_('Facebook пиксель'))
-    tiktok_pixel = models.CharField(max_length=255, blank=True, null=True,
-                                    verbose_name=_('Tiktok пиксель'))
-    vk_pixel = models.CharField(max_length=255, blank=True, null=True,
-                                verbose_name=_('ВК пиксель'))
-    yandex_pixel = models.CharField(max_length=255, blank=True, null=True,
-                                    verbose_name=_('Яндекс метрика'))
-    roistat_id = models.CharField(max_length=255, blank=True, null=True,
-                                  verbose_name=_('Roistat ID'))
-
-    ctr = models.FloatField(default=0, blank=True, null=True,
-                            verbose_name=_('CTR'))
-
-    success_title = models.CharField(max_length=50, default='Успешно',
-                                     verbose_name=_('Заголовок'))
+        default=False,
+        verbose_name=_('Таймер обратного отсчёта')
+    )
+    timer_time = models.IntegerField(
+        default=180,
+        verbose_name=_('Время таймера (в секундах)')
+    )
+    facebook_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Facebook пиксель')
+    )
+    tiktok_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Tiktok пиксель')
+    )
+    vk_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('ВК пиксель')
+    )
+    yandex_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Яндекс метрика')
+    )
+    roistat_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Roistat ID')
+    )
+    ctr = models.FloatField(
+        default=0,
+        blank=True,
+        null=True,
+        verbose_name=_('CTR')
+    )
+    success_title = models.CharField(
+        max_length=50,
+        default='Успешно',
+        verbose_name=_('Заголовок')
+    )
     success_text = models.TextField(
         default='Можете получить материалы, нажав по кнопке ниже.',
-        verbose_name=_('Текст'))
-    success_button_url = models.TextField(null=True,
-                                          verbose_name=_('Ссылка кнопки'))
-    success_button_text = models.CharField(max_length=19,
-                                           default='ПОЛУЧИТЬ МАТЕРИАЛЫ',
-                                           verbose_name=_('Текст на кнопке'))
+        verbose_name=_('Текст')
+    )
+    success_button_url = models.TextField(
+        null=True,
+        verbose_name=_('Ссылка кнопки')
+    )
+    success_button_text = models.CharField(
+        max_length=19,
+        default='ПОЛУЧИТЬ МАТЕРИАЛЫ',
+        verbose_name=_('Текст на кнопке')
+    )
 
-    is_active = models.BooleanField(default=False, verbose_name=_('Активный'))
-    created = models.BooleanField(default=False, verbose_name=_('Создано'))
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name=_('Активный')
+    )
+    created = models.BooleanField(
+        default=False,
+        verbose_name=_('Создано')
+    )
 
     class Meta:
         verbose_name = 'ВК Подписная страница'
@@ -659,7 +872,6 @@ class VKSubscribePage(models.Model):
 
     @property
     def page_url(self) -> str:
-        # return f'https://{self.page_domain}/vk-page/{self.slug}'
         return f'https://vk.com/app51446451#{self.slug}'
 
     def calculate_ctr(self) -> float:
@@ -736,15 +948,27 @@ class VKSubscribePage(models.Model):
 
 
 class VKStatistic(models.Model):
-    vk_subscribe_page = models.ForeignKey(VKSubscribePage,
-                                          on_delete=models.CASCADE,
-                                          verbose_name=_('ВК Страница'),
-                                          related_name='statistic')
+    vk_subscribe_page = models.ForeignKey(
+        VKSubscribePage,
+        on_delete=models.CASCADE,
+        verbose_name=_('ВК Страница'),
+        related_name='statistic'
+    )
     day = models.DateField(verbose_name=_('Дата'))
-    views = models.BigIntegerField(verbose_name=_('Просмотры'), default=0)
-    subscribers = models.BigIntegerField(verbose_name=_('Подписки'), default=0)
-    ctr = models.FloatField(default=0, blank=True, null=True,
-                            verbose_name=_('CTR'))
+    views = models.BigIntegerField(
+        verbose_name=_('Просмотры'),
+        default=0
+    )
+    subscribers = models.BigIntegerField(
+        verbose_name=_('Подписки'),
+        default=0
+    )
+    ctr = models.FloatField(
+        default=0,
+        blank=True,
+        null=True,
+        verbose_name=_('CTR')
+    )
 
     class Meta:
         ordering = ('vk_subscribe_page',)
@@ -752,9 +976,7 @@ class VKStatistic(models.Model):
         verbose_name_plural = 'ВК Статистики'
 
     @classmethod
-    def get_all_views_and_subscribers(cls,
-                                      vk_subscribe_page: VKSubscribePage) -> \
-            List[int]:
+    def get_all_views_and_subscribers(cls, vk_subscribe_page: VKSubscribePage) -> List[int]:
         views, subscribers = 0, 0
         for statistic in cls.objects.filter(
                 vk_subscribe_page=vk_subscribe_page):
@@ -809,24 +1031,49 @@ class VKSubscriber(models.Model):
         ('F', 'Female')
     )
 
-    vk_user_id = models.BigIntegerField(verbose_name=_('ID пользователя ВК'),
-                                        unique=True)
-
-    first_name = models.CharField(max_length=255, null=True, blank=True,
-                                  verbose_name=_('Имя'))
-    last_name = models.CharField(max_length=255, null=True, blank=True,
-                                 verbose_name=_('Фамиллия'))
-    sex = models.IntegerField(null=True, blank=True, verbose_name=_('Пол'))
-
-    photo = models.CharField(max_length=255, null=True, blank=True,
-                             verbose_name=_('Фото'))
-
-    country = models.CharField(max_length=255, null=True, blank=True,
-                               verbose_name=_('Страна'))
-    birthday = models.CharField(max_length=255, null=True, blank=True,
-                                verbose_name=_('День рождения'))
-    date = models.DateTimeField(auto_now=True,
-                                verbose_name=_('Дата создания в сервисе'))
+    vk_user_id = models.BigIntegerField(
+        verbose_name=_('ID пользователя ВК'),
+        unique=True
+    )
+    first_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('Имя')
+    )
+    last_name = models.CharField(
+        max_length=255,
+        null=True, 
+        blank=True,
+        verbose_name=_('Фамиллия')
+    )
+    sex = models.IntegerField(
+        null=True, 
+        blank=True, 
+        verbose_name=_('Пол')
+    )
+    photo = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('Фото')
+    )
+    country = models.CharField(
+        max_length=255,
+        null=True, 
+        blank=True,
+        verbose_name=_('Страна')
+    )
+    birthday = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('День рождения')
+    )
+    date = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Дата создания в сервисе')
+    )
 
     class Meta:
         verbose_name = 'ВК Подписчик'
@@ -837,16 +1084,27 @@ class VKSubscriber(models.Model):
 
 
 class VKSubscription(models.Model):
-    vk_subscriber = models.ForeignKey(VKSubscriber, on_delete=models.CASCADE,
-                                      related_name='subscriptions',
-                                      verbose_name=_('ВК подписчик'))
-    vk_page = models.ForeignKey(VKSubscribePage, on_delete=models.CASCADE,
-                                related_name='subscriptions',
-                                verbose_name=_('ВК подписная страница'))
+    vk_subscriber = models.ForeignKey(
+        VKSubscriber,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+        verbose_name=_('ВК подписчик')
+    )
+    vk_page = models.ForeignKey(
+        VKSubscribePage,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+        verbose_name=_('ВК подписная страница')
+    )
 
-    subscribed = models.BooleanField(default=False, verbose_name=_('Подписался'))
-    date = models.DateTimeField(null=True, auto_now_add=True,
-                                verbose_name=_('Дата подписки'))
+    subscribed = models.BooleanField(
+        default=False,
+        verbose_name=_('Подписался')
+    )
+    date = models.DateTimeField(
+        null=True,
+        auto_now_add=True,
+        verbose_name=_('Дата подписки'))
 
     class Meta:
         verbose_name = 'ВК Подписка'
@@ -865,23 +1123,44 @@ class VKSubscription(models.Model):
 
 
 class TelegramUser(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE,
-                             related_name='telegrams',
-                             verbose_name=_('User'), null=True)
-    telegram_username = models.CharField(max_length=100, null=True, blank=True)
-    telegram_user_id = models.CharField(max_length=100, null=True, blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='telegrams',
+        verbose_name=_('User'),
+        null=True
+    )
+    telegram_username = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    telegram_user_id = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True
+    )
 
 
 class TelegramGroupOfSubscribePage(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE,
-                             related_name='tg_group_of_pages',
-                             verbose_name=_('Владелец'))
-    name = models.CharField(max_length=255, verbose_name=_('Название'))
-    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Создано'))
-    can_delete = models.BooleanField(default=True,
-                                     verbose_name=_('Можно удалить'))
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='tg_group_of_pages',
+        verbose_name=_('Владелец')
+    )
+    name = models.CharField(
+        max_length=255, 
+        verbose_name=_('Название')
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Создано')
+    )
+    can_delete = models.BooleanField(
+        default=True,
+        verbose_name=_('Можно удалить')
+    )
 
     class Meta:
         verbose_name = 'Группа Telegram страницы'
@@ -907,18 +1186,29 @@ class TelegramSubscribePage(models.Model):
         return slug
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE,
         related_name='tg_subscribe_pages',
         verbose_name=_('Пользователь')
     )
     group = models.ForeignKey(
-        TelegramGroupOfSubscribePage, on_delete=models.SET_NULL,
+        TelegramGroupOfSubscribePage,
+        on_delete=models.SET_NULL,
         related_name='tg_subscribe_pages',
-        null=True, blank=True,
+        null=True,
+        blank=True,
         verbose_name=_('Группа страниц')
     )
-    telegram_bot_url = models.CharField(max_length=200, null=True, blank=True)
-    telegram_channel_id = models.CharField(max_length=200, null=True, blank=True)
+    telegram_bot_url = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    telegram_channel_id = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True
+    )
     message_after_getting_present = models.CharField(
         max_length=2000,
         verbose_name=_('Сообщение при выдаче подарка')
@@ -931,11 +1221,14 @@ class TelegramSubscribePage(models.Model):
         max_length=200,
         verbose_name=_('Ссылка кнопки (бот)'),
         null=True,
-        blank=True)
+        blank=True
+    )
     domain = models.ForeignKey(
-        Domain, on_delete=models.SET_NULL,
+        Domain,
+        on_delete=models.SET_NULL,
         related_name='tg_subscribe_pages',
-        blank=True, null=True,
+        blank=True,
+        null=True,
         verbose_name=_('Домен')
     )
     page_name = models.CharField(
@@ -943,37 +1236,46 @@ class TelegramSubscribePage(models.Model):
         verbose_name=_('Название страницы')
     )
     description = models.TextField(
-        null=True, blank=True,
+        null=True,
+        blank=True,
         verbose_name=_('Описание')
     )
     slug = models.SlugField(
-        max_length=30, db_index=True, unique=True,
+        max_length=30,
+        db_index=True,
+        unique=True,
         verbose_name=_('Ссылка подписной страницы')
     )
     page_photo = models.ImageField(
         upload_to=get_page_photo_path,
-        blank=True, null=True,
+        blank=True,
+        null=True,
         verbose_name=_('Page photo')
     )
     bg_color = models.ForeignKey(
-        BGColor, related_name='tg_subscribe_pages',
+        BGColor,
+        related_name='tg_subscribe_pages',
         on_delete=models.SET_NULL,
-        null=True, blank=True,
+        null=True,
+        blank=True,
         verbose_name=_('Цвет фона')
     )
-
     instagram_username = models.CharField(
-        max_length=100, blank=True, null=True,
+        max_length=100,
+        blank=True,
+        null=True,
         verbose_name=_('Имя в Telegram')
     )
     instagram_avatar = models.ImageField(
         upload_to=get_instagram_avatar_path,
-        blank=True, null=True,
+        blank=True,
+        null=True,
         verbose_name=_('Аватарка Telegram')
     )
-
     timer_text = models.CharField(
-        max_length=39, blank=True, null=True,
+        max_length=39,
+        blank=True,
+        null=True,
         default=_('Материал станет недоступным через:'),
         verbose_name=_('Текст на таймере')
     )
@@ -986,28 +1288,39 @@ class TelegramSubscribePage(models.Model):
         verbose_name=_('Время таймера (в секундах)')
     )
     facebook_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Facebook пиксель')
     )
     tiktok_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Tiktok пиксель')
     )
     vk_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('ВК пиксель')
     )
     yandex_pixel = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Яндекс метрика')
     )
     roistat_id = models.CharField(
-        max_length=255, blank=True, null=True,
+        max_length=255,
+        blank=True,
+        null=True,
         verbose_name=_('Roistat ID')
     )
-
     ctr = models.FloatField(
-        default=0, blank=True, null=True,
+        default=0,
+        blank=True,
+        null=True,
         verbose_name=_('CTR')
     )
 
@@ -1034,12 +1347,33 @@ class TelegramSubscribePage(models.Model):
 
     show_subscribers = models.BooleanField(default=False)
 
-    following_count = models.CharField(max_length=12, blank=True, null=True)
-    follower_count = models.CharField(max_length=12, blank=True, null=True)
-    media_count = models.CharField(max_length=12, blank=True, null=True)
-    is_linked = models.BooleanField(default=False, verbose_name=_('Привязан'))
-    is_active = models.BooleanField(default=False, verbose_name=_('Активный'))
-    created = models.BooleanField(default=False, verbose_name=_('Создано'))
+    following_count = models.CharField(
+        max_length=12,
+        blank=True,
+        null=True
+    )
+    follower_count = models.CharField(
+        max_length=12,
+        blank=True,
+        null=True
+    )
+    media_count = models.CharField(
+        max_length=12,
+        blank=True,
+        null=True
+    )
+    is_linked = models.BooleanField(
+        default=False,
+        verbose_name=_('Привязан')
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name=_('Активный')
+    )
+    created = models.BooleanField(
+        default=False,
+        verbose_name=_('Создано')
+    )
 
     class Meta:
         verbose_name = 'Подписная Telegram страница'
@@ -1127,15 +1461,27 @@ class TelegramSubscribePage(models.Model):
 
 
 class TelegramStatistic(models.Model):
-    telegram_subscribe_page = models.ForeignKey(TelegramSubscribePage,
-                                       on_delete=models.CASCADE,
-                                       verbose_name=_('Страница Telegram'),
-                                       related_name='statistic')
+    telegram_subscribe_page = models.ForeignKey(
+        TelegramSubscribePage,
+        on_delete=models.CASCADE,
+        verbose_name=_('Страница Telegram'),
+        related_name='statistic'
+    )
     day = models.DateField(verbose_name=_('Дата'))
-    views = models.BigIntegerField(verbose_name=_('Просмотры'), default=0)
-    subscribers = models.BigIntegerField(verbose_name=_('Подписки'), default=0)
-    ctr = models.FloatField(default=0, blank=True, null=True,
-                            verbose_name=_('CTR'))
+    views = models.BigIntegerField(
+        verbose_name=_('Просмотры'),
+        default=0
+    )
+    subscribers = models.BigIntegerField(
+        verbose_name=_('Подписки'),
+        default=0
+    )
+    ctr = models.FloatField(
+        default=0,
+        blank=True,
+        null=True,
+        verbose_name=_('CTR')
+    )
 
     class Meta:
         ordering = ('telegram_subscribe_page',)
@@ -1174,12 +1520,20 @@ class TelegramSubscriber(models.Model):
         TelegramUser,
         on_delete=models.CASCADE,
         blank=True,
-        null=True)
-    ip = models.CharField(max_length=255, verbose_name=_('IP'))
+        null=True
+    )
+    ip = models.CharField(
+        max_length=255,
+        verbose_name=_('IP')
+    )
     can_get_material = models.BooleanField(
-        default=False, verbose_name=_('Может просматривать материал'))
-    date = models.DateTimeField(auto_now=True, verbose_name=_('Дата'))
-
+        default=False,
+        verbose_name=_('Может просматривать материал')
+    )
+    date = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Дата')
+    )
     telegram_subscribe_page = models.ForeignKey(
         TelegramSubscribePage,
         blank=True,
@@ -1194,8 +1548,7 @@ class TelegramSubscriber(models.Model):
         verbose_name_plural = 'Telegram Подписчики'
 
     @classmethod
-    def get_or_create_by_user_ip(cls, request=None, user_ip: str = None,
-                                 username: str = None) -> 'TelegramSubscriber':
+    def get_or_create_by_user_ip(cls, request=None, user_ip: str = None, username: str = None) -> 'TelegramSubscriber':
         if not user_ip and request:
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 
@@ -1222,8 +1575,7 @@ class TelegramSubscriber(models.Model):
 
 
 @receiver(post_save, sender=InstagramSubscribePage)
-def subscribe_page_post_save(sender, created, instance: InstagramSubscribePage,
-                             **kwargs):
+def subscribe_page_post_save(sender, created, instance: InstagramSubscribePage, **kwargs):
     if created:
         InstagramStatistic.objects.create(
             subscribe_page=instance, day=datetime.today()
@@ -1242,8 +1594,11 @@ def subscribe_page_post_save(sender, created, instance: InstagramSubscribePage,
             instance.instagram_name = instance.instagram_username
         instance.save(
             update_fields=[
-                'instagram_username', 'slug', 'created',
-                'instagram_name', 'instagram_avatar',
+                'instagram_username',
+                'slug',
+                'created',
+                'instagram_name',
+                'instagram_avatar',
                 'group'
             ]
         )
@@ -1255,8 +1610,7 @@ def subscribe_page_post_save(sender, created, instance: InstagramSubscribePage,
 
 
 @receiver(post_save, sender=VKSubscribePage)
-def vk_subscribe_page_post_save(sender, created, instance: VKSubscribePage,
-                                **kwargs):
+def vk_subscribe_page_post_save(sender, created, instance: VKSubscribePage, **kwargs):
     if created:
         VKStatistic.objects.create(
             vk_subscribe_page=instance, day=datetime.today()
@@ -1271,11 +1625,12 @@ def vk_subscribe_page_post_save(sender, created, instance: VKSubscribePage,
 
         instance.save(
             update_fields=[
-                'slug', 'created',
+                'slug',
+                'created',
                 'group'
             ]
         )
-        #        ipLogger.warning('jopa')
+
         # если баланс больше 0, то подписная страница становится активной
         if instance.user.pocket.balance > 0:
             instance.is_active = True
@@ -1283,8 +1638,7 @@ def vk_subscribe_page_post_save(sender, created, instance: VKSubscribePage,
 
 
 @receiver(post_save, sender=TelegramSubscribePage)
-def tg_subscribe_page_post_save(sender, created, instance: TelegramSubscribePage,
-                                **kwargs):
+def tg_subscribe_page_post_save(sender, created, instance: TelegramSubscribePage, **kwargs):
     if created:
         TelegramStatistic.objects.create(
             telegram_subscribe_page=instance, day=datetime.today()
@@ -1293,13 +1647,13 @@ def tg_subscribe_page_post_save(sender, created, instance: TelegramSubscribePage
             user=instance.user, name='Неотсортированные'
         )
         instance.group = default_group
-
         instance.slug = instance.slug.lower()
         instance.created = True
 
         instance.save(
             update_fields=[
-                'slug', 'created',
+                'slug',
+                'created',
                 'group'
             ]
         )
