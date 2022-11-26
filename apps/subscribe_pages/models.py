@@ -137,38 +137,7 @@ class BGColor(models.Model):
         return f'{self.slug} : {self.first_color} - {self.second_color}'
 
 
-class BaseOfSubscribePages(models.Model):
-    related_name_for_user_model = ''
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name=related_name_for_user_model,
-        verbose_name=_('Владелец')
-    )
-    name = models.CharField(
-        max_length=255,
-        verbose_name=_('Название')
-    )
-    created = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Создано')
-    )
-    can_delete = models.BooleanField(
-        default=True,
-        verbose_name=_('Можно удалить')
-    )
-
-    def __str__(self):
-        return f'{self.name}-{self.user}'
-
-class GroupOfSubscribePage(BaseOfSubscribePages):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='',
-        verbose_name=_('Владелец')
-    )
+class BaseGroupOfSubscribePages(models.Model):
     name = models.CharField(
         max_length=255,
         verbose_name=_('Название')
@@ -183,14 +152,134 @@ class GroupOfSubscribePage(BaseOfSubscribePages):
     )
 
     class Meta:
-        verbose_name = 'Группа страниц'
-        verbose_name_plural = 'Группы страниц'
+        abstract = True
 
     def __str__(self):
         return f'{self.name}-{self.user}'
 
 
-class InstagramSubscribePage(models.Model):
+class BaseSubscribePage(models.Model):
+    page_name = models.CharField(
+        max_length=60,
+        verbose_name=_('Название страницы')
+    )
+    slug = models.SlugField(
+        max_length=30,
+        db_index=True,
+        unique=True,
+        verbose_name=_('Ссылка подписной страницы')
+    )
+    title = models.CharField(
+        max_length=60,
+        null=True,
+        blank=True,
+        verbose_name=_('Заголовок')
+    )
+    description = models.TextField(
+        null=True,
+        verbose_name=_('Описание')
+    )
+    button_text = models.CharField(
+        max_length=30,
+        default='ПОЛУЧИТЬ',
+        verbose_name=_('Текст на кнопке')
+    )
+    timer_text = models.CharField(
+        max_length=39,
+        blank=True,
+        null=True,
+        default=_('Материал станет недоступным через:'),
+        verbose_name=_('Текст на таймере')
+    )
+    is_timer_active = models.BooleanField(
+        default=False,
+        verbose_name=_('Таймер обратного отсчёта')
+    )
+    timer_time = models.IntegerField(
+        default=180,
+        verbose_name=_('Время таймера (в секундах)')
+    )
+    facebook_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Facebook пиксель')
+    )
+    tiktok_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Tiktok пиксель')
+    )
+    vk_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('ВК пиксель')
+    )
+    yandex_pixel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Яндекс метрика')
+    )
+    roistat_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name=_('Roistat ID')
+    )
+    ctr = models.FloatField(
+        default=0,
+        blank=True,
+        null=True,
+        verbose_name=_('CTR')
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name=_('Активный')
+    )
+    created = models.BooleanField(
+        default=False,
+        verbose_name=_('Создано')
+    )
+
+    def get_page_photo_url(self) -> str:
+        if self.page_photo:
+            return f'{settings.DOMAIN}{self.page_photo.url}' 
+        return '#'
+
+    def save_ctr(self, ctr: Optional[float] = None) -> None:
+        if not ctr:
+            ctr = self.calculate_ctr()
+        self.ctr = float('{:.2f}'.format(ctr))
+        self.save(update_fields=['ctr'])
+
+    @classmethod
+    def is_slug_unique(cls, slug) -> bool:
+        return not cls.objects.filter(slug=slug)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f'{self.page_name} - {self.slug}'
+
+
+class GroupOfSubscribePage(BaseGroupOfSubscribePages):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='group_of_pages',
+        verbose_name=_('Владелец')
+    )
+
+    class Meta:
+        verbose_name = 'Группа Instagram страниц'
+        verbose_name_plural = 'Группы Instagram страниц'
+
+
+class InstagramSubscribePage(BaseSubscribePage):
     def get_page_photo_path(self, filename: str) -> str:
         return f'subscribe_page/{self.instagram_username}/page_photos/{filename}'
 
@@ -227,16 +316,6 @@ class InstagramSubscribePage(models.Model):
         null=True,
         verbose_name=_('Домен')
     )
-    page_name = models.CharField(
-        max_length=60,
-        verbose_name=_('Название страницы')
-    )
-    slug = models.SlugField(
-        max_length=30,
-        db_index=True,
-        unique=True,
-        verbose_name=_('Ссылка подписной страницы')
-    )
     page_photo = models.ImageField(
         upload_to=get_page_photo_path,
         blank=True,
@@ -251,22 +330,6 @@ class InstagramSubscribePage(models.Model):
         blank=True,
         verbose_name=_('Цвет фона')
     )
-
-    title = models.CharField(
-        max_length=60,
-        null=True,
-        verbose_name=_('Заголовок')
-    )
-    description = models.TextField(
-        null=True,
-        verbose_name=_('Описание')
-    )
-    button_text = models.CharField(
-        max_length=30,
-        default=_('ПОЛУЧИТЬ'),
-        verbose_name=_('Текст на кнопке')
-    )
-
     instagram_username = models.CharField(
         max_length=40,
         null=True,
@@ -283,60 +346,6 @@ class InstagramSubscribePage(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Аватарка Instagram')
-    )
-
-    timer_text = models.CharField(
-        max_length=39,
-        blank=True,
-        null=True,
-        default=_('Материал станет недоступным через:'),
-        verbose_name=_('Текст на таймере')
-    )
-    is_timer_active = models.BooleanField(
-        default=False,
-        verbose_name=_('Таймер обратного отсчёта')
-    )
-    timer_time = models.IntegerField(
-        default=180,
-        verbose_name=_('Время таймера (в секундах)')
-    )
-
-    facebook_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Facebook пиксель')
-    )
-    tiktok_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Tiktok пиксель')
-    )
-    vk_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('ВК пиксель')
-    )
-    yandex_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Яндекс метрика')
-    )
-    roistat_id = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Roistat ID')
-    )
-
-    ctr = models.FloatField(
-        default=0,
-        blank=True,
-        null=True,
-        verbose_name=_('CTR')
     )
 
     popup_title = models.CharField(
@@ -441,20 +450,12 @@ class InstagramSubscribePage(models.Model):
     follower_count = models.CharField(max_length=12, blank=True, null=True)
     media_count = models.CharField(max_length=12, blank=True, null=True)
 
-    is_active = models.BooleanField(default=False, verbose_name=_('Активный'))
-    created = models.BooleanField(default=False, verbose_name=_('Создано'))
-
     class Meta:
         verbose_name = 'Подписная страница'
         verbose_name_plural = 'Подписные страницы'
 
     def get_absolute_url(self) -> str:
         return reverse_lazy('subscribe_pages:page-detail', args=(self.slug,))
-
-    def get_page_photo_url(self) -> str:
-        if self.page_photo:
-            return f'{settings.DOMAIN}{self.page_photo.url}' 
-        return '#'
 
     def set_default_group(self):
         default_group, default_group_created = \
@@ -497,12 +498,6 @@ class InstagramSubscribePage(models.Model):
             ctr = 0
         return ctr
 
-    def save_ctr(self, ctr: Optional[float] = None) -> None:
-        if not ctr:
-            ctr = self.calculate_ctr()
-        self.ctr = float('{:.2f}'.format(ctr))
-        self.save(update_fields=['ctr'])
-
     def all_views_subscribers_and_ctr(self) -> List[int]:
         all_views, all_subscribers = InstagramStatistic.get_all_views_and_subscribers(
             self)
@@ -521,13 +516,6 @@ class InstagramSubscribePage(models.Model):
         for subscribe_page in user.subscribe_pages.filter(is_active=False):
             subscribe_page.is_active = True
             subscribe_page.save(update_fields=['is_active'])
-
-    @classmethod
-    def is_slug_unique(cls, slug) -> bool:
-        return not cls.objects.filter(slug=slug)
-
-    def __str__(self):
-        return f'{self.page_name} - {self.slug}'
 
 
 class InstagramStatistic(models.Model):
@@ -668,35 +656,20 @@ class InstagramCreator(models.Model):
         return self.instagram
 
 
-# VK
-class VKGroupOfSubscribePage(models.Model):
+class VKGroupOfSubscribePage(BaseGroupOfSubscribePages):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='vk_group_of_pages',
-        verbose_name=_('Владелец'))
-    name = models.CharField(
-        max_length=255,
-        verbose_name=_('Название')
-    )
-    created = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Создано')
-    )
-    can_delete = models.BooleanField(
-        default=True,
-        verbose_name=_('Можно удалить')
+        verbose_name=_('Владелец')
     )
 
     class Meta:
-        verbose_name = 'Группа ВК страниц'
-        verbose_name_plural = 'Группы ВК страниц'
-
-    def __str__(self):
-        return f'{self.name}-{self.user}'
+        verbose_name = 'Группа VK страниц'
+        verbose_name_plural = 'Группы VK страниц'
 
 
-class VKSubscribePage(models.Model):
+class VKSubscribePage(BaseSubscribePage):
     def get_page_photo_path(self, filename: str) -> str:
         return f'vk_subscribe_page/{self.slug}/{filename}'
 
@@ -729,16 +702,6 @@ class VKSubscribePage(models.Model):
         blank=True,
         verbose_name=_('Группа ВК страниц')
     )
-    page_name = models.CharField(
-        max_length=60,
-        verbose_name=_('Название страницы')
-    )
-    slug = models.SlugField(
-        max_length=30,
-        db_index=True,
-        unique=True,
-        verbose_name=_('Ссылка подписной страницы')
-    )
     page_photo = models.ImageField(
         upload_to=get_page_photo_path,
         blank=True,
@@ -753,20 +716,6 @@ class VKSubscribePage(models.Model):
         blank=True,
         verbose_name=_('Цвет фона')
     )
-    title = models.CharField(
-        max_length=60,
-        null=True,
-        verbose_name=_('Заголовок')
-    )
-    description = models.TextField(
-        null=True,
-        verbose_name=_('Описание')
-    )
-    button_text = models.CharField(
-        max_length=30,
-        default='ПОЛУЧИТЬ',
-        verbose_name=_('Текст на кнопке')
-    )
     vk_group_id = models.CharField(
         max_length=70,
         null=True,
@@ -777,57 +726,6 @@ class VKSubscribePage(models.Model):
         default='id',
         choices=TYPE_GROUP_ID_CHOICES,
         verbose_name=_('Тип id группы')
-    )
-    timer_text = models.CharField(
-        max_length=39,
-        default='Материал станет недоступным через:',
-        blank=True,
-        null=True,
-        verbose_name=_('Текст на таймере')
-    )
-    is_timer_active = models.BooleanField(
-        default=False,
-        verbose_name=_('Таймер обратного отсчёта')
-    )
-    timer_time = models.IntegerField(
-        default=180,
-        verbose_name=_('Время таймера (в секундах)')
-    )
-    facebook_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Facebook пиксель')
-    )
-    tiktok_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Tiktok пиксель')
-    )
-    vk_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('ВК пиксель')
-    )
-    yandex_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Яндекс метрика')
-    )
-    roistat_id = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Roistat ID')
-    )
-    ctr = models.FloatField(
-        default=0,
-        blank=True,
-        null=True,
-        verbose_name=_('CTR')
     )
     success_title = models.CharField(
         max_length=50,
@@ -848,15 +746,6 @@ class VKSubscribePage(models.Model):
         verbose_name=_('Текст на кнопке')
     )
 
-    is_active = models.BooleanField(
-        default=False,
-        verbose_name=_('Активный')
-    )
-    created = models.BooleanField(
-        default=False,
-        verbose_name=_('Создано')
-    )
-
     class Meta:
         verbose_name = 'ВК Подписная страница'
         verbose_name_plural = 'ВК Подписные страницы'
@@ -864,11 +753,6 @@ class VKSubscribePage(models.Model):
     def get_absolute_url(self) -> str:
         return reverse_lazy('subscribe_pages:vk_page-detail',
                             args=(self.slug,))
-
-    def get_page_photo_url(self) -> str:
-        if self.page_photo:
-            return f'{settings.DOMAIN}{self.page_photo.url}'
-        return '#'
 
     @property
     def page_url(self) -> str:
@@ -882,12 +766,6 @@ class VKSubscribePage(models.Model):
         except ZeroDivisionError:
             ctr = 0
         return round(ctr, 2)
-
-    def save_ctr(self, ctr: Optional[float] = None) -> None:
-        if not ctr:
-            ctr = self.calculate_ctr()
-        self.ctr = float('{:.2f}'.format(ctr))
-        self.save(update_fields=['ctr'])
 
     def all_views_subscribers_and_ctr(self) -> List[int]:
         page_subscriptions = self.subscriptions.all()
@@ -915,10 +793,6 @@ class VKSubscribePage(models.Model):
             subscribe_page.is_active = True
             subscribe_page.save(update_fields=['is_active'])
 
-    @classmethod
-    def is_slug_unique(cls, slug) -> bool:
-        return not cls.objects.filter(slug=slug)
-
     @property
     def bg_first_color(self):
         return self.bg_color.first_color
@@ -942,9 +816,6 @@ class VKSubscribePage(models.Model):
     @property
     def panel_icon_color(self):
         return self.bg_color.panel_icon_color
-
-    def __str__(self):
-        return f'{self.page_name} - {self.slug}'
 
 
 class VKStatistic(models.Model):
@@ -1142,35 +1013,20 @@ class TelegramUser(models.Model):
     )
 
 
-class TelegramGroupOfSubscribePage(models.Model):
+class TelegramGroupOfSubscribePage(BaseGroupOfSubscribePages):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='tg_group_of_pages',
         verbose_name=_('Владелец')
     )
-    name = models.CharField(
-        max_length=255, 
-        verbose_name=_('Название')
-    )
-    created = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Создано')
-    )
-    can_delete = models.BooleanField(
-        default=True,
-        verbose_name=_('Можно удалить')
-    )
 
     class Meta:
         verbose_name = 'Группа Telegram страницы'
         verbose_name_plural = 'Группы Telegram страниц'
 
-    def __str__(self):
-        return f'{self.name}-{self.user}'
 
-
-class TelegramSubscribePage(models.Model):
+class TelegramSubscribePage(BaseSubscribePage):
     def get_page_photo_path(self, filename: str) -> str:
         return f'subscribe_page/telegram-{self.user.username}/page_photos/{filename}'
 
@@ -1213,11 +1069,11 @@ class TelegramSubscribePage(models.Model):
         max_length=2000,
         verbose_name=_('Сообщение при выдаче подарка')
     )
-    bot_button_text = models.CharField(
+    button_text = models.CharField(
         max_length=500,
         verbose_name=_('Текст на кнопке (бот)')
     )
-    bot_button_url = models.URLField(
+    button_url = models.URLField(
         max_length=200,
         verbose_name=_('Ссылка кнопки (бот)'),
         null=True,
@@ -1230,21 +1086,6 @@ class TelegramSubscribePage(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Домен')
-    )
-    page_name = models.CharField(
-        max_length=60,
-        verbose_name=_('Название страницы')
-    )
-    description = models.TextField(
-        null=True,
-        blank=True,
-        verbose_name=_('Описание')
-    )
-    slug = models.SlugField(
-        max_length=30,
-        db_index=True,
-        unique=True,
-        verbose_name=_('Ссылка подписной страницы')
     )
     page_photo = models.ImageField(
         upload_to=get_page_photo_path,
@@ -1271,57 +1112,6 @@ class TelegramSubscribePage(models.Model):
         blank=True,
         null=True,
         verbose_name=_('Аватарка Telegram')
-    )
-    timer_text = models.CharField(
-        max_length=39,
-        blank=True,
-        null=True,
-        default=_('Материал станет недоступным через:'),
-        verbose_name=_('Текст на таймере')
-    )
-    is_timer_active = models.BooleanField(
-        default=False,
-        verbose_name=_('Таймер обратного отсчёта')
-    )
-    timer_time = models.IntegerField(
-        default=180,
-        verbose_name=_('Время таймера (в секундах)')
-    )
-    facebook_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Facebook пиксель')
-    )
-    tiktok_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Tiktok пиксель')
-    )
-    vk_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('ВК пиксель')
-    )
-    yandex_pixel = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Яндекс метрика')
-    )
-    roistat_id = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name=_('Roistat ID')
-    )
-    ctr = models.FloatField(
-        default=0,
-        blank=True,
-        null=True,
-        verbose_name=_('CTR')
     )
 
     popup_title = models.CharField(
@@ -1366,14 +1156,6 @@ class TelegramSubscribePage(models.Model):
         default=False,
         verbose_name=_('Привязан')
     )
-    is_active = models.BooleanField(
-        default=False,
-        verbose_name=_('Активный')
-    )
-    created = models.BooleanField(
-        default=False,
-        verbose_name=_('Создано')
-    )
 
     class Meta:
         verbose_name = 'Подписная Telegram страница'
@@ -1381,11 +1163,6 @@ class TelegramSubscribePage(models.Model):
 
     def get_absolute_url(self) -> str:
         return reverse_lazy('subscribe_pages:page-detail', args=(self.slug,))
-
-    def get_page_photo_url(self) -> str:
-        if self.page_photo:
-            return f'{settings.DOMAIN}{self.page_photo.url}' 
-        return '#'
 
     def set_default_group(self):
         default_group, default_group_created = \
@@ -1428,12 +1205,6 @@ class TelegramSubscribePage(models.Model):
             ctr = 0
         return ctr
 
-    def save_ctr(self, ctr: Optional[float] = None) -> None:
-        if not ctr:
-            ctr = self.calculate_ctr()
-        self.ctr = float('{:.2f}'.format(ctr))
-        self.save(update_fields=['ctr'])
-
     def all_views_subscribers_and_ctr(self) -> List[int]:
         all_views, all_subscribers = TelegramStatistic.get_all_views_and_subscribers(self)
         return [all_views, all_subscribers, self.ctr]
@@ -1451,13 +1222,6 @@ class TelegramSubscribePage(models.Model):
         for subscribe_page in user.tg_subscribe_pages.filter(is_active=False):
             subscribe_page.is_active = True
             subscribe_page.save(update_fields=['is_active'])
-
-    @classmethod
-    def is_slug_unique(cls, slug) -> bool:
-        return not cls.objects.filter(slug=slug)
-
-    def __str__(self):
-        return f'{self.page_name} - {self.slug}'
 
 
 class TelegramStatistic(models.Model):

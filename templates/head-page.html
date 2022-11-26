@@ -83,9 +83,6 @@ TELEPORT - сервис для привлечения подписчиков в 
                             <li class="nav_li">
                                 <a href="#advantage">Преимущества</a>
                             </li>
-{#                            <li class="nav_li">#}
-{#                                <a href="#cases">Кейсы</a>#}
-{#                            </li>#}
                             <li class="nav_li">
                                 <a href="#droprown">Как это работает?</a>
                             </li>
@@ -120,9 +117,6 @@ TELEPORT - сервис для привлечения подписчиков в 
                                     <li class="header_nav_li">
                                         <a href="#advantage" onclick="scroll_to('#advantage')"><span>02</span>Преимущества</a>
                                     </li>
-{#                                    <li class="header_nav_li">#}
-{#                                        <a href="#cases" onclick="scroll_to('#cases')"><span>03</span>Кейсы</a>#}
-{#                                   </li>#}
                                     <li class="header_nav_li">
                                         <a href="#droprown" onclick="scroll_to('#droprown')"><span>04</span>FAQ</a>
                                     </li>
@@ -145,14 +139,6 @@ TELEPORT - сервис для привлечения подписчиков в 
                                     {% else %}
                                         <a href="{% url 'users:login' %}">Войти</a>
                                 {% endif %}
-                                <!-- <div class="content_user flex__align">
-                                    <div class="content_user_ava">
-                                        <div class="ava">
-                                            <img src="/media/images/ava.jpg" alt="" srcset="/media/images/ava.jpg 1x, /media/images/ava@2x.jpg 2x">
-                                        </div>
-                                    </div>
-                                    <div class="content_user_name">Александр Нистеренко</div>
-                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -762,74 +748,6 @@ TELEPORT - сервис для привлечения подписчиков в 
             </div>
         </div>
     </div>
-
-{#    <div class="pages">#}
-{#        <div class="bone">#}
-{#            <div class="pages_title title anim" id="pages">#}
-{#                <div class="title_li"><div class="div"><span>Примеры</span></div></div>#}
-{#                <div class="title_li"><div class="div">подписных страниц</div></div>#}
-{#            </div>#}
-{#            <div class="pages_items">#}
-{#                <div class="pages_item">#}
-{#                    <a href="#">#}
-{#                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                        <span class="pages_item_icon"><svg width="22" height="21" viewBox="0 0 22 21" fill="none"><path d="M2 2.00014L20 2M20 2L20 20M20 2L2.00048 19.2953" stroke="white" stroke-width="3"/></svg></span>#}
-{#                    </a>#}
-{#                </div>#}
-{#                <div class="pages_item">#}
-{#                    <a href="#">#}
-{#                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                        <span class="pages_item_icon"><svg width="22" height="21" viewBox="0 0 22 21" fill="none"><path d="M2 2.00014L20 2M20 2L20 20M20 2L2.00048 19.2953" stroke="white" stroke-width="3"/></svg></span>#}
-{#                    </a>#}
-{#                </div>#}
-{#                <div class="pages_item">#}
-{#                    <a href="#">#}
-{#                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                        <span class="pages_item_icon"><svg width="22" height="21" viewBox="0 0 22 21" fill="none"><path d="M2 2.00014L20 2M20 2L20 20M20 2L2.00048 19.2953" stroke="white" stroke-width="3"/></svg></span>#}
-{#                    </a>#}
-{#                </div>#}
-{#                <div class="pages_item">#}
-{#                    <a href="#">#}
-{#                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                        <span class="pages_item_icon"><svg width="22" height="21" viewBox="0 0 22 21" fill="none"><path d="M2 2.00014L20 2M20 2L20 20M20 2L2.00048 19.2953" stroke="white" stroke-width="3"/></svg></span>#}
-{#                    </a>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
-{#	<div class="bone">#}
-{#		<div class="example">#}
-{#			<div class="example_title title anim" id="cases">#}
-{#				<div class="title_li"><div><span>Примеры</span> </div></div>#}
-{#				<div class="title_li"><div>подписных страниц</div></div>#}
-{#			</div>#}
-{#			<div class="example_items twoo__slide">#}
-{#				<a class="example_item" href="#">#}
-{#					<div class="example_item_label icon icon-arrow_top"></div>#}
-{#					<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#				</a>#}
-{#				<a class="example_item" href="#">#}
-{#					<div class="example_item_label icon icon-arrow_top"></div>#}
-{#					<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#				</a>#}
-{#				<a class="example_item" href="#">#}
-{#					<div class="example_item_label icon icon-arrow_top"></div>#}
-{#					<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#				</a>#}
-{#				<a class="example_item" href="#">#}
-{#					<div class="example_item_label icon icon-arrow_top"></div>#}
-{#					<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#				</a>#}
-{#				<a class="example_item" href="#">#}
-{#					<div class="example_item_label icon icon-arrow_top"></div>#}
-{#					<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#				</a>#}
-{#			</div>#}
-{#		</div>#}
-{#	</div>#}
-
-
 	<div class="pixel">
         <div class="bone">
             <div class="pixel_head">
@@ -882,48 +800,6 @@ TELEPORT - сервис для привлечения подписчиков в 
             </div>
         </div>
     </div>
-
-{#	<div class="bone">#}
-{#		<div class="example">#}
-{#			<div class="example_title title anim" id="example">#}
-{#				<div class="title_li"><div>Результаты</div></div>#}
-{#				<div class="title_li"><div><span>наших клиентов</span></div></div>#}
-{#			</div>#}
-{#			<div class="example_items one__slid">#}
-{#				<div class="example_item__wrapper">#}
-{#					<div class="example_item">#}
-{#						<div class="example_item_label"><span>До</span></div>#}
-{#						<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#					</div>#}
-{#					<div class="example_item">#}
-{#						<div class="example_item_label"><span>После</span></div>#}
-{#						<img class="example_item_content" src="/media/images/svg_anim/2.svg" alt>#}
-{#					</div>#}
-{#				</div>#}
-{#				<div class="example_item__wrapper">#}
-{#					<div class="example_item">#}
-{#						<div class="example_item_label"><span>До</span></div>#}
-{#						<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#					</div>#}
-{#					<div class="example_item">#}
-{#						<div class="example_item_label"><span>После</span></div>#}
-{#						<img class="example_item_content" src="/media/images/svg_anim/2.svg" alt>#}
-{#					</div>#}
-{#				</div>#}
-{#				<div class="example_item__wrapper">#}
-{#					<div class="example_item">#}
-{#						<div class="example_item_label"><span>До</span></div>#}
-{#						<img class="example_item_content" src="/media/images/svg_anim/1.svg" alt>#}
-{#					</div>#}
-{#					<div class="example_item">#}
-{#						<div class="example_item_label"><span>После</span></div>#}
-{#						<img class="example_item_content" src="/media/images/svg_anim/2.svg" alt>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
-{#	</div>#}
-
 	<div class="bone">
 		<div class="landing_block">
 			<div class="landing_block__title title anim">
@@ -953,46 +829,6 @@ TELEPORT - сервис для привлечения подписчиков в 
 			</div>
 		</div>
 	</div>
-
-{#    <div class="results">#}
-{#        <div class="bone">#}
-{#            <div class="results_title title anim" id="results">#}
-{#                <div class="title_li"><div class="div">Результаты</div></div>#}
-{#                <div class="title_li"><div class="div"><span>наших клиентов</span></div></div>#}
-{#            </div>#}
-{#            <div class="results_items">#}
-{#                <div class="results_group">#}
-{#                    <div class="results_item">#}
-{#                        <a href="#">#}
-{#                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                            <span class="results_item_icon">До</span>#}
-{#                        </a>#}
-{#                    </div>#}
-{#                    <div class="results_item">#}
-{#                        <a href="#">#}
-{#                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                            <span class="results_item_icon">После</span>#}
-{#                        </a>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="results_group">#}
-{#                    <div class="results_item">#}
-{#                        <a href="#">#}
-{#                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                            <span class="results_item_icon">До</span>#}
-{#                        </a>#}
-{#                    </div>#}
-{#                    <div class="results_item">#}
-{#                        <a href="#">#}
-{#                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="Photo">#}
-{#                            <span class="results_item_icon">После</span>#}
-{#                        </a>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
 	<div class="bone">
 		<div class="droprown">
 			<div class="droprown_title title anim" id="droprown">
@@ -1082,9 +918,6 @@ TELEPORT - сервис для привлечения подписчиков в 
 					<div class="footer_nav_li">
 						<a href="#">Преимущества</a>
 					</div>
-{#					<div class="footer_nav_li">#}
-{#						<a href="#">Кейсы пользователей</a>#}
-{#					</div>#}
 					<div class="footer_nav_li">
 						<a href="#">Часто задаваемые вопросы</a>
 					</div>

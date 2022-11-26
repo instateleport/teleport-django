@@ -115,13 +115,6 @@
 					<div class="statistik_table_top flex__center">
 						<div class="statistik_table_search">
 							<div class="search flex__align">
-{#								<div class="search_btn">#}
-{#									<svg width="20" height="20" viewbox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">#}
-{#										<circle class="stroke" cx="9.16683" cy="9.16732" r="5.83333" stroke="var(--theme_color_1)" stroke-width="2"/>#}
-{#										<path class="stroke" d="M16.6665 16.666L14.1665 14.166" stroke="var(--theme_color_1)" stroke-width="2" stroke-linecap="round"/>#}
-{#									</svg>#}
-{#								</div>#}
-{#								<input type="text" placeholder="Поиск по логину">#}
 							</div>
 						</div>
                         <a target="_blank" href="{% url 'subscribe_pages:page-statistic-download-subscribers' object.slug %}" class="statistik_table_export hover__line">Экспорт таблицы</a>
@@ -131,7 +124,6 @@
 							<table>
                                 <thead>
                                     <tr>
-{#                                        <th>Дата</th>#}
                                         <th>Логин</th>
                                         <th>Статус</th>
                                     </tr>
@@ -139,7 +131,6 @@
                                 <tbody>
                                     {% for subscriber in subscribers %}
                                         <tr>
-{#                                            <td>{{ subscriber.date|date:"d.m.Y H:i" }}</td>#}
                                             <td>{{ subscriber.instagram_username }}</td>
                                             {% if object in subscriber.subscribe_to.all %}
                                                 <td class="green">Подписался</td>
@@ -155,18 +146,6 @@
 				</div>
 				<div class="statistik_pahination">
 					<div class="pagination flex__align">
-{#						<div class="pagination_li pagination__arrow inactive">#}
-{#							<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">#}
-{#								<path fill-rule="evenodd" clip-rule="evenodd" d="M5.70679 0.293031C5.89426 0.480558 5.99957 0.734866 5.99957 1.00003C5.99957 1.26519 5.89426 1.5195 5.70679 1.70703L2.41379 5.00003L5.70679 8.29303C5.88894 8.48163 5.98974 8.73423 5.98746 8.99643C5.98518 9.25863 5.88001 9.50944 5.6946 9.69485C5.5092 9.88026 5.25838 9.98543 4.99619 9.9877C4.73399 9.98998 4.48139 9.88919 4.29279 9.70703L0.292787 5.70703C0.105316 5.5195 0 5.26519 0 5.00003C0 4.73487 0.105316 4.48056 0.292787 4.29303L4.29279 0.293031C4.48031 0.10556 4.73462 0.000244141 4.99979 0.000244141C5.26495 0.000244141 5.51926 0.10556 5.70679 0.293031V0.293031Z" fill="var(--theme_color_1)"/>#}
-{#							</svg>#}
-{#						</div>#}
-{#						<div class="pagination_li active">1</div>#}
-{#						<div class="pagination_li">2</div>#}
-{#						<div class="pagination_li">3</div>#}
-{#						<div class="pagination_li">4</div>#}
-{#						<div class="pagination_li">5</div>#}
-{#						<div class="pagination_li pagination__dots">...</div>#}
-{#						<div class="pagination_li">8</div>#}
                         {% if subscribers.has_previous %}
                             <a href="{% url 'subscribe_pages:page-statistic' object.slug %}?page={{ subscribers.previous_page_number }}" class="pagination_li pagination__arrow">
                             {% else %}
@@ -206,7 +185,6 @@
     <script src="{% static 'js/libraries/moment.min.js' %}"></script>
     <script src="{% static 'js/libraries/daterangepicker.min.js' %}"></script>
     <script src="{% static 'js/libraries/chart.min.js' %}"></script>
-{#    <script src="{% static 'js/libraries/statisticChart.min.js' %}"></script>#}
     <script src="{% static 'js/statistics-chart.js' %}"></script>
 
 {% endblock %}

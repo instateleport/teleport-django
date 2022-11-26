@@ -195,13 +195,9 @@ class TGSubscribePageUpdateForm(forms.ModelForm):
                 'class': 'sheet_input',
                 'placeholder': 'сообщения при получении подарка (бот)',
             }),
-            'bot_button_text': forms.TextInput(attrs={
+            'button_text': forms.TextInput(attrs={
                 'class': 'sheet_input',
                 'placeholder': 'текст на кнопке (бот)',
-            }),
-            'bot_button_url': forms.TextInput(attrs={
-                'class': 'sheet_input',
-                'placeholder': 'ссылка кнопки (бот)',
             }),
             'page_photo': forms.FileInput(attrs={
                 'class': 'input__hidden',
@@ -342,7 +338,7 @@ class TGSubscribePageCreateForm(forms.ModelForm):
                 'class': 'sheet_input',
                 'placeholder': 'сообщения при получении подарка (бот)',
             }),
-            'bot_button_text': forms.TextInput(attrs={
+            'button_text': forms.TextInput(attrs={
                 'class': 'sheet_input',
                 'placeholder': 'текст на кнопке (бот)',
             }),

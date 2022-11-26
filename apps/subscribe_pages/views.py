@@ -535,8 +535,8 @@ class TGSubscribePageDuplicateView(LoginRequiredMixin, IsResetPasswordMixin,
 
             f.popup_title = self.object.popup_title
             f.popup_button_text = self.object.popup_button_text
-            f.bot_button_text = self.object.bot_button_text
-            f.bot_button_url = self.object.bot_button_url
+            f.button_text = self.object.button_text
+            f.button_url = self.object.button_url
 
             f.created = self.object.created
 
@@ -1977,9 +1977,8 @@ class AddTelegramUserToChannelSubscribers(APIView):
             telegram_subscribe_page.user.pocket.pay_per_subscriber()
             telegram_subscribe_page = models.TelegramSubscribePage.objects.get(
                 telegram_channel_id=telegram_channel_id)
-            telegram_subscribe_page.bot_button_url = telegram_button_url
+            telegram_subscribe_page.button_url = telegram_button_url
             telegram_subscribe_page.is_linked = True
-            print(telegram_subscribe_page)
             telegram_subscribe_page.save()
 
         return Response(status=status.HTTP_201_CREATED)

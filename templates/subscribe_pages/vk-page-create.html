@@ -66,14 +66,12 @@
                 {% if form.errors %}
                     <input type="hidden" class="error">
                     <div class="input_err">Исправьте ошибки ниже</div>
-{#                    {{ form.errors }}#}
                 {% endif %}
 				<div class="content_form_step" id="step-1">
 					<div class="content_form_title">Общие настройки<span></span></div>
 					<div class="content_form_input">
 						<div class="content_form_label required__field">{{ form.page_name.label }}</div>
 						<div class="input">
-{#							<input class="emoj" type="text" placeholder="Введите название страницы">#}
                             {{ form.page_name }}
 							<div class="input_err">{{ form.page_name.errors }}</div>
 						</div>
@@ -110,48 +108,6 @@
                             {% endfor %}
 						</div>
 					</div>
-{#					<div class="content_form_title">Пиксели<span></span></div>#}
-{#					<div class="content_form_more lever__wrapper hover__line hover__active" id="inner-pix">#}
-{#						<span>Показать пиксели</span>#}
-{#						<span>Скрыть пиксели</span>#}
-{#					</div>#}
-{#					<div class="content_form_inner inner-pix">#}
-{#						<div class="content_form_input">#}
-{#							<div class="content_form_label">{{ form.facebook_pixel.label }}</div>#}
-{#							<div class="input">#}
-{#	                            {{ form.facebook_pixel }}#}
-{#								<div class="input_err">{{ form.facebook_pixel.errors }}</div>#}
-{#							</div>#}
-{#						</div>#}
-{#						<div class="content_form_input">#}
-{#							<div class="content_form_label">{{ form.tiktok_pixel.label }}</div>#}
-{#							<div class="input">#}
-{#	                            {{ form.tiktok_pixel }}#}
-{#								<div class="input_err">{{ form.tiktok_pixel.errors }}</div>#}
-{#							</div>#}
-{#						</div>#}
-{#						<div class="content_form_input">#}
-{#							<div class="content_form_label">{{ form.vk_pixel.label }}</div>#}
-{#							<div class="input">#}
-{#	                            {{ form.vk_pixel }}#}
-{#								<div class="input_err">{{ form.vk_pixel.errors }}</div>#}
-{#							</div>#}
-{#						</div>#}
-{#						<div class="content_form_input">#}
-{#							<div class="content_form_label">{{ form.yandex_pixel.label }}</div>#}
-{#							<div class="input">#}
-{#								{{ form.yandex_pixel }}#}
-{#								<div class="input_err">{{ form.yandex_pixel.errors }}</div>#}
-{#							</div>#}
-{#						</div>#}
-{#						<div class="content_form_input">#}
-{#							<div class="content_form_label">{{ form.roistat_id.label }}</div>#}
-{#							<div class="input">#}
-{#								{{ form.roistat_id }}#}
-{#								<div class="input_err">{{ form.roistat_id.errors }}</div>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
 					<div class="content_form_btn">
 						<div class="btn btn-red next__step">Далее</div>
 					</div>
@@ -262,7 +218,6 @@
 					<div class="content_form_btn flex">
 						<div class="btn btn-outline prev__step">Назад</div>
                         <input type="submit" class="btn btn-red dtn__modal" data-modal="ok" value="Создать страницу">
-{#					<div class="btn btn-red dtn__modal" data-modal="ok">Создать страницу</div>#}
 					</div>
 				</div>
 			</form>
@@ -271,27 +226,5 @@
 
 	<div class="copied copy__href">Ссылка на страницу скопирована</div>
 
-	<!-- Modal-ok. -->
-{#	<div class="modal modal_ok">#}
-{#		<div class="modal_wrapper">#}
-{#			<div class="modal_scroll">#}
-{#				<div class="modal_close"></div>#}
-{#				<div class="modal_icon">#}
-{#					<svg width="64" height="64" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">#}
-{#						<path class="fill" d="M10.6668 56.0006H13.3335V21.334H10.6668C9.25234 21.334 7.89579 21.8959 6.89559 22.8961C5.8954 23.8963 5.3335 25.2528 5.3335 26.6673V50.6673C5.3335 52.0818 5.8954 53.4384 6.89559 54.4385C7.89579 55.4387 9.25234 56.0006 10.6668 56.0006ZM53.3335 21.334H34.6668L37.6588 12.3527C37.9258 11.5511 37.9985 10.6976 37.871 9.8624C37.7435 9.02722 37.4194 8.23429 36.9254 7.5489C36.4314 6.86352 35.7817 6.3053 35.0297 5.92021C34.2777 5.53513 33.445 5.3342 32.6002 5.33398H32.0002L18.6668 19.8353V56.0006H48.0002L58.4322 33.078L58.6668 32.0006V26.6673C58.6668 25.2528 58.1049 23.8963 57.1047 22.8961C56.1045 21.8959 54.748 21.334 53.3335 21.334V21.334Z" fill="#578FFC"/>#}
-{#					</svg>#}
-{#				</div>#}
-{#				<div class="modal_name">Страница успешно создана</div>#}
-{#				<!-- <div class="modal_subtitle">Вы действительно хотите удалить эту страницу?</div> -->#}
-{#				<div class="modal_btn flex__align">#}
-{#					<div class="page_link" href="pageLink"></div>#}
-{#					<div class="btn btn-outline modal_ok_btn copy__href">Копировать ссылку на страницу</div>#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
-{#	</div>#}
-	<!-- Modal-ok. -->
-
 	<script src="/static/js/libraries/jquery.min.js"></script>
-{#	<script src="/static/js/main.js"></script> #}
 {% endblock %}
