@@ -208,7 +208,7 @@ LANGUAGES = (
 )
 
 LOCALE_PATHS = (
-    'locale',
+    BASE_DIR / 'locale/',
 )
 
 TIME_ZONE = config('TIMEZONE')
