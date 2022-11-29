@@ -1308,13 +1308,17 @@ class TelegramSubscriber(models.Model):
         auto_now=True,
         verbose_name=_('Дата')
     )
-    telegram_subscribe_page = models.ForeignKey(
+    views = models.ManyToManyField(
         TelegramSubscribePage,
         blank=True,
-        null=True,
-        on_delete=models.CASCADE,
-        related_name='telegram_subscriber',
-        verbose_name=_('Подписная Telegram страница')
+        related_name='views',
+        verbose_name=_('Просмотры')
+    )
+    subscribe_to = models.ManyToManyField(
+        TelegramSubscribePage,
+        blank=True,
+        related_name='subscribers',
+        verbose_name=_('Подписки')
     )
 
     class Meta:
