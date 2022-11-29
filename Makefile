@@ -14,3 +14,6 @@ collectstatic:
 
 shell:
 	sh -c "$(django) shell"
+
+startapp:
+	sh -c "$(django) startapp $(APPNAME)"

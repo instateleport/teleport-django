@@ -199,6 +199,10 @@ class TGSubscribePageUpdateForm(forms.ModelForm):
                 'class': 'sheet_input',
                 'placeholder': 'текст на кнопке (бот)',
             }),
+            'button_url': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'ссылка кнопки (бот)',
+            }),
             'page_photo': forms.FileInput(attrs={
                 'class': 'input__hidden',
                 'id': 'photo',
@@ -320,8 +324,11 @@ class TGSubscribePageCreateForm(forms.ModelForm):
     class Meta:
         model = models.TelegramSubscribePage
         exclude = [
-            'user', 'group',
-            'is_active', 'created'
+            'user',
+            'group',
+            'is_active',
+            'created',
+            'page_hash',
         ]
         widgets = {
             'page_name': forms.TextInput(attrs={
@@ -341,6 +348,10 @@ class TGSubscribePageCreateForm(forms.ModelForm):
             'button_text': forms.TextInput(attrs={
                 'class': 'sheet_input',
                 'placeholder': 'текст на кнопке (бот)',
+            }),
+            'button_url': forms.TextInput(attrs={
+                'class': 'sheet_input',
+                'placeholder': 'ссылка кнопки (бот)',
             }),
             'page_photo': forms.FileInput(attrs={
                 'class': 'input__hidden',

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'apps.payment.apps.PaymentConfig',
     'apps.partners.apps.PartnersConfig',
     'apps.stats',
+    'apps.api',
 
     'rest_framework',
     'rest_framework_simplejwt',
@@ -208,7 +209,7 @@ LANGUAGES = (
 )
 
 LOCALE_PATHS = (
-    BASE_DIR / 'locale/',
+    os.path.join(BASE_DIR, 'locale/'),
 )
 
 TIME_ZONE = config('TIMEZONE')

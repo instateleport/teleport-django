@@ -53,10 +53,3 @@ class VKSubscriptionSerializer(serializers.ModelSerializer):
             instance.pay_per_subscriber()
         instance.save(update_fields=['subscribed', 'date'])
         return instance
-
-
-class TelegramSubscriberSerializer(serializers.Serializer):
-    telegram_user_id = serializers.CharField(max_length=200)
-    telegram_user_username = serializers.CharField(max_length=200)
-    telegram_channel_id = serializers.CharField(max_length=200)
-    telegram_subscribe_page_button_url = serializers.URLField(max_length=200)

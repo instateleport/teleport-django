@@ -157,13 +157,6 @@ urlpatterns = [
     path('vk-subscribe-page/<slug:slug>/statistic/search-subscribers/',
          views.VKSearchSubscribersAjaxView.as_view(),
          name='vk-page-statistic-search-subscribers'),
-
-
-    #telegram bot
-    path('api/v1/telegram-page/present/<str:channel_id>/',
-         views.GetPresentFromTelegramPageView.as_view()),
-    path('api/v1/telegram-page/subscriber/',
-         views.AddTelegramUserToChannelSubscribers.as_view())
 ]
 
 if settings.DEBUG:

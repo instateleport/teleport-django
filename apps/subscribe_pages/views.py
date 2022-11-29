@@ -46,7 +46,6 @@ from .mixins import (
 from . import models, forms, task
 from .serializers import (
     VKSubscribePageSerializer, VKSubscriptionSerializer, VKSubscriberSerializer,
-    TelegramSubscriberSerializer
 )
 
 from .lamadava_api.lamadava import user_is_following
@@ -544,6 +543,7 @@ class TGSubscribePageDuplicateView(LoginRequiredMixin, IsResetPasswordMixin,
         else:
             return self.form_invalid(form)
 
+
 class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
     model = models.TelegramSubscribePage
     form_class = forms.TGSubscribePageCreateForm
@@ -556,8 +556,7 @@ class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, Create
     def get_initial(self):
         """Return the initial data to use for forms on this view."""
         initial = self.initial.copy()
-        # initial['slug'] = self.model.slug_generate(self.request.user)
-        initial['slug'] = 'otfyguihojkpmkbjh'
+        initial['slug'] = self.model.slug_generate(self.request.user)
         return initial
 
     def get_context_data(self, **kwargs):
@@ -572,21 +571,15 @@ class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, Create
 
     def form_valid(self, form):
         self.object = form.save()
-
-        # task.save_instagram_info.delay(
-        #     self.object.pk)  # сохраняем инфу о аккаунте в подписную страницу
-
         return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-        print(form)
-        print('huytcrytuvijok')
         if form.is_valid():
-
             f = form.save(commit=False)
             f.user = request.user
+            f.page_hash = models.TelegramSubscribePage.generate_page_hash(f.slug)
 
             if not f.bg_color:
                 f.bg_color = models.BGColor.objects.get(slug='default')
@@ -598,7 +591,6 @@ class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, Create
             return self.form_invalid(form)
 
 
-# ig subscribe pages - crud
 class InstagramSubscribePageListView(SubscribePageListMixin):
     template_name = 'subscribe_pages/page-list.html'
 
@@ -1923,62 +1915,3 @@ class VKStatisticAPIView(generics.CreateAPIView, mixins.UpdateModelMixin):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED,
                         headers=headers)
-
-
-class GetPresentFromTelegramPageView(APIView):
-
-    def get(self, request, channel_id):
-        try:
-            telegram_sub_page = models.TelegramSubscribePage.objects.get(
-                telegram_channel_id=channel_id)
-        except:
-            data = {'message': 'There is not channel with given id'}
-            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
-        if telegram_sub_page.user.pocket.balance <= 0:
-            data = {'message': 'Channel owner has not enough money'}
-            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
-        data = {'present_url': telegram_sub_page.present_url}
-        return Response(data=data, status=status.HTTP_200_OK)
-
-
-class AddTelegramUserToChannelSubscribers(APIView):
-    def post(self, request):
-        serializer = TelegramSubscriberSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        telegram_channel_id = serializer.data['telegram_channel_id']
-        telegram_user_id = serializer.data['telegram_user_id']
-        telegram_user_username = serializer.data['telegram_user_username']
-        telegram_button_url = serializer.data['telegram_subscribe_page_button_url']
-        try:
-            telegram_subscribe_page = models.TelegramSubscribePage.objects.get(
-                telegram_channel_id=telegram_channel_id)
-        except:
-            data = {'message': 'There is not channel with given id'}
-            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
-
-        if telegram_subscribe_page.user.pocket.balance <= 0:
-            data = {'message': 'Channel owner has not enough money'}
-            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            telegram_user = models.TelegramUser.objects.get(
-                telegram_user_id=telegram_user_id)
-        except:
-            telegram_user = models.TelegramUser.objects.create(
-                telegram_user_id=telegram_user_id,
-                telegram_username=telegram_user_username
-            )
-
-        model, result = models.TelegramSubscriber.objects.get_or_create(
-            telegram_subscribe_page=telegram_subscribe_page,
-            telegram_user=telegram_user,
-        )
-        if result:
-            telegram_subscribe_page.user.pocket.pay_per_subscriber()
-            telegram_subscribe_page = models.TelegramSubscribePage.objects.get(
-                telegram_channel_id=telegram_channel_id)
-            telegram_subscribe_page.button_url = telegram_button_url
-            telegram_subscribe_page.is_linked = True
-            telegram_subscribe_page.save()
-
-        return Response(status=status.HTTP_201_CREATED)

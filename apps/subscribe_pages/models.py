@@ -1,3 +1,4 @@
+import hashlib
 from typing import List, Optional
 
 from django.db import models
@@ -1035,11 +1036,16 @@ class TelegramSubscribePage(BaseSubscribePage):
 
     @classmethod
     def slug_generate(cls, user: settings.AUTH_USER_MODEL, count: int = 1):
-        slug = f'{user.username}-{cls.objects.filter(user=user).count() + count}'.replace(
+        slug = f'tg-{user.username}-{cls.objects.filter(user=user).count() + count}'.replace(
             '.', '_')
         if cls.objects.filter(slug=slug):
             return cls.slug_generate(user, count + 1)
         return slug
+
+    @classmethod
+    def generate_page_hash(self, slug):
+        page_hash = hashlib.sha256(slug.encode('utf-8')).hexdigest()
+        return page_hash
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
@@ -1054,6 +1060,10 @@ class TelegramSubscribePage(BaseSubscribePage):
         null=True,
         blank=True,
         verbose_name=_('Группа страниц')
+    )
+    page_hash = models.CharField(
+        max_length=200,
+        unique=True
     )
     telegram_bot_url = models.CharField(
         max_length=200,
@@ -1122,7 +1132,7 @@ class TelegramSubscribePage(BaseSubscribePage):
     popup_button_text = models.CharField(
         max_length=19,
         default=_('ПОЛУЧИТЬ МАТЕРИАЛЫ'),
-        verbose_name=_('Текст на кнопке')
+        verbose_name=_('Текст на кнопке (подписная страница)')
     )
 
     # Расширенные настройки
