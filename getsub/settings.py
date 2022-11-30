@@ -295,3 +295,5 @@ API_USERS = [
     'adminAPI',
     'vladyadrov',
 ]
+
+TELEPORT_BOT_URL = 'http://t.me/Teleportb_bot'
