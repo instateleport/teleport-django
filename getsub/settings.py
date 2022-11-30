@@ -289,3 +289,9 @@ SHOP_ID = config('SHOP_ID')
 
 DOMAIN = config("DOMAIN")
 LAMADAVA_API_KEY = config("LAMADAVA_API_KEY")
+
+API_USERS = [
+    'admin',
+    'adminAPI',
+    'vladyadrov',
+]
