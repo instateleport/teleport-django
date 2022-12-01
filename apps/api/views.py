@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -18,7 +19,17 @@ class LinkTelegramAccountAPIView(APIView):
         telegram_subscribe_page.instagram_username = telegram_username
         telegram_subscribe_page.telegram_bot_url = telegram_bot_url
         telegram_subscribe_page.is_linked = True
-        telegram_subscribe_page.save()
+
+        if telegram_subscribe_page.user.pocket.balance >= 1:
+            telegram_subscribe_page.user.pocket.balance -= 1
+        else:
+            return Response({
+                'error': 'На вашем счете недостаточно средств'
+            })
+
+        with transaction.atomic():
+            telegram_subscribe_page.user.pocket.save()
+            telegram_subscribe_page.save()
 
         return Response({
             'bot_button_text': telegram_subscribe_page.button_text,
