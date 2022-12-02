@@ -167,18 +167,17 @@ class TGSubscribePageUpdateForm(forms.ModelForm):
             self.fields['slug'].widget.attrs.update({
                 'class': 'sheet_input error'
             })
-        if not models.TelegramSubscribePage.is_slug_unique(slug):
-            self.add_error('slug', 'Страница с такой ссылкой уже существует')
-            self.fields['slug'].widget.attrs.update({
-                'class': 'sheet_input error'
-            })
         return self.is_bound and not self.errors
 
     class Meta:
         model = models.TelegramSubscribePage
         exclude = [
-            'user', 'group',
-            'is_active', 'created'
+            'user', 
+            'group',
+            'is_active',
+            'instagram_username',
+            'created',
+            'page_hash'
         ]
         widgets = {
             'page_name': forms.TextInput(attrs={
@@ -189,7 +188,6 @@ class TGSubscribePageUpdateForm(forms.ModelForm):
             'slug': forms.TextInput(attrs={
                 'class': 'sheet_input',
                 'placeholder': 'Ссылка на страницу',
-                'id': 'id_slug_create'
             }),
             'message_after_getting_present': forms.TextInput(attrs={
                 'class': 'sheet_input',

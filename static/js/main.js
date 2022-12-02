@@ -759,7 +759,7 @@ $(document).ready(() => {
         	folderIDInput.val(folderID)
 		}
 
-        modalAction(modalSelector, 'show');
+        // modalAction(modalSelector, 'show');
 
     });
 
@@ -1009,7 +1009,6 @@ $(document).on('click', '.statistic_button .button', function () {
             input = $(stepId).find('.required__field input'),
             b = 1,
             posTop = 0;
-
         if ($('input[name=typePage]:checked').attr('id') === 'typePage-1') {
             $(stepId).find('.required__field').parent().find('input').each(function () {
                 var val = $(this).val();
@@ -1076,6 +1075,7 @@ $(document).on('click', '.statistic_button .button', function () {
 
     $('.dooble .content_step_li').on('click', function () {
         var e = $(this);
+        console.log('heya')
 
         if (!$(this).hasClass('open')) {
             var step = $(this).attr('data-id'),
@@ -1088,7 +1088,6 @@ $(document).on('click', '.statistic_button .button', function () {
             if ($('input[name=typePage]:checked').attr('id') === 'typePage-1' && step === 'step-2') {
                 stepId = '#step-5';
             }
-
             if (e.hasClass('past')) {
                 $('.content_step_li').removeClass('open');
                 $('.content_form_step').slideUp(1000);

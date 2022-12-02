@@ -9,7 +9,7 @@
     <!-- Carrot quest END -->
 {% endblock %}
 
-{% block title %}Создание страницы{% endblock %}
+{% block title %}Изменение страницы{% endblock %}
 
 {% block body_class %}theme{% endblock %}
 
@@ -17,7 +17,7 @@
     {% include 'subscribe_pages/nav.html' %}
     <div class="bar_viel"></div>
 
- 	<div class="content">
+ 	<div class="content dooble">
 
 		<div class="content_top flex__align">
 			<div class="content_left flex__align">
@@ -36,16 +36,16 @@
 		</div>
 
 		<div class="content_inner">
-			<div class="content_title">Новая страница</div>
+			<div class="content_title">{{ object.page_name }}</div>
 			<div class="content_step">
-				<div class="content_step_li step-1 active">
+				<div class="content_step_li step-1 active open" data-id="step-1">
 					<div class="content_step_top flex__align">
 						<div class="content_step_number">1</div>
 						<span></span>
 					</div>
 					<div class="content_step_name">Общие настройки</div>
 				</div>
-				<div class="content_step_li step-2">
+				<div class="content_step_li step-2" data-id="step-2">
 					<div class="content_step_top flex__align">
 						<div class="content_step_number">2</div>
 						<span></span>
@@ -53,7 +53,7 @@
 					<div class="content_step_name">Страница 1</div>
 				</div>
 			</div>
-			<form method="POST" enctype="multipart/form-data" class="content_form">
+			<form method="POST" enctype="multipart/form-data" class="content_form" id="subscribePageForm">
                 {% csrf_token %}
 				<!-- Steps. -->
                 {% if form.errors %}
@@ -93,7 +93,7 @@
 					</div>
 					<div class="content_form_title">Визуализация<span></span></div>
 					<div class="content_form_photo images__wrapper">
-						<div class="content_form_label required__field">{{ form.page_photo.label }}</div>
+						<div class="content_form_label">{{ form.page_photo.label }}</div>
 						<div class="photo images">
 							<img src="{{ page_photo }}">
 						</div>
