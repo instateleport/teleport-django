@@ -245,8 +245,6 @@ class TGSubscribePageOpenView(IsSubscribePageActive, DetailView):
         return self.render_to_response(context)
 
 
-
-
 class TGSubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin,
                               IsSubscribePageOwner, UpdateView):
     model = models.TelegramSubscribePage
@@ -284,6 +282,7 @@ class TGSubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin,
     def form_valid(self, form):
         self.object = form.save()
         return super().form_valid(form)
+
 
 class TGAddToFolderView(LoginRequiredMixin, AjaxMixin, View):
     def post(self, request, *args, **kwargs):

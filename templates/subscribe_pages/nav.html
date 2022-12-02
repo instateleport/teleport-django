@@ -5,7 +5,7 @@
                 <div class="logo"><a href="/">Teleport</a></div>
             </div>
             <div class="bar_nav">
-                {% if '/subscribe-pages/' in request.get_full_path %}
+                {% if '/subscribe-page' in request.get_full_path %}
                 <div class="bar_nav_li active">
                 {% else %}
                 <div class="bar_nav_li">
@@ -28,7 +28,7 @@
                         Instagram страницы
                     </a>
                 </div>
-                {% if '/tg-subscribe-pages/' in request.get_full_path %}
+                {% if '/tg-subscribe-page' in request.get_full_path %}
                 <div class="bar_nav_li active">
                 {% else %}
                 <div class="bar_nav_li">
@@ -40,7 +40,7 @@
                         Telegram страницы (Beta)
                     </a>
                 </div>
-                {% if '/vk-subscribe-pages/' in request.get_full_path %}
+                {% if '/vk-subscribe-page' in request.get_full_path %}
                 <div class="bar_nav_li active">
                 {% else %}
                 <div class="bar_nav_li">
