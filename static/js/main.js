@@ -763,25 +763,6 @@ $(document).ready(() => {
 
     });
 
-    // var m = $('.modal');
-    //
-    // $(document).on('click', '.dtn__modal', function () {
-    //
-    //     let page_id = $(this).attr('data-id'),
-    //         dataModal = $(this).attr('data-modal');
-    //
-    //     $('#page_slug').val(page_id);
-    //
-    //     var e = '.modal_' + dataModal;
-    //     $(e).addClass(a);
-    //
-    //     if (dataModal === 'folder') {
-    //     	let folderID = $(this).data('element-id'),
-		// 		folderIDInput = $('#folderRenameForm input[name="id"]');
-    //     	folderIDInput.val(folderID)
-		// }
-    // });
-
     $('.modal_wrapper').mousedown(function () {
         event.stopPropagation();
 

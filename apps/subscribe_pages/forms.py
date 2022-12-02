@@ -74,7 +74,7 @@ class TGSubscribePageDuplicateForm(forms.ModelForm):
             self.fields['slug'].widget.attrs.update({
                 'class': 'sheet_input error'
             })
-        if not models.InstagramSubscribePage.is_slug_unique(slug):
+        if not models.TelegramSubscribePage.is_slug_unique(slug):
             self.add_error('slug', 'Страница с такой ссылкой уже существует')
             self.fields['slug'].widget.attrs.update({
                 'class': 'sheet_input error'
@@ -86,7 +86,9 @@ class TGSubscribePageDuplicateForm(forms.ModelForm):
     class Meta:
         model = models.TelegramSubscribePage
         fields = [
-            'page_name', 'slug', 'domain', 'instagram_username', 'instagram_avatar'
+            'page_name',
+            'slug',
+            'domain'
         ]
         labels = {
             'title': 'Заголовок страницы'
@@ -100,11 +102,8 @@ class TGSubscribePageDuplicateForm(forms.ModelForm):
                 'class': 'sheet_input',
                 'placeholder': 'Ссылка на страницу'
             }),
-            'instagram_avatar': forms.FileInput(attrs={
-                'class': 'input__hidden',
-                'id': 'ava'
-            })
         }
+
 
 class TGGroupRenameForm(forms.ModelForm):
     class Meta:

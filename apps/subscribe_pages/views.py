@@ -513,6 +513,7 @@ class TGSubscribePageDuplicateView(LoginRequiredMixin, IsResetPasswordMixin,
 
             # copy
             f.page_name = page_name
+            f.page_hash = models.TelegramSubscribePage.generate_page_hash(f.slug)
             f.page_photo = self.object.page_photo
             f.bg_color = self.object.bg_color
             f.description = self.object.description
