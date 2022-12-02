@@ -1,10 +1,10 @@
 django = docker-compose exec django ./manage.py
 
 migrate:
-	sh -c "$(django) migrate --noinput"
+	sh -c "$(django) migrate $(ARGS)"
 
 makemigrations:
-	sh -c "$(django) makemigrations"
+	sh -c "$(django) makemigrations $(ARGS)"
 
 createsuperuser:
 	sh -c "$(django) createsuperuser"

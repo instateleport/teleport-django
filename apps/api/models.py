@@ -10,5 +10,7 @@ class TelegramChannel(models.Model):
     telegram_user = models.ForeignKey(
         TelegramUser,
         on_delete=models.CASCADE,
-        related_name='telegram_channels'
+        related_name='telegram_channels',
+        null=True,
+        blank=True
     )

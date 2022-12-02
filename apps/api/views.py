@@ -18,14 +18,14 @@ class HandleNewTelegramChannelSubscriberAPIView(APIView):
 
         telegram_subscribe_page_statistic = TelegramSubscribePage.objects.get(page_hash=page_hash).statistic.first()
 
-        if not TelegramUser.objects.filter(chat_id=chat_id):
-            TelegramUser.objects.create(chat_id=chat_id)
+        if not TelegramUser.objects.filter(chat_id=chat_id, telegram_channels__channel_id=channel_id):
+            TelegramUser.objects.get_or_create(chat_id=chat_id)
+            TelegramChannel.objects.get_or_create(channel_id=channel_id)
 
-        if not TelegramChannel.objects.filter(channel_id=channel_id):
-            TelegramChannel.objects.create(
-                channel_id=channel_id,
-                telegram_user=TelegramUser.objects.get(chat_id=chat_id)
+            TelegramUser.objects.get(chat_id=chat_id).telegram_channels.add(
+                TelegramChannel.objects.get(channel_id=channel_id)
             )
+
             telegram_subscribe_page_statistic.subscribers += 1
             telegram_subscribe_page_statistic.save()
 
