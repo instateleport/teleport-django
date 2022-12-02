@@ -759,7 +759,7 @@ $(document).ready(() => {
         	folderIDInput.val(folderID)
 		}
 
-        // modalAction(modalSelector, 'show');
+        modalAction(modalSelector, 'show');
 
     });
 
@@ -1604,7 +1604,7 @@ $(document).on('click', '.statistic_button .button', function () {
 					break;
                 case 'tg_delete_page':
                     await deleteTGPageAjax(
-                    {
+                        {
                             'pageID': elementID
                         }, CSRFToken
                     );
