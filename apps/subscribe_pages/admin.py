@@ -199,4 +199,4 @@ class TelegramSubscriberAdmin(admin.ModelAdmin):
     pass
 
 
-admin.register(models.TelegramStatistic)
+admin.site.register(models.TelegramStatistic)

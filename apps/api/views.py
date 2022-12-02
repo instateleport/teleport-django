@@ -2,12 +2,41 @@ from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import LinkTelegramAccount
+from .serializers import LinkTelegramAccount, NewTelegramChannelSubscriberSerializer
+from .models import TelegramUser, TelegramChannel
 from apps.subscribe_pages.models import TelegramSubscribePage
 
 
+class HandleNewTelegramChannelSubscriberAPIView(APIView):
+    def patch(self, request):
+        serializer = NewTelegramChannelSubscriberSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        page_hash = serializer.data['page_hash']
+        chat_id = serializer.data['chat_id']
+        channel_id = serializer.data['channel_id']
+
+        telegram_subscribe_page_statistic = TelegramSubscribePage.objects.get(page_hash=page_hash).statistic.first()
+
+        if not TelegramUser.objects.filter(chat_id=chat_id):
+            TelegramUser.objects.create(chat_id=chat_id)
+
+        if not TelegramChannel.objects.filter(channel_id=channel_id):
+            TelegramChannel.objects.create(
+                channel_id=channel_id,
+                telegram_user=TelegramUser.objects.get(chat_id=chat_id)
+            )
+            telegram_subscribe_page_statistic.subscribers += 1
+            telegram_subscribe_page_statistic.save()
+
+        return Response({
+            'subscribers_count': telegram_subscribe_page_statistic.subscribers
+        })
+
+
+
 class LinkTelegramAccountAPIView(APIView):
-    def put(self, request):
+    def patch(self, request):
         serializer = LinkTelegramAccount(data=request.data)
         serializer.is_valid(raise_exception=True)
 

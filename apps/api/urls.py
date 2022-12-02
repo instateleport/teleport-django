@@ -4,5 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    path('link-telegram/', views.LinkTelegramAccountAPIView.as_view()),
+    path('link-subscribe-telegram-page/', views.LinkTelegramAccountAPIView.as_view()),
+    path('update-subscribe-telegram-page-statistic/', views.HandleNewTelegramChannelSubscriberAPIView.as_view())
 ]

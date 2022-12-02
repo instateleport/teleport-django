@@ -116,76 +116,76 @@ else:
     }
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
 
-        'ip': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': 'logs/ip.log'
-        },
+#         'ip': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': 'logs/ip.log'
+#         },
 
-        'register': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': 'logs/register.log'
-        },
+#         'register': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': 'logs/register.log'
+#         },
 
-        'domain': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': 'logs/domain.log'
-        },
+#         'domain': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': 'logs/domain.log'
+#         },
 
-        'carrot_quest_order_completed': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': 'logs/carrot_quest/order_completed.log'
-        },
+#         'carrot_quest_order_completed': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': 'logs/carrot_quest/order_completed.log'
+#         },
 
-        'page': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': 'logs/page/page-open.log'
-        },
+#         'page': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': 'logs/page/page-open.log'
+#         },
 
 
-    },
-    'loggers': {
+#     },
+#     'loggers': {
 
-        'ip': {
-            'level': 'INFO',
-            'handlers': ['ip'],
-            'propagate': True
-        },
+#         'ip': {
+#             'level': 'INFO',
+#             'handlers': ['ip'],
+#             'propagate': True
+#         },
 
-        'register': {
-            'level': 'WARNING',
-            'handlers': ['register'],
-            'propagate': True
-        },
+#         'register': {
+#             'level': 'WARNING',
+#             'handlers': ['register'],
+#             'propagate': True
+#         },
 
-        'domain': {
-            'level': 'WARNING',
-            'handlers': ['domain'],
-            'propagate': True
-        },
+#         'domain': {
+#             'level': 'WARNING',
+#             'handlers': ['domain'],
+#             'propagate': True
+#         },
 
-        'carrot_quest_order_completed': {
-            'level': 'WARNING',
-            'handlers': ['carrot_quest_order_completed'],
-            'propagate': True
-        },
+#         'carrot_quest_order_completed': {
+#             'level': 'WARNING',
+#             'handlers': ['carrot_quest_order_completed'],
+#             'propagate': True
+#         },
 
-        'page': {
-            'level': 'WARNING',
-            'handlers': ['page'],
-            'propagate': True
-        },
-    }
-}
+#         'page': {
+#             'level': 'WARNING',
+#             'handlers': ['page'],
+#             'propagate': True
+#         },
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
