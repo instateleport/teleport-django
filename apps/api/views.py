@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .serializers import LinkTelegramAccount, NewTelegramChannelSubscriberSerializer
-from .models import TelegramUser, TelegramChannel
+from .models import TelegramBotUser
 from apps.subscribe_pages.models import TelegramSubscribePage
 
 
@@ -14,21 +14,21 @@ class HandleNewTelegramChannelSubscriberAPIView(APIView):
 
         page_hash = serializer.data['page_hash']
         chat_id = serializer.data['chat_id']
-        channel_id = serializer.data['channel_id']
+        print(page_hash)
+        print(chat_id)
 
-        telegram_subscribe_page_statistic = TelegramSubscribePage.objects.get(page_hash=page_hash).statistic.first()
+        telegram_subscribe_page_statistic = TelegramSubscribePage.objects.get(page_hash=page_hash).statistic.last()
 
-        if not TelegramUser.objects.filter(chat_id=chat_id, telegram_channels__channel_id=channel_id):
-            TelegramUser.objects.get_or_create(chat_id=chat_id)
-            TelegramChannel.objects.get_or_create(channel_id=channel_id)
+        if not TelegramBotUser.objects.filter(chat_id=chat_id, telegram_subscribe_pages__page_hash=page_hash):
+            TelegramBotUser.objects.get_or_create(chat_id=chat_id)
 
-            TelegramUser.objects.get(chat_id=chat_id).telegram_channels.add(
-                TelegramChannel.objects.get(channel_id=channel_id)
+            TelegramBotUser.objects.get(chat_id=chat_id).telegram_subscribe_pages.add(
+                TelegramSubscribePage.objects.get(page_hash=page_hash)
             )
-
+            print('yes')
             telegram_subscribe_page_statistic.subscribers += 1
             telegram_subscribe_page_statistic.save()
-
+        print(telegram_subscribe_page_statistic.subscribers)
         return Response({
             'subscribers_count': telegram_subscribe_page_statistic.subscribers
         })

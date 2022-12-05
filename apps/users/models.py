@@ -63,7 +63,7 @@ class CustomUser(AbstractUser):
 
     class Meta:
         verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователиаа'
+        verbose_name_plural = 'Пользователи'
 
     def generate_verification_uuid(self):
         self.verification_uuid = uuid4()

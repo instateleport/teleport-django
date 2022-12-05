@@ -13,6 +13,8 @@ from decimal import Decimal
 
 import logging
 
+from apps.api.models import TelegramBotUser
+
 
 ipLogger = logging.getLogger('ip')
 
@@ -1044,7 +1046,7 @@ class TelegramSubscribePage(BaseSubscribePage):
 
     @classmethod
     def generate_page_hash(self, slug):
-        page_hash = hashlib.sha256(slug.encode('utf-8')).hexdigest()
+        page_hash = hashlib.sha256(slug.encode('utf-8')).hexdigest()[:10]
         return page_hash
 
     user = models.ForeignKey(
@@ -1067,6 +1069,13 @@ class TelegramSubscribePage(BaseSubscribePage):
     )
     telegram_bot_url = models.CharField(
         max_length=200,
+        null=True,
+        blank=True
+    )
+    telegram_user = models.ForeignKey(
+        TelegramBotUser,
+        on_delete=models.CASCADE,
+        related_name='telegram_subscribe_pages',
         null=True,
         blank=True
     )
@@ -1208,7 +1217,7 @@ class TelegramSubscribePage(BaseSubscribePage):
 
     def calculate_ctr(self) -> float:
         all_views, all_subscribers = \
-            InstagramStatistic.get_all_views_and_subscribers(self)
+            TelegramStatistic.get_all_views_and_subscribers(self)
         try:
             ctr = all_subscribers / all_views * 100
         except ZeroDivisionError:
@@ -1217,7 +1226,11 @@ class TelegramSubscribePage(BaseSubscribePage):
 
     def all_views_subscribers_and_ctr(self) -> List[int]:
         all_views, all_subscribers = TelegramStatistic.get_all_views_and_subscribers(self)
-        return [all_views, all_subscribers, self.ctr]
+        try:
+            conversion = all_subscribers / all_views * 100
+        except ZeroDivisionError:
+            conversion = float()
+        return [all_views, all_subscribers, conversion]
 
     all_views_subscribers_and_ctr.short_description = '👁‍🗨, 👤, %'
 
