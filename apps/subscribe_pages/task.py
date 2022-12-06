@@ -9,7 +9,7 @@ from apps.users.models import CustomUser
 from apps.users.task import carrot_quest_update_balance
 
 from .ispmanager_api.api import ISPManagerAPI
-from .models import InstagramSubscribePage, InstagramSubscriber, InstagramStatistic, Domain
+from .models import InstagramSubscribePage, TelegramSubscribePage
 
 import requests
 
@@ -29,6 +29,18 @@ def save_instagram_info(n):
 @app.task(name='calculate_and_save_ctr')
 def calculate_and_save_ctr() -> None:
     subscribe_pages = InstagramSubscribePage.objects.filter(is_active=True, created=True)
+    for subscribe_page in subscribe_pages:
+        subscribe_page.save_ctr()
+
+        statistics = subscribe_page.statistic.filter(day=datetime.today())
+        for statistic in statistics:
+            statistic.save_ctr()
+
+
+@app.task(name='calculate_and_save_telegram_ctr')
+def calculate_and_save_ctr_telegram_ctr() -> None:
+    subscribe_pages = TelegramSubscribePage.objects.filter(is_active=True, created=True)
+    print(666)
     for subscribe_page in subscribe_pages:
         subscribe_page.save_ctr()
 

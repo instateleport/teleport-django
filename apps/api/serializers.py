@@ -11,3 +11,4 @@ class NewTelegramChannelSubscriberSerializer(serializers.Serializer):
     page_hash = serializers.CharField(max_length=200)
     chat_id = serializers.IntegerField()
     channel_id = serializers.IntegerField()
+    username = serializers.CharField(max_length=200)

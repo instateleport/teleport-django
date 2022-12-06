@@ -546,6 +546,110 @@ class TGSubscribePageDuplicateView(LoginRequiredMixin, IsResetPasswordMixin,
             return self.form_invalid(form)
 
 
+
+class TGStatisticSubscribePageDownloadSubscribers(LoginRequiredMixin, IsResetPasswordMixin, IsSubscribePageOwner, IsSubscribePageActive, DetailView):
+    model = models.TelegramSubscribePage
+    template_name = 'subscribe_pages/tg-page-statistic.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object: models.TelegramSubscribePage = self.get_object()
+        models.TelegramSubscribePage.objects.filter()
+        subscribers = {
+            'username': [],
+            'subscribed': []
+        }
+
+        for subscriber in self.object.subscribed_tg_users.all():
+            if subscriber.username:
+                subscribers['username'].append(subscriber.username)
+                subscribers['subscribed'].append(
+                    '+' if self.object in subscriber.subscribe_to.all() else '-'
+                )
+
+        excel_file_path = f'media/excels/{request.user.id}'
+        if not os.path.exists(excel_file_path):
+            os.makedirs(excel_file_path, exist_ok=True)
+        excel_file_name = excel_file_path + f'{uuid4()}.xlsx'
+
+        df = pd.DataFrame(subscribers)
+        df.to_excel(excel_file_name, )
+
+        with open(excel_file_name, 'rb') as f:
+            response = HttpResponse(f.read())
+
+        file_type = mimetypes.guess_type(
+            excel_file_name) or 'application/octet-stream'
+        response['Content-Type'] = file_type
+        response['Content-Length'] = str(os.stat(excel_file_name).st_size)
+        response[
+            'Content-Disposition'] = "attachment; filename=subscribers.xlsx"
+        os.remove(excel_file_name)
+        return response
+
+
+class TGStatisticAjaxView(LoginRequiredMixin, IsResetPasswordMixin, IsSubscribePageOwner, IsSubscribePageActive, DetailView, AjaxMixin):
+    model = models.TelegramSubscribePage
+    queryset = models.TelegramSubscribePage.objects.filter(created=True)
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        response = self.get_ajax_response(views=0, subscribers=0, ctr=0)
+
+        start_date = request.GET.get(
+            'start_date',
+            datetime.today() - timedelta(days=7)
+        )
+        end_date = request.GET.get(
+            'end_date',
+            datetime.today()
+        )
+
+        telegram_page_statistic_list = models.TelegramStatistic.objects.filter(
+            telegram_subscribe_page=self.object,
+            day__range=[start_date, end_date]).order_by('day')
+        for page_statistic in telegram_page_statistic_list:
+            response[str(page_statistic.day)] = [
+                page_statistic.views,
+                page_statistic.subscribers,
+                page_statistic.ctr
+            ]
+            response['views'] += page_statistic.views
+            response['subscribers'] += page_statistic.subscribers
+        try:
+            response['ctr'] = int(
+                response['subscribers'] / response['views'] * 100
+            )
+        except ZeroDivisionError:
+            response['ctr'] = 0
+       
+        return self.ajax_response(response)
+
+
+class TGStatisticSubscribePageDetailView(LoginRequiredMixin, IsResetPasswordMixin, IsSubscribePageOwner, IsSubscribePageActive, DetailView):
+    model = models.TelegramSubscribePage
+    template_name = 'subscribe_pages/tg-page-statistic.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        page = int(self.request.GET.get('page', 1))
+
+        subscribers = self.object.subscribed_tg_users.all().order_by('-pk')[:100]
+        print(self.object.subscribed_tg_users.all())
+        paginator = Paginator(subscribers, 10)
+
+        context['subscribers'] = paginator.get_page(page)
+
+        context['pages'] = paginator.page_range
+        context['current_page'] = page
+        context['prev_page'] = page - 1 if (page - 1) in context[
+            'pages'] else page
+        context['next_page'] = page + 1 if (page + 1) in context[
+            'pages'] else page
+        return context
+
+
 class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, CreateView):
     model = models.TelegramSubscribePage
     form_class = forms.TGSubscribePageCreateForm
@@ -586,7 +690,6 @@ class TGSubscribePageCreateView(LoginRequiredMixin, IsResetPasswordMixin, Create
             if not f.bg_color:
                 f.bg_color = models.BGColor.objects.get(slug='default')
 
-            models.TelegramUser.objects.get_or_create(user=request.user)
             return self.form_valid(form)
         else:
             print(form.errors.as_data())
@@ -960,11 +1063,7 @@ class SearchSubscribersAjaxView(LoginRequiredMixin, IsResetPasswordMixin,
         return self.ajax_response(response)
 
 
-class StatisticSubscribePageDownloadSubscribers(LoginRequiredMixin,
-                                                IsResetPasswordMixin,
-                                                IsSubscribePageOwner,
-                                                IsSubscribePageActive,
-                                                DetailView):
+class StatisticSubscribePageDownloadSubscribers(LoginRequiredMixin, IsResetPasswordMixin, IsSubscribePageOwner, IsSubscribePageActive, DetailView):
     model = models.InstagramSubscribePage
     template_name = 'subscribe_pages/page-statistic.html'
 

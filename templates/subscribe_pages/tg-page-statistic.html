@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block carrot %}
+    <!-- Carrot quest BEGIN -->
+    <script type="text/javascript">
+    !function(){function t(t,e){return function(){window.carrotquestasync.push(t,arguments)}}if("undefined"==typeof carrotquest){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="//cdn.carrotquest.app/api.min.js",document.getElementsByTagName("head")[0].appendChild(e),window.carrotquest={},window.carrotquestasync=[],carrotquest.settings={};for(var n=["connect","track","identify","auth","oth","onReady","addCallback","removeCallback","trackMessageInteraction"],a=0;a<n.length;a++)carrotquest[n[a]]=t(n[a])}}(),carrotquest.connect("42083-c5cbf07ce7e3c9363e0bb9df9e");
+    </script>
+    <!-- Carrot quest END -->
+{% endblock %}
+
+{% block title %}Статистика {{ object.page_name }}{% endblock %}
+
+{% block body_class %}theme{% endblock %}
+
+{% block content %}
+	{% include 'subscribe_pages/nav.html' %}
+    <div class="bar_viel"></div>
+
+ 	<div class="content">
+
+		<div class="content_top flex__align">
+			<div class="content_left flex__align">
+				<div class="content_burger">
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+				<div class="content_logo">
+					<div class="logo">Teleport</div>
+				</div>
+			</div>
+			<div class="content_user flex__align" id="user-desktop">
+				<div class="content_user_name">{{ request.user.username }}</div>
+			</div>
+		</div>
+        <input type="hidden" name="start_date" id="start_date">
+        <input type="hidden" name="end_date" id="end_date">
+
+		<div class="content_inner">
+			<div class="content_title">Статистика моей бизнес страницы</div>
+			<div class="statistik">
+				<div class="statistik_top flex__align">
+					<div class="statistik_label">Выбрать период</div>
+					<div class="statistik_date">
+						<div class="input">
+							<label class="icon" for="ind">
+								<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path class="fill" fill-rule="evenodd" clip-rule="evenodd" d="M16.4109 2.76862L16.4119 3.51824C19.1665 3.73413 20.9862 5.61119 20.9891 8.48975L21 16.9155C21.0039 20.054 19.0322 21.985 15.8718 21.99L8.15188 22C5.01119 22.004 3.01482 20.027 3.01087 16.8795L3.00001 8.55272C2.99606 5.65517 4.75153 3.78311 7.50617 3.53024L7.50518 2.78061C7.5042 2.34083 7.83001 2.01 8.26444 2.01C8.69886 2.009 9.02468 2.33883 9.02567 2.77861L9.02666 3.47826L14.8914 3.47027L14.8904 2.77062C14.8894 2.33084 15.2152 2.001 15.6497 2C16.0742 1.999 16.4099 2.32884 16.4109 2.76862ZM4.52148 8.86157L19.4696 8.84158V8.49175C19.4272 6.34283 18.349 5.21539 16.4138 5.04748L16.4148 5.81709C16.4148 6.24688 16.0801 6.5877 15.6556 6.5877C15.2212 6.5887 14.8943 6.24887 14.8943 5.81909L14.8934 5.0095L9.02863 5.01749L9.02962 5.82609C9.02962 6.25687 8.70479 6.5967 8.27036 6.5967C7.83594 6.5977 7.50913 6.25887 7.50913 5.82809L7.50815 5.05847C5.58286 5.25137 4.51753 6.38281 4.52049 8.55072L4.52148 8.86157ZM15.2399 13.4043V13.4153C15.2498 13.8751 15.625 14.2239 16.0801 14.2139C16.5244 14.2029 16.8789 13.8221 16.869 13.3623C16.8483 12.9225 16.4918 12.5637 16.0485 12.5647C15.5944 12.5747 15.2389 12.9445 15.2399 13.4043ZM16.0554 17.892C15.6013 17.882 15.235 17.5032 15.234 17.0435C15.2241 16.5837 15.5884 16.2029 16.0426 16.1919H16.0525C16.5165 16.1919 16.8927 16.5707 16.8927 17.0405C16.8937 17.5102 16.5185 17.891 16.0554 17.892ZM11.1721 13.4203C11.1919 13.8801 11.568 14.2389 12.0222 14.2189C12.4665 14.1979 12.821 13.8181 12.8012 13.3583C12.7903 12.9085 12.425 12.5587 11.9807 12.5597C11.5266 12.5797 11.1711 12.9605 11.1721 13.4203ZM12.0262 17.8471C11.572 17.8671 11.1968 17.5082 11.1761 17.0485C11.1761 16.5887 11.5305 16.2089 11.9847 16.1879C12.429 16.1869 12.7953 16.5367 12.8052 16.9855C12.8259 17.4463 12.4705 17.8261 12.0262 17.8471ZM7.10433 13.4553C7.12408 13.915 7.50025 14.2749 7.95442 14.2539C8.39872 14.2339 8.75317 13.8531 8.73243 13.3933C8.72256 12.9435 8.35725 12.5937 7.91196 12.5947C7.45779 12.6147 7.10334 12.9955 7.10433 13.4553ZM7.95837 17.8521C7.5042 17.8731 7.12901 17.5132 7.10828 17.0535C7.10729 16.5937 7.46273 16.2129 7.9169 16.1929C8.3612 16.1919 8.7275 16.5417 8.73737 16.9915C8.7581 17.4513 8.40365 17.8321 7.95837 17.8521Z" fill="#68A4FF"/>
+								</svg>
+							</label>
+							<input type="text" id="ind" name="daterange">
+						</div>
+					</div>
+				</div>
+				<div class="statistik_info grid">
+					<div class="statistik_info_li">
+						<div class="statistik_subtitle">Подписчики</div>
+						<div class="statistik_text">
+							<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g opacity="0.23">
+								<rect width="24" height="24" rx="4" fill="#FD3162"/>
+								</g>
+								<path d="M14.7433 12.188C14.0271 12.8651 13.0541 13.2713 12.0001 13.2713C10.946 13.2713 9.97303 12.8651 9.25682 12.188C7.93249 13.2578 7.06763 14.9234 7.06763 16.2099C7.06763 18.2547 7.81087 18.9317 12.0001 18.9317C16.1892 18.9317 16.9325 18.2547 16.9325 16.2099C16.9325 14.9234 16.0676 13.2578 14.7433 12.188Z" fill="#FD3162"/>
+								<path d="M12 12.3778C13.7389 12.3778 15.1486 10.9652 15.1486 9.22259C15.1486 7.48002 13.7389 6.06738 12 6.06738C10.261 6.06738 8.85132 7.48002 8.85132 9.22259C8.85132 10.9652 10.261 12.3778 12 12.3778Z" fill="#FD3162"/>
+							</svg>
+							<span id="subscribersValue">0</span>
+						</div>
+					</div>
+					<div class="statistik_info_li">
+						<div class="statistik_subtitle">Конверсия</div>
+						<div class="statistik_text">
+							<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g opacity="0.2">
+								<rect width="24" height="24" rx="4" fill="#BC31FD"/>
+								</g>
+								<g clip-path="url(#clip0)">
+								<path d="M11.6058 12.4187V7.21546C11.6067 7.17554 11.5997 7.13584 11.5851 7.09864C11.5706 7.06145 11.5488 7.02752 11.5211 6.9988C11.4933 6.97008 11.4602 6.94716 11.4235 6.93136C11.3868 6.91555 11.3474 6.90719 11.3074 6.90674C7.0928 7.08712 4.11654 11.9227 7.405 16.4113L7.59231 16.5987C12.0498 19.8871 16.8992 16.9213 17.1143 12.7309C17.1143 12.6499 17.0829 12.572 17.0265 12.5138C16.9702 12.4555 16.8935 12.4214 16.8125 12.4187H11.6092H11.6058Z" fill="#BC31FD"/>
+								<path d="M12.5075 6.63242V11.5165H17.3638C17.4434 11.517 17.5223 11.5017 17.5959 11.4716C17.6695 11.4415 17.7365 11.3971 17.7929 11.341C17.8493 11.2849 17.8941 11.2182 17.9246 11.1447C17.9552 11.0713 17.9709 10.9925 17.9709 10.913C17.9709 10.8887 17.9709 10.8609 17.9709 10.8367C17.8165 9.61983 17.2634 8.48842 16.3979 7.61922C15.5325 6.75001 14.4035 6.19198 13.1874 6.03232C13.1081 6.02263 13.0277 6.02868 12.9507 6.05012C12.8738 6.07157 12.8018 6.10799 12.739 6.15729C12.6762 6.2066 12.6237 6.26782 12.5845 6.33744C12.5454 6.40707 12.5204 6.48374 12.5109 6.56305C12.5081 6.58605 12.5069 6.60924 12.5075 6.63242Z" fill="#BC31FD"/>
+								</g>
+								<defs>
+								<clippath id="clip0">
+								<rect width="12" height="12.0325" fill="white" transform="translate(6 6)"/>
+								</clippath>
+								</defs>
+							</svg>
+							<span id="ctrValue">0 %</span>
+						</div>
+					</div>
+					<div class="statistik_info_li">
+						<div class="statistik_subtitle">Просмотров</div>
+						<div class="statistik_text">
+							<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g opacity="0.2">
+								<rect width="24" height="24" rx="4" fill="#FD9331"/>
+								</g>
+								<path d="M12 7.3335C9.00699 7.3335 6.40017 9.21334 5 12.0002C6.40017 14.7876 9.00699 16.6669 12 16.6669C14.993 16.6669 17.5998 14.7876 19 12.0002C17.5998 9.21334 14.993 7.3335 12 7.3335ZM12 14.9169C10.3889 14.9169 9.08328 13.6113 9.08328 12.0002C9.08328 10.3892 10.3889 9.0835 12 9.0835C13.6111 9.0835 14.9167 10.3892 14.9167 12.0002C14.9167 13.6113 13.6111 14.9169 12 14.9169Z" fill="#FD9331"/>
+								<path d="M12 13.75C12.9665 13.75 13.75 12.9665 13.75 12C13.75 11.0335 12.9665 10.25 12 10.25C11.0335 10.25 10.25 11.0335 10.25 12C10.25 12.9665 11.0335 13.75 12 13.75Z" fill="#FD9331"/>
+							</svg>
+							<span id="viewsValue">0</span>
+						</div>
+					</div>
+				</div>
+				<div class="statistik_chart">
+					<div class="statistik_chart_li">
+						<div class="statistik_chart_title">Просмотров и подписок</div>
+						<canvas id="statistik"></canvas>
+					</div>
+					<div class="statistik_chart_li">
+						<div class="statistik_chart_title">Просмотров и подписок</div>
+						<canvas id="CTRChart"></canvas>
+					</div>
+				</div>
+				<div class="statistik_table">
+					<div class="statistik_table_top flex__center">
+						<div class="statistik_table_search">
+							<div class="search flex__align">
+							</div>
+						</div>
+                        <a target="_blank" href="{% url 'subscribe_pages:tg-page-statistic-download-subscribers' object.slug %}" class="statistik_table_export hover__line">Экспорт таблицы</a>
+					</div>
+					<div class="statistik_table_wrapper">
+						<div class="statistik_table_inner">
+							<table>
+                                <thead>
+                                    <tr>
+                                        <th>Логин</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for subscriber in subscribers %}
+                                        <tr>
+                                            <td>{{ subscriber.username }}</td>
+											<td class="green">Подписался</td>
+                                            {% comment %} {% if object in subscriber.subscribe_to.all %}
+                                                <td class="green">Подписался</td>
+                                                {% else %}
+                                                <td class="orange">Не подписался</td>
+                                            {% endif %} {% endcomment %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="statistik_pahination">
+					<div class="pagination flex__align">
+                        {% if subscribers.has_previous %}
+                            <a href="{% url 'subscribe_pages:tg-page-statistic' object.slug %}?page={{ subscribers.previous_page_number }}" class="pagination_li pagination__arrow">
+                            {% else %}
+                                <a href="" class="pagination_li pagination__arrow inactive">
+                        {% endif %}
+
+                            <svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.70679 0.293031C5.89426 0.480558 5.99957 0.734866 5.99957 1.00003C5.99957 1.26519 5.89426 1.5195 5.70679 1.70703L2.41379 5.00003L5.70679 8.29303C5.88894 8.48163 5.98974 8.73423 5.98746 8.99643C5.98518 9.25863 5.88001 9.50944 5.6946 9.69485C5.5092 9.88026 5.25838 9.98543 4.99619 9.9877C4.73399 9.98998 4.48139 9.88919 4.29279 9.70703L0.292787 5.70703C0.105316 5.5195 0 5.26519 0 5.00003C0 4.73487 0.105316 4.48056 0.292787 4.29303L4.29279 0.293031C4.48031 0.10556 4.73462 0.000244141 4.99979 0.000244141C5.26495 0.000244141 5.51926 0.10556 5.70679 0.293031V0.293031Z" fill="var(--theme_color_1)"/>
+                            </svg>
+                        </a>
+
+                        {% for page in subscribers.paginator.page_range %}
+                           {% if page == subscribers.number %}
+                                <a class="pagination_li active">{{ page }}</a>
+                                {% else %}
+                                    <a href="{% url 'subscribe_pages:page-statistic' object.slug %}?page={{ page }}" class="pagination_li">{{ page }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if subscribers.has_next %}
+                            <a href="{% url 'subscribe_pages:page-statistic' object.slug %}?page={{ subscribers.next_page_number }}" class="pagination_li pagination__arrow">
+                            {% else %}
+                            <a href="" class="pagination_li pagination__arrow inactive">
+                        {% endif %}
+                            </a>
+						<div class="pagination_li pagination__arrow">
+							<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M0.292787 9.70698C0.105316 9.51945 0 9.26514 0 8.99998C0 8.73482 0.105316 8.48051 0.292787 8.29298L3.58579 4.99998L0.292787 1.70698C0.110629 1.51838 0.00983372 1.26578 0.0121121 1.00358C0.0143906 0.741382 0.11956 0.49057 0.304968 0.305162C0.490376 0.119753 0.741189 0.0145843 1.00339 0.0123059C1.26558 0.0100274 1.51818 0.110822 1.70679 0.29298L5.70679 4.29298C5.89426 4.48051 5.99957 4.73482 5.99957 4.99998C5.99957 5.26514 5.89426 5.51945 5.70679 5.70698L1.70679 9.70698C1.51926 9.89445 1.26495 9.99977 0.999786 9.99977C0.734622 9.99977 0.480314 9.89445 0.292787 9.70698Z" fill="var(--theme_color_1)"/>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script src="{% static 'js/libraries/moment.min.js' %}"></script>
+    <script src="{% static 'js/libraries/daterangepicker.min.js' %}"></script>
+    <script src="{% static 'js/libraries/chart.min.js' %}"></script>
+    <script src="{% static 'js/tg-statistics-chart.js' %}"></script>
+
+{% endblock %}

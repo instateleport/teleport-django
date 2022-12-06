@@ -996,26 +996,6 @@ class VKSubscription(models.Model):
         return f'{self.vk_subscriber} - {self.vk_page.slug}'
 
 
-class TelegramUser(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='telegrams',
-        verbose_name=_('User'),
-        null=True
-    )
-    telegram_username = models.CharField(
-        max_length=100,
-        null=True,
-        blank=True
-    )
-    telegram_user_id = models.CharField(
-        max_length=100,
-        null=True,
-        blank=True
-    )
-
-
 class TelegramGroupOfSubscribePage(BaseGroupOfSubscribePages):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -1245,6 +1225,22 @@ class TelegramSubscribePage(BaseSubscribePage):
         for subscribe_page in user.tg_subscribe_pages.filter(is_active=False):
             subscribe_page.is_active = True
             subscribe_page.save(update_fields=['is_active'])
+
+
+class TelegramUser(models.Model):
+    username = models.CharField(
+        max_length=100
+    )
+    chat_id = models.CharField(
+        max_length=100,
+        unique=True
+    )
+    subscribe_to = models.ManyToManyField(
+        TelegramSubscribePage,
+        blank=True,
+        related_name='subscribed_tg_users',
+        verbose_name=_('Подписки')
+    )
 
 
 class TelegramStatistic(models.Model):

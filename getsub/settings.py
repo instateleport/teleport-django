@@ -262,8 +262,12 @@ CELERYBEAT_SCHEDULE = {
     },
     'calculate_and_save_ctr': {
         'task': 'calculate_and_save_ctr',
-        'schedule': crontab(minute='5')
+        'schedule': crontab(minute='*/20')
     },
+    'calculate_and_save_telegram_ctr': {
+        'task': 'calculate_and_save_telegram_ctr',
+        'schedule': crontab(minute='*/20')
+    }
 }
 
 
