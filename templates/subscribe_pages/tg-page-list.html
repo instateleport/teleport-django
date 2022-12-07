@@ -65,7 +65,7 @@
                     <div class="content_slid delete__e">
                         <div class="folder {% if folder.name == selected_folder_name %}selected{% endif %}"
                              data-element-id="{{ folder.id }}">
-                            <a href="{% url 'subscribe_pages:tg-page-list' folder.name %}"></a>
+                            <a href="{% url 'tg-page-list' folder.name %}"></a>
                             <div class="folder_top flex__start">
                                 <div class="folder_file">{{ folder.tg_subscribe_pages.count }}</div>
                                 {% if folder.can_delete %}
@@ -104,7 +104,7 @@
                     <div class="content_subtitle">Всего {{ pages_count }}</div>
                 </div>
                 <div class="content_btn">
-                    <a class="btn btn-red icon_plus" href="{% url 'subscribe_pages:tg-page-create' %}"><span
+                    <a class="btn btn-red icon_plus" href="{% url 'tg-page-create' %}"><span
                             class="icon"><span class="plus"></span>Создать страницу</span></a>
                 </div>
             </div>
@@ -202,7 +202,7 @@
                         </div>
                         <div class="subscribe_navigation">
                             <div class="subscribe_btn">
-                                <a class="btn btn-fill" href="{% url 'subscribe_pages:tg-page-detail' page.slug %}">
+                                <a class="btn btn-fill" href="{% url 'tg-page-detail' page.slug %}">
                                     <span class="icon icon-pencil_btn">Изменить</span>
                                 </a>
                                 {% if page.is_linked %}
@@ -258,7 +258,7 @@
                                     <p>Копировать</p>
                                 </div>
                                 <div class="subscribe_nav_li">
-                                    <a href="{% url 'subscribe_pages:tg-page-duplicate' page.slug %}">
+                                    <a href="{% url 'tg-page-duplicate' page.slug %}">
                                         <span>
                                             <svg width="18" height="22" viewbox="0 0 18 22" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -274,7 +274,7 @@
                                     </a>
                                 </div>
                                 <div class="subscribe_nav_li">
-                                    <a href="{% url 'subscribe_pages:tg-page-statistic' page.slug %}">
+                                    <a href="{% url 'tg-page-statistic' page.slug %}">
                                         <span>
                                             <svg width="24" height="24" viewbox="0 0 24 24" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -319,7 +319,7 @@
     <div class="copied show__hint_in_modal">Нужно привязать Telegram</div>
 
     <!-- Modal-folder. -->
-    <form class="modal modal_folder" method="POST" action="{% url 'subscribe_pages:tg-folder-rename' %}"
+    <form class="modal modal_folder" method="POST" action="{% url 'tg-folder-rename' %}"
           id="folderRenameForm">
         {% csrf_token %}
         <div class="modal_wrapper">
@@ -345,7 +345,7 @@
 
     <!-- Modal-folder. -->
     <form class="modal modal_new_folder" id="createFolderModal" method="POST"
-          action="{% url 'subscribe_pages:tg-folder-create' %}">
+          action="{% url 'tg-folder-create' %}">
         {% csrf_token %}
         <div class="modal_wrapper">
             <div class="modal_scroll">

@@ -20,10 +20,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'apps.users.apps.UsersConfig',
-    'apps.subscribe_pages.apps.SubscribePagesConfig',
-    'apps.payment.apps.PaymentConfig',
-    'apps.partners.apps.PartnersConfig',
+    'apps.users',
+    'apps.subscribe_pages',
+    'apps.tg_subscribe_pages',
+    'apps.payment',
+    'apps.partners',
     'apps.stats',
     'apps.api',
 

@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='telegramsubscribepage',
             name='instagram_avatar',
-            field=models.ImageField(blank=True, null=True, upload_to=apps.subscribe_pages.models.TelegramSubscribePage.get_instagram_avatar_path, verbose_name='Аватарка Instagram'),
+            field=models.ImageField(blank=True, null=True, upload_to=apps.tg_subscribe_pages.models.TelegramSubscribePage.get_instagram_avatar_path, verbose_name='Аватарка Instagram'),
         ),
         migrations.AddField(
             model_name='telegramsubscribepage',
@@ -144,7 +144,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='telegramsubscribepage',
             name='page_photo',
-            field=models.ImageField(blank=True, null=True, upload_to=apps.subscribe_pages.models.TelegramSubscribePage.get_page_photo_path, verbose_name='Page photo'),
+            field=models.ImageField(blank=True, null=True, upload_to=apps.tg_subscribe_pages.models.TelegramSubscribePage.get_page_photo_path, verbose_name='Page photo'),
         ),
         migrations.AddField(
             model_name='telegramsubscribepage',

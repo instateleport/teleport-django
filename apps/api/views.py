@@ -2,9 +2,12 @@ from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import LinkTelegramAccount, NewTelegramChannelSubscriberSerializer
+from apps.tg_subscribe_pages.models import TelegramSubscribePage
+from apps.tg_subscribe_pages.models import TelegramUser
+
+from .serializers import LinkTelegramAccount
+from .serializers import NewTelegramChannelSubscriberSerializer
 from .models import TelegramBotUser
-from apps.subscribe_pages.models import TelegramSubscribePage, TelegramUser
 
 
 class HandleNewTelegramChannelSubscriberAPIView(APIView):
@@ -15,9 +18,6 @@ class HandleNewTelegramChannelSubscriberAPIView(APIView):
         page_hash = serializer.data['page_hash']
         chat_id = serializer.data['chat_id']
         username = serializer.data['username']
-        print(page_hash)
-        print(chat_id)
-        print(username)
 
         telegram_subscribe_page_statistic = TelegramSubscribePage.objects.get(page_hash=page_hash).statistic.last()
 
@@ -36,10 +36,8 @@ class HandleNewTelegramChannelSubscriberAPIView(APIView):
             TelegramBotUser.objects.get(chat_id=chat_id).telegram_subscribe_pages.add(
                 TelegramSubscribePage.objects.get(page_hash=page_hash)
             )
-            print('yes')
             telegram_subscribe_page_statistic.subscribers += 1
             telegram_subscribe_page_statistic.save()
-        print(telegram_subscribe_page_statistic.subscribers)
         return Response({
             'subscribers_count': telegram_subscribe_page_statistic.subscribers
         })

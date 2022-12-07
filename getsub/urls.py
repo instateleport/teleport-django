@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include('apps.payment.urls')),
     path('', include('apps.partners.urls')),
     path('', include('apps.subscribe_pages.urls')),
+    path('', include('apps.tg_subscribe_pages.urls')),
     path('', include('apps.stats.urls')),
     path('api/v1/', include('apps.api.urls')),
     path('robots.txt/', robots_txt, name='robots_txt')

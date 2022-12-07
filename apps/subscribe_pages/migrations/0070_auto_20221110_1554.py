@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='telegramsubscribepage',
             name='instagram_avatar',
-            field=models.ImageField(blank=True, null=True, upload_to=apps.subscribe_pages.models.TelegramSubscribePage.get_instagram_avatar_path, verbose_name='Аватарка Telegram'),
+            field=models.ImageField(blank=True, null=True, upload_to=apps.tg_subscribe_pages.models.TelegramSubscribePage.get_instagram_avatar_path, verbose_name='Аватарка Telegram'),
         ),
         migrations.AlterField(
             model_name='telegramsubscribepage',

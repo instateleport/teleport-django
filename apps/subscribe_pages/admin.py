@@ -177,26 +177,3 @@ class DomainAdmin(admin.ModelAdmin):
 @admin.register(models.CostPerSubscriber)
 class CostPerSubscriberAdmin(admin.ModelAdmin):
     pass
-
-@admin.register(models.TelegramGroupOfSubscribePage)
-class TelegramGroupOfSubscribePageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'name', 'can_delete']
-    search_fields = ['user__username', 'name']
-
-@admin.register(models.TelegramSubscribePage)
-class TelegramSubscribePageAdmin(admin.ModelAdmin):
-    raw_id_fields = ("user",)
-    pass
-
-
-@admin.register(models.TelegramUser)
-class TelegramUserAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(models.TelegramSubscriber)
-class TelegramSubscriberAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(models.TelegramStatistic)
