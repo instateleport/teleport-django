@@ -178,7 +178,7 @@
                         {{ form.is_timer_active }}
 						<p>Таймер обратного отсчета</p>
 					</div>
-					<div class="content_form_inner inner-1">
+					<div class="content_form_inner inner-1" {% if form.is_timer_active.value == True or form.is_timer_active.value == 'true' %}style="display: block;"{% endif %}>
 						<div class="content_form_input">
 							<div class="content_form_label">{{ form.timer_text.label }}</div>
 							<div class="input input__read">
