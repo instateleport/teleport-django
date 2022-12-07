@@ -92,6 +92,7 @@ class TelegramSubscribePage(BaseSubscribePage):
     )
     button_text = models.CharField(
         max_length=500,
+        default=_('ПОЛУЧИТЬ'),
         verbose_name=_('Текст на кнопке (бот)')
     )
     button_url = models.URLField(
@@ -137,7 +138,6 @@ class TelegramSubscribePage(BaseSubscribePage):
 
     popup_title = models.CharField(
         max_length=50,
-        default=_('Успешно'),
         verbose_name=_('Заголовок')
     )
     popup_button_text = models.CharField(

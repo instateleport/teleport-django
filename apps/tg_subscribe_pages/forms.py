@@ -270,7 +270,7 @@ class TGSubscribePageCreateForm(forms.ModelForm):
         widgets = {
             'page_name': forms.TextInput(attrs={
                 'class': 'sheet_input',
-                'placeholder': 'Страница №1'
+                'placeholder': 'имя вкладки браузера'
             }),
             'domain': forms.HiddenInput(),
             'slug': forms.TextInput(attrs={
