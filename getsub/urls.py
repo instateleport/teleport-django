@@ -2,16 +2,20 @@ from django.urls import path, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView
-)
+from django.contrib.sitemaps.views import sitemap
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 # local imports
 from apps.users.views import handler404, handler500
 
 from .robots import robots_txt
+from .sitemaps import MounthlyChangefreqStaticViewSitemap
+
+
+sitemaps = {
+    'static': MounthlyChangefreqStaticViewSitemap,
+}
 
 urlpatterns = [
     path('api/v1/token/', TokenObtainPairView.as_view(),
@@ -30,7 +34,9 @@ urlpatterns = [
     path('', include('apps.tg_subscribe_pages.urls')),
     path('', include('apps.stats.urls')),
     path('api/v1/', include('apps.api.urls')),
-    path('robots.txt/', robots_txt, name='robots_txt')
+    path('robots.txt/', robots_txt, name='robots_txt'),
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 if settings.DEBUG:

@@ -59,7 +59,6 @@ class LinkTelegramAccountAPIView(APIView):
         telegram_subscribe_page.is_linked = True
 
         if telegram_subscribe_page.user.pocket.balance >= 1:
-            print('-')
             telegram_subscribe_page.user.pocket.balance -= 1
         else:
             return Response({

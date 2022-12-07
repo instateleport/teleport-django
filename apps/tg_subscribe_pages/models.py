@@ -319,6 +319,10 @@ class TelegramUser(models.Model):
         related_name='subscribed_tg_users',
         verbose_name=_('Подписки')
     )
+    created_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Время подписки')
+    )
 
 
 class TelegramSubscriber(models.Model):
