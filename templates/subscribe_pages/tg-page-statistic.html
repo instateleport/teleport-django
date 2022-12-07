@@ -117,7 +117,7 @@
 							<div class="search flex__align">
 							</div>
 						</div>
-                        <a target="_blank" href="{% url 'subscribe_pages:tg-page-statistic-download-subscribers' object.slug %}" class="statistik_table_export hover__line">Экспорт таблицы</a>
+                        <a target="_blank" href="{% url 'tg-page-statistic-download-subscribers' object.slug %}" class="statistik_table_export hover__line">Экспорт таблицы</a>
 					</div>
 					<div class="statistik_table_wrapper">
 						<div class="statistik_table_inner">
@@ -148,7 +148,7 @@
 				<div class="statistik_pahination">
 					<div class="pagination flex__align">
                         {% if subscribers.has_previous %}
-                            <a href="{% url 'subscribe_pages:tg-page-statistic' object.slug %}?page={{ subscribers.previous_page_number }}" class="pagination_li pagination__arrow">
+                            <a href="{% url 'tg-page-statistic' object.slug %}?page={{ subscribers.previous_page_number }}" class="pagination_li pagination__arrow">
                             {% else %}
                                 <a href="" class="pagination_li pagination__arrow inactive">
                         {% endif %}
