@@ -1,6 +1,0 @@
-[2022-10-02 13:52:14,932: INFO/ForkPoolWorker-3] Task save_instagram_info[6a2e36e7-9844-4cdd-a060-fc3da9ae63fb] succeeded in 0.0072623989999556215s: None
-[2022-10-02 13:52:14,937: INFO/ForkPoolWorker-3] Task save_instagram_info[a7b8b235-9b9b-44d6-b21a-827a65c728bd] succeeded in 0.0008838730009301798s: None
-[2022-10-02 13:52:14,941: INFO/ForkPoolWorker-3] Task save_instagram_info[d723cf21-ed16-423d-aeee-76e9df01a7a0] succeeded in 0.000819582999611157s: None
-[2022-10-02 13:52:14,947: INFO/ForkPoolWorker-3] Task save_instagram_info[c3981009-cacb-40a1-a4d6-94770b548804] succeeded in 0.0014958770007069688s: None
-[2022-10-02 13:52:14,953: INFO/ForkPoolWorker-3] Task save_instagram_info[06990c5d-f95c-4d39-a20d-4996c316ba69] succeeded in 0.0008073839999269694s: None
-[2022-10-02 13:52:14,962: INFO/ForkPoolWorker-3] Task save_instagram_info[4d8e1dc6-0db8-4b58-8e04-6bf3f0836d96] succeeded in 0.0015467260000150418s: None

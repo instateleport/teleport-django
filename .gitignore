@@ -18,8 +18,10 @@ db.sqlite3*
 .venv
 
 media/
+mediafiles/
 logs/
 
 celerybeat*
 
 ./db/redis/
+*.log
