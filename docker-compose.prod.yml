@@ -1,0 +1,67 @@
+version: '3.4'
+
+services:
+  web:
+    build:
+      context: teleport
+      dockerfile: ../Dockerfile
+      network: host
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./teleport/:/code
+      - media_volume:/code/mediafiles
+    command:
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py wait_for_db &&
+             gunicorn -b 0.0.0.0:8000 -w 3"
+    env_file:
+      - ./teleport/.env.dev
+    depends_on:
+      - db
+      - redis
+  
+  db:
+    image: postgres:12
+    env_file:
+      - ./teleport/.env.dev
+
+  redis:
+    image: redis
+
+  celery:
+    restart: always
+    build:
+      context: ./teleport
+      dockerfile: ../Dockerfile
+      network: host
+    command: celery -A getsub worker -l info -f celery.log
+    volumes:
+      - ./teleport:/code/
+    env_file:
+      - ./teleport/.env.dev
+    depends_on:
+      - db
+      - redis
+      - web
+
+  celery-beat:
+    restart: always
+    build:
+      context: ./teleport
+      dockerfile: ../Dockerfile
+      network: host
+    command: celery -A getsub beat -l info -f celery_beat.log
+    volumes:
+      - ./teleport:/code/
+    env_file:
+      - ./teleport/.env.dev
+    depends_on:
+      - db
+      - redis
+      - web
+    
+
+volumes:
+  media_volume:
