@@ -231,8 +231,8 @@ class TelegramSubscribePage(BaseSubscribePage):
         try:
             conversion = all_subscribers / all_views * 100
         except ZeroDivisionError:
-            conversion = float()
-        return [all_views, all_subscribers, conversion]
+            conversion = 0
+        return [all_views, all_subscribers, float('{:.2f}'.format(conversion))]
 
     all_views_subscribers_and_ctr.short_description = '👁‍🗨, 👤, %'
 
