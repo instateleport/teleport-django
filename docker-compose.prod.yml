@@ -17,7 +17,7 @@ services:
              python3 manage.py wait_for_db &&
              gunicorn -b 0.0.0.0:8001 -w 3"
     env_file:
-      - ./teleport/.env.dev
+      - ./teleport/.env.prod
     depends_on:
       - db
       - redis
@@ -25,7 +25,7 @@ services:
   db:
     image: postgres:12
     env_file:
-      - ./teleport/.env.dev
+      - ./teleport/.env.prod
 
   redis:
     image: redis
@@ -40,7 +40,7 @@ services:
     volumes:
       - ./teleport:/code/
     env_file:
-      - ./teleport/.env.dev
+      - ./teleport/.env.prod
     depends_on:
       - db
       - redis
@@ -56,7 +56,7 @@ services:
     volumes:
       - ./teleport:/code/
     env_file:
-      - ./teleport/.env.dev
+      - ./teleport/.env.prod
     depends_on:
       - db
       - redis
