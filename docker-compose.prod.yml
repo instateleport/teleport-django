@@ -13,8 +13,7 @@ services:
       - ./teleport/:/code
       - media_volume:/code/mediafiles
     command:
-      sh -c "python3 manage.py migrate &&
-             python3 manage.py wait_for_db &&
+      sh -c "python3 manage.py wait_for_db &&
              gunicorn -b 0.0.0.0:8001 -w 3 getsub.wsgi:application"
     env_file:
       - ./teleport/.env.prod
