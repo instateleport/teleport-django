@@ -10,6 +10,7 @@ webstat/
 webstat.off/
 
 db.sqlite3*
+*.sql
 
 .idea/
 .vscode/
