@@ -25,6 +25,7 @@ urlpatterns = [
                                  namespace='rest_framework')),
 
     path('1/2/3/admin/', admin.site.urls),
+    path('admin/clearcache/', include('clearcache.urls')),
     path('', include('apps.users.urls')),
     path('', include('apps.payment.urls')),
     path('', include('apps.partners.urls')),

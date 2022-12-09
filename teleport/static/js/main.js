@@ -660,16 +660,17 @@ $(document).ready(() => {
 // Cabinet theme
 
     if (!$('body').hasClass('white')) {
-        $('.nav__theme p').text('Темная тема');
+        $('.nav__theme p').text('Тёмная тема');
     };
 
     $(document).on('click', '.nav__theme', async function () {
-        $('.lever, .theme').toggleClass('white');
-
-        if ($('.theme').hasClass('white')) {
+        console.log('it was i, Jotaro')
+        if (!$('body').hasClass('white')) {
+            $('.lever, .theme').addClass('white');
             $('.nav__theme p').text('Светлая тема');
             await changeThemeAjax({'white': true})
         } else {
+            $('.lever, .theme').removeClass('white');
             $('.nav__theme p').text('Темная тема');
             await changeThemeAjax({'dark': true})
         }
