@@ -8,14 +8,14 @@ services:
       network: host
     restart: always
     ports:
-      - "8000:8000"
+      - "8001:8001"
     volumes:
       - ./teleport/:/code
       - media_volume:/code/mediafiles
     command:
       sh -c "python3 manage.py migrate &&
              python3 manage.py wait_for_db &&
-             gunicorn -b 0.0.0.0:8000 -w 3"
+             gunicorn -b 0.0.0.0:8001 -w 3"
     env_file:
       - ./teleport/.env.dev
     depends_on:
