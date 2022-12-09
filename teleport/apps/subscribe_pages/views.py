@@ -727,9 +727,6 @@ class SubscribePageGetMaterials(IsSubscribePageActive, FormMixin, DetailView):
         )
 
         context['show_subscribes'] = self.object.show_subscribers
-        context['follower_count'] = self.object.follower_count
-        context['following_count'] = self.object.following_count
-        context['media_count'] = self.object.media_count
         context['instagram_avatar'] = self.object.get_instagram_avatar_url()
 
         return context

@@ -3,7 +3,7 @@ from django.conf import settings
 import requests
 
 
-def get_account_id_by_username(username: str):
+def get_instagram_profile_data_by_username(username: str):
     try:
         response = requests.get("https://api.lamadava.com/v1/user/by/username", params={
             "username": username
@@ -21,7 +21,7 @@ def get_account_id_by_username(username: str):
 
 
 def user_is_following(username: str, username_2: str):
-    username_id = get_account_id_by_username(username).get("pk")
+    username_id = get_instagram_profile_data_by_username(username).get("pk")
 
     if username_id == None:
         return {"detail": "usernotfound"}

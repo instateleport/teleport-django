@@ -5,12 +5,15 @@ from rest_framework.response import Response
 from apps.tg_subscribe_pages.models import TelegramSubscribePage
 from apps.tg_subscribe_pages.models import TelegramUser
 
+from apps.subscribe_pages.lamadava_api.lamadava import get_instagram_profile_data_by_username
+
 from .serializers import LinkTelegramAccount
 from .serializers import NewTelegramChannelSubscriberSerializer
+from .serializers import GetInstagramProfileDataByUsernameSerializer
 from .models import TelegramBotUser
 
 
-class HandleNewTelegramChannelSubscriberAPIView(APIView):
+class UpdateTelegramPageSubscribesStatiscticAPIView(APIView):
     def patch(self, request):
         serializer = NewTelegramChannelSubscriberSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -77,3 +80,15 @@ class LinkTelegramAccountAPIView(APIView):
             'presubscribe_message': telegram_subscribe_page.presubscribe_text
         })
 
+
+class GetInstagramProfileDataByUsername(APIView):
+    permission_classes = []
+
+    def get(self, request):
+        print(request.query_params)
+        serializer = GetInstagramProfileDataByUsernameSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+
+        username = serializer.data['username']
+
+        return Response(get_instagram_profile_data_by_username(username))

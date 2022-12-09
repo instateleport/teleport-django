@@ -58,7 +58,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ALLOWED_ORIGINS = [
     'https://prod-app51446451-59048e70ea30.pages-ac.vk-apps.com',
-    'https://user85393911-nn2h2j6c.wormhole.vk-apps.com'
+    'https://user85393911-nn2h2j6c.wormhole.vk-apps.com',
 ]
 
 REST_FRAMEWORK = {

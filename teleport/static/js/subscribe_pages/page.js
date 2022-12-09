@@ -168,3 +168,23 @@ function bodyUnfixPosition() {
 // if ($('.single_page').val() === 'true'){
 //     window.location.replace($("#next-step").attr('href'));
 //     }
+
+$(() => {
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    data: {
+     'username': $('h4.user-title').first().text()
+    },
+    headers: {
+     'Content-Type': 'application/json'
+    },
+    url: '/api/v1/get-instagram-profile-data/',
+    success: (data) => {
+      console.log(data.media_count, data.follower_count, data.following_count)
+      $('.profile-amount_numb:eq(0)').text(data.media_count)
+      $('.profile-amount_numb:eq(1)').text(data.follower_count)
+      $('.profile-amount_numb:eq(2)').text(data.following_count)
+    }
+ })
+})

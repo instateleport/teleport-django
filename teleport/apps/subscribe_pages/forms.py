@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import datetime
-from .lamadava_api.lamadava import get_account_id_by_username
+from .lamadava_api.lamadava import get_instagram_profile_data_by_username
 
 import re
 
@@ -79,7 +79,7 @@ class SubscribePageCreateForm(forms.ModelForm):
                 'class': 'sheet_input error'
             })
         else:
-            instagram_user_info = get_account_id_by_username(instagram_username) # проверка профиля
+            instagram_user_info = get_instagram_profile_data_by_username(instagram_username) # проверка профиля
 
             if instagram_user_info.get("exc_type") == "UserNotFound":  # если аккаунт не найден
                 self.add_error('instagram_username', 'Аккаунт не найден')
