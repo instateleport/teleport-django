@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.decorators.cache import cache_page
 from rest_framework import routers
 
 # local imports
@@ -73,14 +74,13 @@ urlpatterns = [
           name='page-statistic-search-subscribers'),
 
      # ig subscribe pages
-     path('page/<slug:slug>/', views.SubscribePageOpenView.as_view(),
+     path('page/<slug:slug>/', cache_page(settings.CACHE_TTL)(views.SubscribePageOpenView.as_view()),
           name='page-open'),
-     path('page/<slug:slug>/subscribe/',
-          views.SubscribePageGetMaterials.as_view(), name='page-get_material'),
-     path('page/<slug:slug>/subscribe/check-subscribe/',
-          views.SubscribePageAjaxCheckUsername.as_view(),
+     path('page/<slug:slug>/subscribe/', cache_page(settings.CACHE_TTL)(views.SubscribePageGetMaterials.as_view()),
+          name='page-get_material'),
+     path('page/<slug:slug>/subscribe/check-subscribe/', cache_page(settings.CACHE_TTL)(views.SubscribePageAjaxCheckUsername.as_view()),
           name='ajax-check'),
-     path('page/<slug:slug>/success/', views.SubscribePageSuccessView.as_view(),
+     path('page/<slug:slug>/success/', cache_page(settings.CACHE_TTL)(views.SubscribePageSuccessView.as_view()),
           name='success'),
 
      # vk folders

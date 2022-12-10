@@ -210,3 +210,16 @@ API_USERS = [
 ]
 
 TELEPORT_BOT_URL = 'http://t.me/Teleportb_bot'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        },
+        'KEY_PREFIX': 'teleport'
+    }
+}
+
+CACHE_TTL = 60 * 10

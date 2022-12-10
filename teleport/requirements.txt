@@ -15,6 +15,7 @@ django-appconf==1.0.4
 django-clearcache==1.2.1
 django-colorfield==0.8.0
 django-cors-headers==3.11.0
+django-redis==5.2.0
 djangorestframework==3.13.1
 djangorestframework-simplejwt==5.1.0
 et-xmlfile==1.1.0
