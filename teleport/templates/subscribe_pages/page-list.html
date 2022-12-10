@@ -202,7 +202,7 @@
                                 <a class="btn btn-fill" href="{% url 'subscribe_pages:page-detail' page.slug %}"><span
                                         class="icon icon-pencil_btn">Изменить</span></a>
                                 <a class="btn btn-outline" id="page_open-{{ forloop.counter }}" target="_blank"
-                                   href="https://{{ page.page_url }}"><span class="icon icon-open">Открыть</span></a>
+                                   href="{{ request.scheme }}://{{ page.page_url }}"><span class="icon icon-open">Открыть</span></a>
                             </div>
                             <div class="subscribe_nav flex__center">
                                 <div class="subscribe_nav_li dtn__modal" data-modal="carry" data-id="{{ page.slug }}">

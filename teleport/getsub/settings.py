@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'clearcache',
+    'colorfield',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

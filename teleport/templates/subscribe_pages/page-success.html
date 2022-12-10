@@ -74,10 +74,12 @@
 
 {% block title %}Успешно{% endblock %}
 
+{% block body_class %}theme{% endblock %}
+
 {% block content %}
     <style>
         body {
-            background: linear-gradient(225deg, #F3F6FB, #F3F6FB);
+            background: {{ bg_color.success_page_bg_color }};
             color: #5D7993!important;
         }
         .thanks-page .wrapper:after {

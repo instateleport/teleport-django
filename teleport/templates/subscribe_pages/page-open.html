@@ -124,7 +124,7 @@
         }
     </style>
     <main class="promo-page">
-        <div style="background-image: url('https://{{ page.get_page_photo_url }}')" class="background-picture"></div>
+        <div style="background-image: url('{{ request.scheme }}://{{ page.get_page_photo_url }}')" class="background-picture"></div>
         <div class="wrapper">
             <div class="container">
                 <h1 class="promo-title">

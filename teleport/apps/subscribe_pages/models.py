@@ -1,6 +1,6 @@
-import hashlib
 from typing import List, Optional
 
+from colorfield.fields import ColorField
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import datetime
 from django.urls import reverse_lazy
 from django.conf import settings
+from django.contrib.postgres.fields.array import ArrayField
 
 from decimal import Decimal
 
@@ -78,50 +79,46 @@ class BGColor(models.Model):
     )
 
     # страница
-    first_color = models.CharField(
-        max_length=50,
+    first_color = ColorField(
         verbose_name=_('Первый цвет')
     )
-    second_color = models.CharField(
-        max_length=50,
+    second_color = ColorField(
         verbose_name=_('Второй цвет')
     )
-    text_color = models.CharField(
-        max_length=50,
+    text_color = ColorField(
         default='#fff',
         verbose_name=_('Цвет текста')
     )
 
+    success_page_bg_color = ColorField(
+        default='#32405e',
+        verbose_name=_('Цвет заднего фона на странице благодарности за подписку')
+    )
     # панель
-    panel = models.CharField(
-        max_length=50,
+    panel = ColorField(
         default='#2C3955',
         verbose_name=_('Цвет панели')
     )
-    panel_text_color = models.CharField(
-        max_length=50,
+    panel_text_color = ColorField(
         default='#68A4FF',
         verbose_name=_('Цвет текста на панели')
     )
-    panel_icon_color = models.CharField(
-        max_length=50,
+    panel_icon_color = ColorField(
         default='#68A4FF',
         verbose_name=_('Цвет иконки на панели')
     )
-    panel_icon_bg_color = models.CharField(
-        max_length=50,
+    panel_icon_bg_color = ColorField(
         default='#68A4FF45',
         verbose_name=_('Фон иконки')
     )
 
+
     # поле ввода
-    input_bg_color = models.CharField(
-        max_length=50,
+    input_bg_color = ColorField(
         default='#272C44',
         verbose_name=_('Фон инпута')
     )
-    input_text_color = models.CharField(
-        max_length=50,
+    input_text_color = ColorField(
         default='#7088AC',
         verbose_name=_('Цвет текста инпута')
     )

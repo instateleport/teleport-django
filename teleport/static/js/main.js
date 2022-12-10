@@ -664,18 +664,16 @@ $(document).ready(() => {
     };
 
     $(document).on('click', '.nav__theme', async function () {
-        console.log('it was i, Jotaro')
+        console.log('it was i, Dio')
         if (!$('body').hasClass('white')) {
-            $('.lever, .theme').addClass('white');
             $('.nav__theme p').text('Светлая тема');
             await changeThemeAjax({'white': true})
         } else {
-            $('.lever, .theme').removeClass('white');
             $('.nav__theme p').text('Темная тема');
             await changeThemeAjax({'dark': true})
         }
+        $('.lever, .theme').toggleClass('white')
     });
-
 
 // Select
 
