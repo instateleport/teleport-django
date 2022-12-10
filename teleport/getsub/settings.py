@@ -213,13 +213,8 @@ TELEPORT_BOT_URL = 'http://t.me/Teleportb_bot'
 
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_URL,
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
-        },
-        'KEY_PREFIX': 'teleport'
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
-
 CACHE_TTL = 60 * 10

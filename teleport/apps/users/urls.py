@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
+from django.views.decorators.cache import cache_page
 
 from . import views
 
@@ -9,9 +10,9 @@ from . import views
 app_name = 'users'
 
 urlpatterns = [
-    path('', views.HeadTemplateView.as_view(), name='head'),
-    path('public-offer/', views.PublicOfferTemplateView.as_view(), name='public-offer'),
-    path('privacy-policy/', views.PrivacyPolicyTemplateView.as_view(), name='privacy-policy'),
+    path('', cache_page(settings.CACHE_TTL * 30)(views.HeadTemplateView.as_view()), name='head'),
+    path('public-offer/', cache_page(settings.CACHE_TTL * 30)(views.PublicOfferTemplateView.as_view()), name='public-offer'),
+    path('privacy-policy/', cache_page(settings.CACHE_TTL * 30)(views.PrivacyPolicyTemplateView.as_view()), name='privacy-policy'),
 
     path('tutorial/', views.TutorialTemplateView.as_view(), name='tutorial'),
     path('settings/', views.SettingsFormView.as_view(), name='settings'),
