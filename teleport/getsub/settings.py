@@ -218,4 +218,4 @@ CACHES = {
 }
 CACHE_TTL = 60 * 10
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
