@@ -217,3 +217,5 @@ CACHES = {
     }
 }
 CACHE_TTL = 60 * 10
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
