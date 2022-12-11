@@ -155,7 +155,7 @@ STATICFILES_DIRS = [
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles/')
+MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'media/')
 
 
 ISP_URL = os.environ.get('ISP_URL')
