@@ -40,6 +40,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -48,12 +49,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 
     'getsub.middlewares.CarrotRequestAuthMiddleware',
     'getsub.middlewares.FormErrorMiddleware'
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ALLOWED_ORIGINS = [
     'https://prod-app51446451-59048e70ea30.pages-ac.vk-apps.com',
@@ -145,10 +148,11 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '..', 'staticfiles/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles/')
