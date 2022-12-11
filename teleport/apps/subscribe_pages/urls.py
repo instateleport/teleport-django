@@ -15,79 +15,151 @@ router.register(r'vk-subscribers', views.VKSubscriberViewSet)
 
 urlpatterns = [
     # API
-     path('api/v1/', include(router.urls)),
-     path('api/v1/vk-subscribe-pages-statistic/',
-          views.VKStatisticAPIView.as_view()),
+     path(
+          'api/v1/',
+          include(router.urls)
+     ),
+     path(
+          'api/v1/vk-subscribe-pages-statistic/',
+          views.VKStatisticAPIView.as_view()
+     ),
 
      # domains
-     path('domains/', views.DomainCreateListView.as_view(), name='domain-list'),
-     path('domains/delete/', views.DomainDeleteAjaxView.as_view(),
-          name='domain-delete'),
-     path('domains/insctuctions/',
+     path(
+          'domains/',
+          views.DomainCreateListView.as_view(),
+          name='domain-list'
+     ),
+     path(
+          'domains/delete/',
+          views.DomainDeleteAjaxView.as_view(),
+          name='domain-delete'
+     ),
+     path(
+          'domains/insctuctions/',
           views.DomainInstructionTemplateView.as_view(),
-          name='domain-instruction'),
+          name='domain-instruction'
+     ),
 
      # ig folders
-     path('folders/create/', views.FolderCreateView.as_view(),
-          name='folder-create'),
-     path('folders/delete/', views.FolderDeleteAjaxView.as_view(),
-          name='folder-delete'),
-     path('folders/rename/', views.FolderRenameView.as_view(),
-          name='folder-rename'),
-     path('folder/append/', views.AddToFolderView.as_view(),
-          name='add-to-folder'),
+     path(
+          'folders/create/',
+          views.FolderCreateView.as_view(),
+          name='folder-create'
+     ),
+     path(
+          'folders/delete/',
+          views.FolderDeleteAjaxView.as_view(),
+          name='folder-delete'
+     ),
+     path(
+          'folders/rename/',
+          views.FolderRenameView.as_view(),
+          name='folder-rename'
+     ),
+     path(
+          'folder/append/',
+          views.AddToFolderView.as_view(),
+          name='add-to-folder'
+     ),
 
      # ig instagram pages - crud
-     path('subscribe-pages/', views.InstagramSubscribePageListView.as_view(),
-          name='page-list'),
-     path('subscribe-pages/<str:name>/', views.InstagramSubscribePageListView.as_view(),
-          name='page-list'),
+     path(
+          'subscribe-pages/',
+          views.InstagramSubscribePageListView.as_view(),
+          name='page-list'
+     ),
+     path(
+          'subscribe-pages/<str:name>/',
+          views.InstagramSubscribePageListView.as_view(),
+          name='page-list'
+     ),
 
-     path('subscribe-page/create/', views.SubscribePageCreateView.as_view(),
-          name='page-create'),
-     path('subscribe-page/create/slug-check/',
+     path(
+          'subscribe-page/create/',
+          cache_page(settings.CACHE_TTL)(views.SubscribePageCreateView.as_view()),
+          name='page-create'
+     ),
+     path(
+          'subscribe-page/create/slug-check/',
           views.SubscribePageCreateSlugCheckAjaxView.as_view(),
-          name='page-create-slug_check'),
+          name='page-create-slug_check'
+     ),
 
-     path('subscribe-page/delete/', views.SubscribePageDeleteView.as_view(),
-          name='page-delete'),
+     path(
+          'subscribe-page/delete/', views.SubscribePageDeleteView.as_view(),
+          name='page-delete'
+     ),
 
-     path('subscribe-page/<slug:slug>/',
-          views.SubscribePageDetailView.as_view(), name='page-detail'),
-     path('subscribe-page/<slug:slug>/slug-check/',
+     path(
+          'subscribe-page/<slug:slug>/',
+          views.SubscribePageDetailView.as_view(),
+          name='page-detail'
+     ),
+     path(
+          'subscribe-page/<slug:slug>/slug-check/',
           views.SubscribePageDetailSlugCheckAjaxView.as_view(),
-          name='page-detail-slug_check'),
+          name='page-detail-slug_check'
+     ),
 
-     path('subscribe-page/<slug:slug>/duplicate/',
-          views.SubscribePageDuplicateView.as_view(), name='page-duplicate'),
-     path('subscribe-page/<slug:slug>/statistic/',
-          views.StatisticSubscribePageDetailView.as_view(),
-          name='page-statistic'),
-     path('subscribe-page/<slug:slug>/statistic/get-statistic/',
+     path(
+          'subscribe-page/<slug:slug>/duplicate/',
+          cache_page(settings.CACHE_TTL)(views.SubscribePageDuplicateView.as_view()), 
+          name='page-duplicate'
+     ),
+     path(
+          'subscribe-page/<slug:slug>/statistic/',
+          cache_page(settings.CACHE_TTL)(views.StatisticSubscribePageDetailView.as_view()),
+          name='page-statistic'
+     ),
+     path(
+          'subscribe-page/<slug:slug>/statistic/get-statistic/',
           views.StatisticAjaxView.as_view(),
-          name='ajax-page-statistic'),
-     path('subscribe-page/<slug:slug>/statistic/download-subscribers/',
+          name='ajax-page-statistic'
+     ),
+     path(
+          'subscribe-page/<slug:slug>/statistic/download-subscribers/',
           views.StatisticSubscribePageDownloadSubscribers.as_view(),
-          name='page-statistic-download-subscribers'),
+          name='page-statistic-download-subscribers'
+     ),
      path('subscribe-page/<slug:slug>/statistic/search-subscribers/',
           views.SearchSubscribersAjaxView.as_view(),
-          name='page-statistic-search-subscribers'),
+          name='page-statistic-search-subscribers'
+     ),
 
      # ig subscribe pages
-     path('page/<slug:slug>/', cache_page(settings.CACHE_TTL)(views.SubscribePageOpenView.as_view()),
-          name='page-open'),
-     path('page/<slug:slug>/subscribe/', cache_page(settings.CACHE_TTL)(views.SubscribePageGetMaterials.as_view()),
-          name='page-get_material'),
-     path('page/<slug:slug>/subscribe/check-subscribe/', cache_page(settings.CACHE_TTL)(views.SubscribePageAjaxCheckUsername.as_view()),
-          name='ajax-check'),
-     path('page/<slug:slug>/success/', cache_page(settings.CACHE_TTL)(views.SubscribePageSuccessView.as_view()),
-          name='success'),
+     path(
+          'page/<slug:slug>/',
+          cache_page(settings.CACHE_TTL)(views.SubscribePageOpenView.as_view()),
+          name='page-open'
+     ),
+     path(
+          'page/<slug:slug>/subscribe/',
+          cache_page(settings.CACHE_TTL)(views.SubscribePageGetMaterials.as_view()),
+          name='page-get_material'
+     ),
+     path(
+          'page/<slug:slug>/subscribe/check-subscribe/',
+          cache_page(settings.CACHE_TTL)(views.SubscribePageAjaxCheckUsername.as_view()),
+          name='ajax-check'
+     ),
+     path(
+          'page/<slug:slug>/success/',
+          cache_page(settings.CACHE_TTL)(views.SubscribePageSuccessView.as_view()),
+          name='success'
+     ),
 
      # vk folders
-     path('vk-folders/create/', views.VKFolderCreateView.as_view(),
-          name='vk-folder-create'),
-     path('vk-folders/delete/', views.VKFolderDeleteAjaxView.as_view(),
-          name='vk-folder-delete'),
+     path(
+          'vk-folders/create/',
+          views.VKFolderCreateView.as_view(),
+          name='vk-folder-create'
+     ),
+     path(
+          'vk-folders/delete/',
+          views.VKFolderDeleteAjaxView.as_view(),
+          name='vk-folder-delete'
+     ),
      path('vk-folders/rename/', views.VKFolderRenameView.as_view(),
           name='vk-folder-rename'),
      path('vk-folder/append/', views.AddToVKFolderView.as_view(),

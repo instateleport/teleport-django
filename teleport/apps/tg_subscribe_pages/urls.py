@@ -1,6 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.decorators.cache import cache_page
 
 from . import views
 
@@ -39,7 +40,7 @@ urlpatterns = [
 
     path(
         'tg-subscribe-page/create/',
-        views.TGSubscribePageCreateView.as_view(),
+        cache_page(settings.CACHE_TTL)(views.TGSubscribePageCreateView.as_view()),
         name='tg-page-create'
     ),
     path(
