@@ -64,8 +64,12 @@ services:
       - db
       - redis
       - web
+
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    ports:
+      - "8080:8080"
     
 
 volumes:
-  media_volume:
   postgres_data:
