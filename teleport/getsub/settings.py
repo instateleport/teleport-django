@@ -194,8 +194,8 @@ CARROT_REQUEST_AUTH_TOKEN = os.environ.get('CARROT_REQUEST_AUTH_TOKEN')
 CENT_API_TOKEN = os.environ.get('CENT_API_KEY')
 SHOP_ID = os.environ.get('SHOP_ID')
 
-DOMAIN = os.environ.get("DOMAIN")
-LAMADAVA_API_KEY = os.environ.get("LAMADAVA_API_KEY")
+DOMAIN = os.environ.get('DOMAIN')
+LAMADAVA_API_KEY = os.environ.get('LAMADAVA_API_KEY')
 
 API_USERS = [
     'admin',
@@ -203,7 +203,7 @@ API_USERS = [
     'vladyadrov',
 ]
 
-TELEPORT_BOT_URL = 'https://t.me/Teleportb_bot'
+TELEPORT_TG_BOT_URL = os.environ.get('TELEPORT_TG_BOT_URL')
 
 CACHES = {
     'default': {

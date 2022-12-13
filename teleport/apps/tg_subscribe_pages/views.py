@@ -296,7 +296,7 @@ class TGSubscribePageListView(SubscribePageListMixin):
         context['pages_count'] = count_of_pages + (
             ' страница' if count_of_pages == '1' else ' страниц')
         context['selected_folder_name'] = group.name
-        context['teleport_bot_url'] = settings.TELEPORT_BOT_URL
+        context['TELEPORT_TG_BOT_URL'] = settings.TELEPORT_TG_BOT_URL
         context['subscribe_pages'] = group.tg_subscribe_pages.all().order_by(
             '-id')
         context['form'] = self.get_form()

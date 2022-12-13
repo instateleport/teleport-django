@@ -1,4 +1,4 @@
-import hashlib
+import uuid
 from typing import Optional
 from typing import List
 
@@ -48,8 +48,7 @@ class TelegramSubscribePage(BaseSubscribePage):
 
     @classmethod
     def generate_page_hash(self, slug):
-        page_hash = hashlib.sha256(slug.encode('utf-8')).hexdigest()[:10]
-        return page_hash
+        return str(uuid.uuid4())
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
