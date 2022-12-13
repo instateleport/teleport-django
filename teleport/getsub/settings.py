@@ -203,7 +203,7 @@ API_USERS = [
     'vladyadrov',
 ]
 
-TELEPORT_BOT_URL = 'https://t.me/Sjjxhskbot'
+TELEPORT_BOT_URL = 'https://t.me/Teleportb_bot'
 
 CACHES = {
     'default': {
