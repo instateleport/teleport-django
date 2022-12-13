@@ -3,8 +3,7 @@ version: '3.4'
 services:
   web:
     build:
-      context: teleport
-      dockerfile: ../Dockerfile
+      context: .
       network: host
     restart: always
     ports:
@@ -36,8 +35,7 @@ services:
   celery:
     restart: always
     build:
-      context: ./teleport
-      dockerfile: ../Dockerfile
+      context: .
       network: host
     command: celery -A getsub worker -l info -f celery.log
     volumes:
@@ -52,8 +50,7 @@ services:
   celery-beat:
     restart: always
     build:
-      context: ./teleport
-      dockerfile: ../Dockerfile
+      context: .
       network: host
     command: celery -A getsub beat -l info -f celery_beat.log
     volumes:
