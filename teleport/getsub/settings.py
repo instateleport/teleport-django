@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'apps.core',
 
     'rest_framework',
-    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
     'corsheaders',
     'clearcache',
     'colorfield',
@@ -65,18 +65,12 @@ CORS_ALLOWED_ORIGINS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'getsub.permissions.AdminUsernameAPIPermission'
     ]
 }
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=365)
-}
-
 
 ROOT_URLCONF = 'getsub.urls'
 
@@ -209,7 +203,7 @@ API_USERS = [
     'vladyadrov',
 ]
 
-TELEPORT_BOT_URL = 'http://t.me/Teleportb_bot'
+TELEPORT_BOT_URL = 'https://t.me/Sjjxhskbot'
 
 CACHES = {
     'default': {

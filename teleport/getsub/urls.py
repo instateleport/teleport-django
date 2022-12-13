@@ -3,8 +3,6 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.views import TokenRefreshView
 
 # local imports
 from .robots import robots_txt
@@ -16,11 +14,6 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path('api/v1/token/', TokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
-    path('api/v1/token/refresh/', TokenRefreshView.as_view(),
-         name='token_refresh'),
-
     path('api/v1/auth/', include('rest_framework.urls',
                                  namespace='rest_framework')),
 
