@@ -48,7 +48,7 @@ class TelegramSubscribePage(BaseSubscribePage):
 
     @classmethod
     def generate_page_hash(self, slug):
-        return str(uuid.uuid4())
+        return str(uuid.uuid4())[:10]
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 

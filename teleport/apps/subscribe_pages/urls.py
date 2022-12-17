@@ -140,7 +140,7 @@ urlpatterns = [
      ),
      path(
           'page/<slug:slug>/subscribe/check-subscribe/',
-          cache_page(settings.CACHE_TTL)(views.SubscribePageAjaxCheckUsername.as_view()),
+          views.SubscribePageAjaxCheckUsername.as_view(),
           name='ajax-check'
      ),
      path(
