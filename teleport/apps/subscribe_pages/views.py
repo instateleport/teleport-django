@@ -617,7 +617,7 @@ class StatisticAjaxView(LoginRequiredMixin, IsResetPasswordMixin,
             response['subscribers'] += page_statistic.subscribers
         try:
             ctr = response['subscribers'] / response['views'] * 100
-            response['ctr'] = '{:.2f}'.format(ctr)
+            response['ctr'] = float('{:.2f}'.format(ctr))
         except ZeroDivisionError:
             response['ctr'] = 0
        
