@@ -783,9 +783,9 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
     def post(self, request, *args, **kwargs):
         instagram_username = self.get_object().__dict__["instagram_username"]
         username2 = request.POST.get("login", "")
-
+        print(username2, instagram_username)
         n = user_is_following(instagram_username, username2)
-
+        print(n)
         if not n:
             return HttpResponse("FAIL")
 
@@ -803,18 +803,20 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
 
         if not s or page.user.pocket.balance <= 0:
             return HttpResponse("FAIL")
+
         subscriber = models.InstagramSubscriber.get_or_create_by_user_ip(request)
-        print(7777777, self.object.slug, subscriber.is_visited_page_by_slug(self.object.slug), subscriber)
-        if subscriber.is_visited_page_by_slug(self.object.slug):
-            return HttpResponse("SUCCESS")
-        print(999999)
+        print(subscriber)
+        print(subscriber.is_visited_page_by_slug(self.object.slug))
+        # if subscriber.is_visited_page_by_slug(self.object.slug):
+        #     return HttpResponse("SUCCESS")
+
         page.user.pocket.pay_per_subscriber()
         statistic, statistic_created = models.InstagramStatistic.objects.get_or_create(
                         subscribe_page=self.object, day=datetime.today())
 
         statistic.subscribers += 1
+        print('yes')
         statistic.save(update_fields=["subscribers"])
-        print(88888)
 
         subscriber.instagram_username = username2
         subscriber.subscribe_to.add(page)

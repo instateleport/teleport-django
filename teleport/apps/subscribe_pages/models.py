@@ -609,24 +609,13 @@ class InstagramSubscriber(models.Model):
 
     @classmethod
     def get_or_create_by_user_ip(cls, request=None, user_ip: str = None, username: str = None) -> 'InstagramSubscriber':
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        print(request.META)
-        if x_forwarded_for:
-            print('forward')
-            ip = x_forwarded_for.split(',')[-1].strip()
-        elif request.META.get('HTTP_X_REAL_IP'):
-            print('real')
-            ip = request.META.get('HTTP_X_REAL_IP')
-        else:
-            print('remote\n')
-            ip = request.META.get('REMOTE_ADDR')
-        print(ip)
         if not user_ip and request:
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
                 user_ip = x_forwarded_for.split(',')[0].strip()
             else:
                 user_ip = request.META.get('REMOTE_ADDR').strip()
+        print(user_ip)
         try:
             subscriber, subscriber_created = cls.objects.get_or_create(
                 ip=user_ip)  # получаем/создаём IP пользователя
