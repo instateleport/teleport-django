@@ -180,7 +180,7 @@ $(document).ready(function () {
                         console.log(data)
                         if (date === 'views') views.text(data[date]);
                         else if (date === 'subscribers') subscribers.text(data[date]);
-                        else if (date === 'ctr') ctr.text(data[date].toFixed(0) + ' %')
+                        else if (date === 'ctr') ctr.text(data[date] + ' %')
                     }
                 }
                 statisticConfig.data.labels = statisticLabels;
