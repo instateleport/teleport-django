@@ -735,11 +735,14 @@ class SubscribePageGetMaterials(IsSubscribePageActive, FormMixin, DetailView):
         self.object = self.get_object()
 
         try:
+            print('uuuu')
             subscriber = models.InstagramSubscriber.get_or_create_by_user_ip(
-                request)
+                request=request
+            )
             if not subscriber.is_visited_page_by_slug(
                     self.object.slug):  # Если он не был на этой странице то
                 try:
+                    print(00000)
                     # получаем/создаём статистику сегодняшнего дня
                     statistic, statistic_created = models.InstagramStatistic.objects.get_or_create(
                         subscribe_page=self.object, day=datetime.today())
@@ -800,17 +803,18 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
 
         if not s or page.user.pocket.balance <= 0:
             return HttpResponse("FAIL")
-
         subscriber = models.InstagramSubscriber.get_or_create_by_user_ip(request)
+        print(7777777, self.object.slug, subscriber.is_visited_page_by_slug(self.object.slug))
         if subscriber.is_visited_page_by_slug(self.object.slug):
             return HttpResponse("SUCCESS")
-
+        print(999999)
         page.user.pocket.pay_per_subscriber()
         statistic, statistic_created = models.InstagramStatistic.objects.get_or_create(
                         subscribe_page=self.object, day=datetime.today())
 
         statistic.subscribers += 1
         statistic.save(update_fields=["subscribers"])
+        print(88888)
 
         subscriber.instagram_username = username2
         subscriber.subscribe_to.add(page)

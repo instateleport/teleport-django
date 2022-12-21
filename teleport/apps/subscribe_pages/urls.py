@@ -77,7 +77,7 @@ urlpatterns = [
 
      path(
           'subscribe-page/create/',
-          cache_page(settings.CACHE_TTL)(views.SubscribePageCreateView.as_view()),
+          (views.SubscribePageCreateView.as_view()),
           name='page-create'
      ),
      path(
@@ -104,12 +104,12 @@ urlpatterns = [
 
      path(
           'subscribe-page/<slug:slug>/duplicate/',
-          cache_page(settings.CACHE_TTL)(views.SubscribePageDuplicateView.as_view()), 
+          (views.SubscribePageDuplicateView.as_view()), 
           name='page-duplicate'
      ),
      path(
           'subscribe-page/<slug:slug>/statistic/',
-          cache_page(settings.CACHE_TTL)(views.StatisticSubscribePageDetailView.as_view()),
+          (views.StatisticSubscribePageDetailView.as_view()),
           name='page-statistic'
      ),
      path(
@@ -130,12 +130,12 @@ urlpatterns = [
      # ig subscribe pages
      path(
           'page/<slug:slug>/',
-          cache_page(settings.CACHE_TTL)(views.SubscribePageOpenView.as_view()),
+          (views.SubscribePageOpenView.as_view()),
           name='page-open'
      ),
      path(
           'page/<slug:slug>/subscribe/',
-          cache_page(settings.CACHE_TTL)(views.SubscribePageGetMaterials.as_view()),
+          (views.SubscribePageGetMaterials.as_view()),
           name='page-get_material'
      ),
      path(
@@ -145,7 +145,7 @@ urlpatterns = [
      ),
      path(
           'page/<slug:slug>/success/',
-          cache_page(settings.CACHE_TTL)(views.SubscribePageSuccessView.as_view()),
+          (views.SubscribePageSuccessView.as_view()),
           name='success'
      ),
 
