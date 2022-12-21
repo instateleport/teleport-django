@@ -176,6 +176,8 @@ $(document).ready(function () {
                             subscribers = $('#subscribersValue'),
                             ctr = $('#ctrValue');
                         console.log(date)
+                        console.log('hello')
+                        console.log(data)
                         if (date === 'views') views.text(data[date]);
                         else if (date === 'subscribers') subscribers.text(data[date]);
                         else if (date === 'ctr') ctr.text(data[date].toFixed(0) + ' %')
