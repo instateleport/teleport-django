@@ -804,7 +804,7 @@ class SubscribePageAjaxCheckUsername(IsSubscribePageActive, DetailView,
         if not s or page.user.pocket.balance <= 0:
             return HttpResponse("FAIL")
         subscriber = models.InstagramSubscriber.get_or_create_by_user_ip(request)
-        print(7777777, self.object.slug, subscriber.is_visited_page_by_slug(self.object.slug))
+        print(7777777, self.object.slug, subscriber.is_visited_page_by_slug(self.object.slug), subscriber)
         if subscriber.is_visited_page_by_slug(self.object.slug):
             return HttpResponse("SUCCESS")
         print(999999)
