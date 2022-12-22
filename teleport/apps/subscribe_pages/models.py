@@ -500,8 +500,11 @@ class InstagramSubscribePage(BaseSubscribePage):
 
     def all_views_subscribers_and_ctr(self) -> List[int]:
         all_views, all_subscribers = InstagramStatistic.get_all_views_and_subscribers(self)
-        ctr = all_subscribers / all_views * 100
-        ctr = float('{:.2f}'.format(ctr))
+        try:
+            ctr = all_subscribers / all_views * 100
+            ctr = float('{:.2f}'.format(ctr))
+        except ZeroDivisionError:
+            ctr = 0
         return [all_views, all_subscribers, ctr]
 
     all_views_subscribers_and_ctr.short_description = '👁‍🗨, 👤, %'
